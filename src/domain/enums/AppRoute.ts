@@ -3,4 +3,9 @@ export enum AppRoute {
   ADMIN = "/admin",
   LOGIN = "/login",
   WELCOME_NEW_MEMBER = "/welcome-new-member",
+  SEARCH = "/search",
+  REEL = "/reel",
+  NOTIFICATION = "/notification",
+  CREATE = "/create",
+  PROFILE = "/profile",
 }

@@ -1,18 +1,12 @@
-import { Geist, Geist_Mono } from "next/font/google"
+import { Inter } from "next/font/google"
+
 import "./globals.css"
 import NextTopLoader from "nextjs-toploader"
+import Sidebar from "@/component/sidebar/SideBar"
+import { UIProvider } from "@/component/provider/UIProvider"
 import { SessionProvider } from "next-auth/react"
-import { Providers } from "@/component/providers"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-})
+const inter = Inter({ subsets: ["latin"] })
 
 export async function generateMetadata() {
   return {
@@ -35,23 +29,24 @@ export async function generateMetadata() {
   }
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={inter.className}>
         <NextTopLoader />
         <SessionProvider>
-          <Providers>
-            <div className="flex flex-col min-h-screen">
-              <main className="container  mx-auto px-4 xl:px-0 flex-1 flex flex-col">
+          <UIProvider>
+            <div className="flex flex-col h-screen">
+              <main className=" flex-1 flex flex-col">
+                <Sidebar />
                 {children}
               </main>
             </div>
-          </Providers>
+          </UIProvider>
         </SessionProvider>
       </body>
     </html>

@@ -68,6 +68,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.role = user.role
         token.permissions = user.permissions
         token.isActive = user.isActive
+        token.avatarUrl = user.avatarUrl
       }
       return token
     },
@@ -78,6 +79,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         Record<Permission, boolean>
       >
       session.user.isActive = token.isActive as boolean
+      session.user.avatarUrl = token.avatarUrl as string
       return session
     },
   },

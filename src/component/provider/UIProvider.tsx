@@ -14,7 +14,7 @@ declare module "@react-types/shared" {
   }
 }
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function UIProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   useEffect(() => {
     const lenis = new Lenis({
