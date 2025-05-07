@@ -1,0 +1,5 @@
+export enum UnstableCacheKey {
+  USER_EMAIL="USER_EMAIL",
+  USER_EXISTS_BY_EMAIL="USER_EXISTS_BY_EMAIL",
+  USER_LIST="USER_LIST",
+}

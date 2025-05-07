@@ -1,0 +1,4 @@
+export enum Permission {
+  CLEAR_CACHE = "CLEAR_CACHE",
+  CHANGE_ACCOUNT_STATUS = "CHANGE_ACCOUNT_STATUS",
+}
