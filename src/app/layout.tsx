@@ -46,7 +46,7 @@ export default async function RootLayout({
                 {children}
               </main>
             </div>
-          </UIProvider>
+          </UIProvider> 
         </SessionProvider>
       </body>
     </html>
