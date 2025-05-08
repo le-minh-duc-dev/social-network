@@ -8,4 +8,6 @@ export enum AppRoute {
   NOTIFICATION = "/notification",
   CREATE = "/create",
   PROFILE = "/profile",
+  SAVED = "/saved",
+  USER_SETTINGS = "/user-settings",
 }

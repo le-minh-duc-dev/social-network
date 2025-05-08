@@ -4,6 +4,5 @@ import React from "react"
 
 export default function UserIcon() {
   const { authUser } = useAuth()
-  console.log(authUser);
-  return <Avatar size="sm" src={authUser?.avatarUrl} />
+  return <Avatar className="w-6 h-6" src={authUser?.avatarUrl} />
 }
