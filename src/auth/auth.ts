@@ -21,6 +21,7 @@ declare module "next-auth" {
       id: string
       isActive: boolean
       role: Role
+      avatarUrl?: string
       permissions: Partial<Record<Permission, boolean>>
     } & DefaultSession["user"]
   }

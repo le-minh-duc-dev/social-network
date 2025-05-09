@@ -6,7 +6,6 @@ export enum AppRoute {
   SEARCH = "/search",
   REEL = "/reel",
   NOTIFICATION = "/notification",
-  CREATE = "/create",
   PROFILE = "/profile",
   SAVED = "/saved",
   USER_SETTINGS = "/user-settings",

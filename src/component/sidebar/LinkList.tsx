@@ -1,7 +1,7 @@
 "use client"
 import { AppRoute } from "@/domain/enums/AppRoute"
-import { Listbox, ListboxItem } from "@heroui/react"
-import React from "react"
+import { Listbox, ListboxItem, useDisclosure } from "@heroui/react"
+import React, { ReactNode } from "react"
 import { GoHome, GoHomeFill } from "react-icons/go"
 import { IoIosHeartEmpty, IoMdHeart } from "react-icons/io"
 import {
@@ -12,29 +12,40 @@ import {
 import { PiFilmReel, PiFilmReelFill } from "react-icons/pi"
 import UserIcon from "./UserIcon"
 import { usePathname } from "next/navigation"
+import Create from "../create/Create"
 
 export default function LinkList() {
   const pathname = usePathname()
-  const items = [
+  const items: {
+    type: "link" | "action"
+    url: string
+    label: string
+    defaultIcon: ReactNode
+    activeIcon: ReactNode
+  }[] = [
     {
+      type: "link",
       url: AppRoute.HOME,
       label: "Home",
       defaultIcon: <GoHome className="text-2xl" />,
       activeIcon: <GoHomeFill className="text-2xl" />,
     },
     {
+      type: "link",
       url: AppRoute.SEARCH,
       label: "Search",
       defaultIcon: <IoSearchOutline className="text-2xl" />,
       activeIcon: <IoSearchSharp className="text-2xl" />,
     },
     {
+      type: "link",
       url: AppRoute.REEL,
       label: "Reels",
       defaultIcon: <PiFilmReel className="text-2xl" />,
       activeIcon: <PiFilmReelFill className="text-2xl" />,
     },
     {
+      type: "link",
       url: AppRoute.NOTIFICATION,
       label: "Notifications",
       defaultIcon: <IoIosHeartEmpty className="text-2xl" />,
@@ -42,13 +53,15 @@ export default function LinkList() {
     },
 
     {
-      url: AppRoute.CREATE,
+      type: "action",
+      url: "",
       label: "Create",
       defaultIcon: <IoAddCircleOutline className="text-2xl" />,
       activeIcon: <IoAddCircleOutline className="text-2xl" />,
     },
 
     {
+      type: "link",
       url: AppRoute.PROFILE,
       label: "Profile",
       defaultIcon: <UserIcon />,
@@ -61,23 +74,39 @@ export default function LinkList() {
     return pathname.startsWith(url)
   }
 
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+
   return (
-    <Listbox aria-label="Dynamic Actions" items={items}>
-      {(item) => (
-        <ListboxItem
-          key={item.url}
-          href={item.url}
-          startContent={
-            isPathNameMatched(item.url) ? item.activeIcon : item.defaultIcon
+    <div>
+      <Create isOpen={isOpen} onOpenChange={onOpenChange} />
+      <Listbox
+        aria-label="Dynamic Actions"
+        items={items}
+        onAction={(key) => {
+          const item = items.find((item) => item.label == key)
+          if (item?.type == "action" && item.label == "Create") {
+            onOpen()
           }
-          classNames={{
-            title: `text-base ${isPathNameMatched(item.url) ? "font-semibold" : ""}`,
-            base: "mt-4",
-          }}
-        >
-          {item.label}
-        </ListboxItem>
-      )}
-    </Listbox>
+        }}
+      >
+        {(item) => (
+          <ListboxItem
+            key={item.label}
+            href={item.type == "link" ? item.url : undefined}
+            startContent={
+              isPathNameMatched(item.url) ? item.activeIcon : item.defaultIcon
+            }
+            classNames={{
+              title: `text-base ${
+                isPathNameMatched(item.url) ? "font-semibold" : ""
+              }`,
+              base: "mt-4",
+            }}
+          >
+            {item.label}
+          </ListboxItem>
+        )}
+      </Listbox>
+    </div>
   )
 }
