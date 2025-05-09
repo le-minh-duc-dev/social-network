@@ -32,10 +32,12 @@ export default function Create({
         isKeyboardDismissDisabled={true}
       >
         <ModalContent>
-          {() => (
+          {(onClose) => (
             <>
               <ModalHeader className="flex justify-between items-center">
-                <div className=""></div>
+                <Button variant="light" color="danger" onPress={onClose}>
+                  Cancel
+                </Button>
                 <div className="">Create new post</div>
                 <Button variant="light" color="primary">
                   Share
