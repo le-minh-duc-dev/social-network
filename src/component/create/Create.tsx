@@ -24,10 +24,12 @@ export default function Create({
         classNames={{
           header: "border-b-[1px] border-white/10 text-base py-2 ",
           body: "grid grid-cols-5   p-0    overflow-y-hidden",
-          base: "bg-black border border-white/10 h-[75vh] " ,
+          base: "bg-black border border-white/10 h-[75vh] ",
         }}
         hideCloseButton={true}
         shouldBlockScroll={false}
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
       >
         <ModalContent>
           {() => (

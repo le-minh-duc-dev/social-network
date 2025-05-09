@@ -6,6 +6,7 @@ import Sidebar from "@/component/sidebar/SideBar"
 import { UIProvider } from "@/component/provider/UIProvider"
 import { SessionProvider } from "next-auth/react"
 
+import 'react-photo-view/dist/react-photo-view.css';
 const inter = Inter({ subsets: ["latin"] })
 
 export async function generateMetadata() {

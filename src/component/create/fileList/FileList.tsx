@@ -15,6 +15,10 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable"
 import SortableItem from "./SortableItem"
+import { Button } from "@heroui/react"
+import { TiDelete } from "react-icons/ti"
+import { PhotoProvider, PhotoView } from "react-photo-view"
+import { TbZoomScan } from "react-icons/tb"
 
 export default function FileList({
   files,
@@ -42,7 +46,7 @@ export default function FileList({
   }
 
   return (
-    <div className="mt-6 flex-1  overflow-y-auto rounded-lg">
+    <div className="mt-6 flex-1  overflow-y-auto rounded-lg overflow-x-hidden">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -53,9 +57,22 @@ export default function FileList({
           strategy={verticalListSortingStrategy}
         >
           <ul className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {files.map((file) => (
-              <SortableItem key={file.id} id={file.id} file={file} />
-            ))}
+            <PhotoProvider>
+              {files.map((file) => (
+                <div key={file.id}>
+                  <Button isIconOnly variant="light">
+                    <TiDelete className="text-lg" />
+                  </Button>
+                  <PhotoView src={file.preview}>
+                    <Button isIconOnly variant="light">
+                      <TbZoomScan className="text-lg" />
+                    </Button>
+                  </PhotoView>
+
+                  <SortableItem id={file.id} file={file} />
+                </div>
+              ))}
+            </PhotoProvider>
           </ul>
         </SortableContext>
       </DndContext>
