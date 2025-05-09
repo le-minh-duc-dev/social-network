@@ -40,7 +40,7 @@ export default function Create({
                 </Button>
               </ModalHeader>
               <ModalBody>
-                <div className="col-span-3 ">
+                <div className="col-span-3 h-full overflow-hidden">
                   <DropZone />
                 </div>
                 <div className="col-span-2 p-3 bg-neutral-800">

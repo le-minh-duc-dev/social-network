@@ -2,7 +2,7 @@
 
 import { useDropzone } from "react-dropzone"
 import { useEffect, useState } from "react"
-import FileList from "./FileList"
+import FileList from "./fileList/FileList"
 
 export default function DropZone() {
   const { acceptedFiles, getRootProps, getInputProps, isDragActive } =
@@ -18,7 +18,7 @@ export default function DropZone() {
   }, [acceptedFiles])
 
   return (
-    <div className="w-full max-w-xl mx-auto p-4  ">
+    <div className="w-full max-w-xl mx-auto p-4  h-full overflow-hidden flex flex-col">
       <div
         {...getRootProps()}
         className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center transition ${
@@ -37,7 +37,7 @@ export default function DropZone() {
         </p>
       </div>
 
-      <FileList files={files} />
+      <FileList files={files} setFiles={setFiles} />
     </div>
   )
 }
