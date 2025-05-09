@@ -1,7 +1,6 @@
-import React from 'react'
+import UnderConstruction from "@/component/UnderConstruction"
+import React from "react"
 
 export default function page() {
-  return (
-    <div>notification</div>
-  )
+  return <UnderConstruction />
 }
