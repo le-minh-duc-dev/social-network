@@ -25,7 +25,8 @@
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
     "react-icons": "^5.5.0",
-    "social-network": "file:"
+    "social-network": "file:",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -1,5 +1,5 @@
 "use client"
-
+import { v4 as uuidv4 } from "uuid"
 import { useDropzone } from "react-dropzone"
 import { useEffect, useState } from "react"
 import FileList from "./fileList/FileList"
@@ -11,10 +11,19 @@ export default function DropZone() {
       maxFiles: 20,
     })
 
-  const [files, setFiles] = useState<File[]>([])
+  const [files, setFiles] = useState<FilePreview[]>([])
 
   useEffect(() => {
-    setFiles((pre: File[]) => [...pre, ...acceptedFiles])
+    setFiles((pre) => {
+      const newFilePreviews: FilePreview[] = acceptedFiles.map((file) => ({
+        id: uuidv4(),
+        file: file as File,
+        preview: URL.createObjectURL(file),
+        size: (file.size / 1024).toFixed(2) + " KB",
+        type: file.type.startsWith("image") ? "image" : "video",
+      }))
+      return [...pre, ...newFilePreviews]
+    })
   }, [acceptedFiles])
 
   return (

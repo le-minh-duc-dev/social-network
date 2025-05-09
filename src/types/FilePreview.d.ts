@@ -1,6 +1,6 @@
 interface FilePreview {
   id: string
-  file: File
+  file: File | null
   preview: string
   size: string
   type: "image" | "video"

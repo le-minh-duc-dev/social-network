@@ -1,6 +1,4 @@
 "use client"
-
-import React, { useMemo } from "react"
 import {
   DndContext,
   closestCenter,
@@ -22,19 +20,9 @@ export default function FileList({
   files,
   setFiles,
 }: {
-  files: File[]
-  setFiles: (files: File[]) => void
+  files: FilePreview[]
+  setFiles: (files: FilePreview[]) => void
 }) {
-  const previews = useMemo<FilePreview[]>(() => {
-    return files.map((file, idx) => ({
-      id: idx.toString(),
-      file,
-      preview: URL.createObjectURL(file),
-      size: (file.size / 1024).toFixed(2) + " KB",
-      type: file.type.startsWith("image") ? "image" : "video",
-    }))
-  }, [files])
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -45,8 +33,8 @@ export default function FileList({
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
     if (active.id !== over?.id) {
-      const oldIndex = previews.findIndex((item) => item.id === active.id)
-      const newIndex = previews.findIndex((item) => item.id === over?.id)
+      const oldIndex = files.findIndex((item) => item.id === active.id)
+      const newIndex = files.findIndex((item) => item.id === over?.id)
 
       const newOrder = arrayMove(files, oldIndex, newIndex)
       setFiles(newOrder)
@@ -61,11 +49,11 @@ export default function FileList({
         onDragEnd={handleDragEnd}
       >
         <SortableContext
-          items={previews.map((f) => f.id)}
+          items={files.map((f) => f.id)}
           strategy={verticalListSortingStrategy}
         >
           <ul className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {previews.map((file) => (
+            {files.map((file) => (
               <SortableItem key={file.id} id={file.id} file={file} />
             ))}
           </ul>

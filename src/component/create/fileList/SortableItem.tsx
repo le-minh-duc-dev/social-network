@@ -1,9 +1,15 @@
-import { useSortable } from '@dnd-kit/sortable';
-import { Image } from '@heroui/react';
-import React from 'react'
+import { useSortable } from "@dnd-kit/sortable"
+import { Image } from "@heroui/react"
+import React from "react"
 import { CSS } from "@dnd-kit/utilities"
 
-export default function SortableItem({ id, file }: { id: string; file: FilePreview }) {
+export default function SortableItem({
+  id,
+  file,
+}: {
+  id: string
+  file: FilePreview
+}) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id })
 
@@ -23,7 +29,7 @@ export default function SortableItem({ id, file }: { id: string; file: FilePrevi
       {file.type === "image" ? (
         <Image
           src={file.preview}
-          alt={file.file.name}
+          alt={file.file?.name}
           className="aspect-square w-full object-cover rounded-lg"
         />
       ) : (
