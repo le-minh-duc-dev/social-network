@@ -42,7 +42,7 @@ export default function FileList({
   }
 
   return (
-    <div className="mt-6 flex-1  overflow-y-auto">
+    <div className="mt-6 flex-1  overflow-y-auto rounded-lg">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}

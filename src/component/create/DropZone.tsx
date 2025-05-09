@@ -27,7 +27,7 @@ export default function DropZone() {
   }, [acceptedFiles])
 
   return (
-    <div className="w-full max-w-xl mx-auto p-4  h-full overflow-hidden flex flex-col">
+    <div className="w-full max-w-xl mx-auto p-6  h-full overflow-hidden flex flex-col">
       <div
         {...getRootProps()}
         className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center transition ${
