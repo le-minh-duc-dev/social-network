@@ -8,6 +8,7 @@ import {
   User,
 } from "@heroui/react"
 import React from "react"
+import DropZone from "./DropZone"
 
 export default function Create({
   isOpen,
@@ -21,11 +22,12 @@ export default function Create({
         onOpenChange={onOpenChange}
         size="4xl"
         classNames={{
-          header: "border-b-[1px] border-white/10 text-base py-2",
-          body: "grid grid-cols-5 min-h-96 p-0",
-          base: "bg-black border border-white/10 ",
+          header: "border-b-[1px] border-white/10 text-base py-2 ",
+          body: "grid grid-cols-5   p-0    overflow-y-hidden",
+          base: "bg-black border border-white/10 h-[75vh] " ,
         }}
         hideCloseButton={true}
+        shouldBlockScroll={false}
       >
         <ModalContent>
           {() => (
@@ -33,10 +35,14 @@ export default function Create({
               <ModalHeader className="flex justify-between items-center">
                 <div className=""></div>
                 <div className="">Create new post</div>
-                <Button variant="light" color="primary">Share</Button>
+                <Button variant="light" color="primary">
+                  Share
+                </Button>
               </ModalHeader>
               <ModalBody>
-                <div className="col-span-3"> images</div>
+                <div className="col-span-3 ">
+                  <DropZone />
+                </div>
                 <div className="col-span-2 p-3 bg-neutral-800">
                   <div className="">
                     <User
