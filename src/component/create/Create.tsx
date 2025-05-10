@@ -5,6 +5,8 @@ import { useMediaUpload } from "@/context/MediaUploadContext"
 import { createPost } from "@/actions/post/createPost"
 import { FilePreview } from "@/types/FilePreview"
 import { MediaItemDTO } from "@/domain/zod/PostUploadSchema"
+import { useQueryClient } from "@tanstack/react-query"
+import { QueryKey } from "@/domain/enums/QueryKey"
 
 export default function Create({
   isOpen,
@@ -15,6 +17,8 @@ export default function Create({
   onOpenChange: (isOpen: boolean) => void
   onClose: () => void
 }>) {
+  const queryClient = useQueryClient()
+
   const uploadService = useMediaUpload()
   const [files, setFiles] = useState<FilePreview[]>([])
   const captionRef = useRef<string>("")
@@ -44,11 +48,14 @@ export default function Create({
       // Handle error
       console.error("Failed to create post:", result.message)
     } else {
-      // Handle success
-      alert("Post created successfully:" + result.data)
+      queryClient.invalidateQueries({
+        queryKey: [QueryKey.GET_POSTS],
+        exact: false,
+      })
       setFiles([])
       captionRef.current = ""
       onClose()
+      alert("Post created successfully:" + result.data)
     }
   }, [captionRef, files, uploadService, onClose])
 

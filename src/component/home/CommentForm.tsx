@@ -1,7 +1,7 @@
-import { Input } from "@heroui/react"
 import React from "react"
 
 export default function CommentForm({ postId }: { postId: string }) {
+    
   return (
     <form>
       <input
