@@ -21,8 +21,8 @@ export class Formater {
       .join(" ")
   }
 
-  static formatDate(dateStr: string) {
-    const date = new Date(dateStr)
+  static formatDate(dateInput: string | Date) {
+    const date = typeof dateInput === "string" ? new Date(dateInput) : dateInput
     return format(date, "MMMM d, yyyy 'at' h:mm a")
   }
 }

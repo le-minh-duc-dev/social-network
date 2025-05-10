@@ -1,12 +1,13 @@
 "use client"
 import { QueryKey } from "@/domain/enums/QueryKey"
 import { PostAPI } from "@/service/PostAPI"
-import { Post } from "@/types/schema"
+import { Post as PostType } from "@/types/schema"
 import { useQuery } from "@tanstack/react-query"
 import React, { useEffect, useState } from "react"
+import Post from "./Post"
 
 export default function Feeds() {
-  const [posts, setPosts] = useState<Post[]>([])
+  const [posts, setPosts] = useState<PostType[]>([])
   const [nextCursor, setNextCursor] = useState<string | null>(null)
   const { data, isLoading, error } = useQuery({
     queryKey: [QueryKey.GET_POSTS, nextCursor],
@@ -30,11 +31,9 @@ export default function Feeds() {
     return <div className="mt-6">Error: {error.message}</div>
   }
   return (
-    <div className="mt-6">
+    <div className="mt-6 w-[450px]">
       {posts.map((post) => (
-        <div key={post._id as string} className="p-4 border-b border-gray-200">
-          <h2 className="text-lg font-bold">{post.caption}</h2>
-        </div>
+        <Post post={post} key={post._id.toString()} />
       ))}
     </div>
   )
