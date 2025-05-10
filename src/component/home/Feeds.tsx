@@ -1,16 +1,19 @@
 "use client"
+
+import { useInfiniteQuery } from "@tanstack/react-query"
+import { useWindowVirtualizer } from "@tanstack/react-virtual"
+import { useMemo, useEffect } from "react"
 import { QueryKey } from "@/domain/enums/QueryKey"
 import { PostAPI } from "@/service/PostAPI"
 import { Post as PostType } from "@/types/schema"
-import { useInfiniteQuery } from "@tanstack/react-query"
 import Post from "./Post"
-import { useMemo } from "react"
+
+type PostResponse = {
+  posts: PostType[]
+  nextCursor: string | null
+}
 
 export default function Feeds() {
-  type PostResponse = {
-    posts: PostType[]
-    nextCursor: string | null
-  }
   const fetchPosts = async ({
     pageParam = null,
   }: {
@@ -18,18 +21,19 @@ export default function Feeds() {
   }): Promise<PostResponse> => {
     return await PostAPI.getPosts(pageParam)
   }
+
   const {
     data,
-    // fetchNextPage,
-    // hasNextPage,
-    // isFetchingNextPage,
-    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
     isLoading,
+    error,
   } = useInfiniteQuery({
     queryKey: [QueryKey.GET_POSTS],
     queryFn: fetchPosts,
     initialPageParam: null,
-    getNextPageParam: (lastPage) => lastPage.nextCursor, // from API response
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   })
 
   const allPosts = useMemo<PostType[]>(
@@ -37,17 +41,71 @@ export default function Feeds() {
     [data]
   )
 
-  if (isLoading) {
-    return <div className="mt-6">Loading...</div>
-  }
-  if (error) {
-    return <div className="mt-6">Error: {error.message}</div>
-  }
+  const virtualizer = useWindowVirtualizer({
+    count: hasNextPage ? allPosts.length + 1 : allPosts.length,
+    estimateSize: () => 900,
+    overscan: 5,
+  })
+
+  const virtualItems = virtualizer.getVirtualItems()
+
+  useEffect(() => {
+    const last = virtualItems[virtualItems.length - 1]
+    if (
+      !isFetchingNextPage &&
+      hasNextPage &&
+      last?.index >= allPosts.length - 1
+    ) {
+      fetchNextPage()
+    }
+  }, [
+    virtualItems,
+    allPosts.length,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  ])
+
+  if (isLoading) return <div className="mt-6">Loading...</div>
+  if (error) return <div className="mt-6">Error: {error.message}</div>
+
   return (
-    <div className="mt-6 w-[450px] grid gap-y-8">
-      {allPosts.map((post) => (
-        <Post post={post} key={post._id.toString()} />
-      ))}
+    <div
+      style={{
+        height: virtualizer.getTotalSize(),
+        position: "relative",
+      }}
+      className=""
+    >
+      {virtualItems.map((virtualRow) => {
+        const post = allPosts[virtualRow.index]
+
+        return (
+          <div
+            key={virtualRow.key}
+            ref={virtualizer.measureElement}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: "50%",
+              width: "450px",
+              transform: `translateY(${virtualRow.start}px) translateX(-50%)`,
+            }}
+          >
+            {post ? (
+              <Post post={post} />
+            ) : hasNextPage ? (
+              <div className="py-6 text-center text-gray-400">
+                Loading more...
+              </div>
+            ) : (
+              <div className="py-6 text-center text-gray-400">
+                No more posts
+              </div>
+            )}
+          </div>
+        )
+      })}
     </div>
   )
 }

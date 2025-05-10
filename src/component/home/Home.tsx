@@ -1,12 +1,15 @@
 import React from "react"
-import Stories from "./Stories"
+
 import Feeds from "./Feeds"
+import Stories from "./Stories"
 
 export default function Home() {
   return (
-    <div className="flex  flex-col items-center">
-      <Stories />
+    <>
+      <div className="flex justify-center mb-8">
+        <Stories />
+      </div>
       <Feeds />
-    </div>
+    </>
   )
 }

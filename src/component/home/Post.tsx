@@ -11,7 +11,7 @@ import { LuDot } from "react-icons/lu"
 export default function Post({ post }: { post: PostType }) {
   const author: UserType = post.author as UserType
   return (
-    <div className=" border-b border-white/25 pb-3">
+    <div className=" border-b border-white/25 pb-3 ">
       <div className="flex justify-between items-center">
         <User
           avatarProps={{
