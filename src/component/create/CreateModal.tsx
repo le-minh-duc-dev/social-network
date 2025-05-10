@@ -14,16 +14,13 @@ export default function CreateModal({
   onOpenChange,
 }: Readonly<{ isOpen: boolean; onOpenChange: (isOpen: boolean) => void }>) {
   const { authUser } = useAuth()
-  const {captionRef} = useCreatePostContext()
+  const {captionRef, handleSubmit} = useCreatePostContext()
   const handleCaptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const caption = e.target.value
     captionRef.current = caption
   }
 
-  const handleSubmit = () => {
-    // Handle form submission logic here
-    console.log("Form submitted with caption:", captionRef.current)
-  }
+ 
   return (
     <Modal
       isOpen={isOpen}
