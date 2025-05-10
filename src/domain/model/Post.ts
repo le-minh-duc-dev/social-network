@@ -1,4 +1,4 @@
-import { MediaItem, PostDoc } from "@/types/schema"
+import { MediaItem, Post } from "@/types/schema"
 import mongoose, { Schema } from "mongoose"
 import { PostPrivacy } from "../enums/PostPrivacy"
 
@@ -10,7 +10,7 @@ const MediaSchema = new Schema<MediaItem>(
   { _id: false }
 )
 
-const PostSchema = new Schema<PostDoc>(
+const PostSchema = new Schema<Post>(
   {
     author: { type: Schema.Types.ObjectId, ref: "User", required: true },
     caption: { type: String },
@@ -26,5 +26,4 @@ const PostSchema = new Schema<PostDoc>(
   { timestamps: true }
 )
 
-export default mongoose.models.Post ||
-  mongoose.model<PostDoc>("Post", PostSchema)
+export default mongoose.models.Post || mongoose.model<Post>("Post", PostSchema)

@@ -1,7 +1,7 @@
-import { CommentDoc } from "@/types/schema"
+import { Comment } from "@/types/schema"
 import mongoose, { Schema } from "mongoose"
 
-const CommentSchema = new Schema<CommentDoc>(
+const CommentSchema = new Schema<Comment>(
   {
     post: { type: Schema.Types.ObjectId, ref: "Post", required: true },
     author: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -11,4 +11,4 @@ const CommentSchema = new Schema<CommentDoc>(
 )
 
 export default mongoose.models.Comment ||
-  mongoose.model<CommentDoc>("Comment", CommentSchema)
+  mongoose.model<Comment>("Comment", CommentSchema)

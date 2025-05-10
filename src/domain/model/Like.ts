@@ -1,7 +1,7 @@
-import { LikeDoc } from "@/types/schema"
+import { Like } from "@/types/schema"
 import mongoose, { Schema } from "mongoose"
 
-const LikeSchema = new Schema<LikeDoc>(
+const LikeSchema = new Schema<Like>(
   {
     post: { type: Schema.Types.ObjectId, ref: "Post", required: true },
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -12,4 +12,4 @@ const LikeSchema = new Schema<LikeDoc>(
 LikeSchema.index({ post: 1, user: 1 }, { unique: true })
 
 export default mongoose.models.Like ||
-  mongoose.model<LikeDoc>("Like", LikeSchema)
+  mongoose.model<Like>("Like", LikeSchema)

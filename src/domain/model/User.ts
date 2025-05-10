@@ -1,9 +1,9 @@
 // src/models/User.ts
-import { UserDoc } from "@/types/schema"
+import { User } from "@/types/schema"
 import mongoose, { Schema } from "mongoose"
 import { Role } from "../enums/Role"
 
-const UserSchema = new Schema<UserDoc>(
+const UserSchema = new Schema<User>(
   {
     email: { type: String, required: true, unique: true, index:true },
     password: { type: String },
@@ -24,4 +24,4 @@ const UserSchema = new Schema<UserDoc>(
 )
 
 export default mongoose.models.User ||
-  mongoose.model<UserDoc>("User", UserSchema)
+  mongoose.model<User>("User", UserSchema)
