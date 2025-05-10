@@ -1,5 +1,5 @@
 import { RouteProtector } from "@/auth/RouteProtector"
-import UnderConstruction from "@/component/UnderConstruction"
+import Home from "@/component/home/Home"
 import { AppRoute } from "@/domain/enums/AppRoute"
 import { MetaDataHelper } from "@/lib/MetaDataHelper"
 
@@ -13,5 +13,5 @@ export async function generateMetadata() {
 
 export default async function page() {
   await RouteProtector.protect()
-  return <UnderConstruction />
+  return <Home/>
 }
