@@ -1,14 +1,46 @@
-import Post from "@/domain/model/Post";
-import { PostUploadType } from "@/domain/zod/PostUploadSchema";
-import { ClientSession, Types } from "mongoose";
+import { UnstableCacheKey } from "@/domain/enums/UnstableCacheKey"
+import Post from "@/domain/model/Post"
+import { PostUploadType } from "@/domain/zod/PostUploadSchema"
+import { ClientSession, Types } from "mongoose"
+import { revalidateTag, unstable_cache } from "next/cache"
 
-export class PostService{
-    async createPost(user:Types.ObjectId, post:PostUploadType,dbSession:ClientSession){
-        const newPost = new Post({
-            author:user,
-            caption: post.caption,
-            media: post.media,
-        })
-        return await newPost.save({ session: dbSession })
-    }
+export class PostService {
+  async createPost(
+    user: Types.ObjectId,
+    post: PostUploadType,
+    dbSession: ClientSession
+  ) {
+    const newPost = new Post({
+      author: user,
+      caption: post.caption,
+      media: post.media,
+    })
+    const savedPost = await newPost.save({ session: dbSession })
+
+    //revalidateTag(UnstableCacheKey.POST_LIST)
+    revalidateTag(UnstableCacheKey.POST_LIST)
+
+    return savedPost
+  }
+
+  async getInfinitePosts(cursor: string | null, limit: number) {
+    return unstable_cache(
+      async () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const query: any = {}
+        if (cursor) {
+          query._id = { $lt: new Types.ObjectId(cursor) }
+        }
+
+        return await Post.find(query)
+          .sort({ _id: -1 }) // newest first
+          .limit(limit + 1)
+          .populate("author", "_id fullName avatarUrl")
+      },
+      [UnstableCacheKey.POST_LIST + cursor + limit],
+      {
+        tags: [UnstableCacheKey.POST_LIST],
+      }
+    )()
+  }
 }
