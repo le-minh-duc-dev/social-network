@@ -19,14 +19,11 @@ import { Button } from "@heroui/react"
 import { TiDelete } from "react-icons/ti"
 import { PhotoProvider, PhotoView } from "react-photo-view"
 import { TbZoomScan } from "react-icons/tb"
+import { useCreatePostContext } from "../CreatePostContext"
 
-export default function FileList({
-  files,
-  setFiles,
-}: {
-  files: FilePreview[]
-  setFiles: (files: FilePreview[]) => void
-}) {
+export default function FileList() {
+  const { files, setFiles } = useCreatePostContext()
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -45,6 +42,10 @@ export default function FileList({
     }
   }
 
+  const handleDelete = (id: string) => {
+    setFiles((prev) => prev.filter((file) => file.id !== id))
+  }
+
   return (
     <div className="mt-6 flex-1  overflow-y-auto rounded-lg overflow-x-hidden">
       <DndContext
@@ -60,7 +61,11 @@ export default function FileList({
             <PhotoProvider>
               {files.map((file) => (
                 <div key={file.id}>
-                  <Button isIconOnly variant="light">
+                  <Button
+                    isIconOnly
+                    variant="light"
+                    onPress={() => handleDelete(file.id)}
+                  >
                     <TiDelete className="text-lg" />
                   </Button>
                   <PhotoView src={file.preview}>

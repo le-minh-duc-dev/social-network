@@ -1,8 +1,9 @@
 "use client"
 import { v4 as uuidv4 } from "uuid"
 import { useDropzone } from "react-dropzone"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import FileList from "./fileList/FileList"
+import { useCreatePostContext } from "./CreatePostContext"
 
 export default function DropZone() {
   const { acceptedFiles, getRootProps, getInputProps, isDragActive } =
@@ -11,7 +12,7 @@ export default function DropZone() {
       maxFiles: 20,
     })
 
-  const [files, setFiles] = useState<FilePreview[]>([])
+  const {  setFiles } = useCreatePostContext()
 
   useEffect(() => {
     setFiles((pre) => {
@@ -46,7 +47,7 @@ export default function DropZone() {
         </p>
       </div>
 
-      <FileList files={files} setFiles={setFiles} />
+      <FileList  />
     </div>
   )
 }
