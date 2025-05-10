@@ -8,6 +8,7 @@ import { SessionProvider } from "next-auth/react"
 
 import "react-photo-view/dist/react-photo-view.css"
 import MediaUploadProvider from "@/component/provider/MediaUploadProvider"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 const inter = Inter({ subsets: ["latin"] })
 
 export async function generateMetadata() {
@@ -30,7 +31,7 @@ export async function generateMetadata() {
     },
   }
 }
-
+const queryClient = new QueryClient()
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -43,12 +44,14 @@ export default async function RootLayout({
         <SessionProvider>
           <UIProvider>
             <MediaUploadProvider>
-              <div className="flex flex-col h-screen">
-                <main className=" flex-1 flex flex-col">
-                  <Sidebar />
-                  {children}
-                </main>
-              </div>
+              <QueryClientProvider client={queryClient}>
+                <div className="flex flex-col h-screen">
+                  <main className=" flex-1 flex flex-col">
+                    <Sidebar />
+                    {children}
+                  </main>
+                </div>
+              </QueryClientProvider>
             </MediaUploadProvider>
           </UIProvider>
         </SessionProvider>
