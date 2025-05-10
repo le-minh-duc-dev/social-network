@@ -1,4 +1,5 @@
 // app/api/posts/route.ts (App Router)
+import { RouteProtector } from "@/auth/RouteProtector"
 import connectDB from "@/lib/connectDB"
 import { PostService } from "@/service/PostService"
 import { NextRequest } from "next/server"
@@ -7,6 +8,8 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const limit = parseInt(searchParams.get("limit") ?? "10")
   const cursor = searchParams.get("nextCursor") // last post ID
+
+  await RouteProtector.protect()
   //connect to the database
   await connectDB()
 
