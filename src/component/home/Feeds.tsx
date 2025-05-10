@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import { QueryKey } from "@/domain/enums/QueryKey"
 import { PostAPI } from "@/service/PostAPI"
 import { Post } from "@/types/schema"
@@ -18,6 +18,8 @@ export default function Feeds() {
       const newPosts = data.posts
       setPosts((prevPosts) => [...prevPosts, ...newPosts])
       setNextCursor(data.nextCursor)
+
+      console.log(data)
     }
   }, [data])
 

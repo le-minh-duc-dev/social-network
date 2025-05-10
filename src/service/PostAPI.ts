@@ -1,7 +1,7 @@
 import { Post } from "@/types/schema"
 
 export class PostAPI {
-  static readonly baseUrl = process.env.NEXT_PUBLIC_BASE_URL + "/posts"
+  static readonly baseUrl = process.env.NEXT_PUBLIC_BASE_URL + "/api/posts"
 
   static async getPosts(
     nextCursor: string | null,
