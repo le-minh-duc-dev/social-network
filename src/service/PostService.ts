@@ -43,6 +43,26 @@ export class PostService {
     revalidateTag(UnstableCacheKey.POST_SINGLE + postId.toString())
   }
 
+  async incrementLikeCount(postId: Types.ObjectId, session?: ClientSession) {
+    await Post.updateOne(
+      { _id: postId },
+      { $inc: { likeCount: 1 } },
+      { session }
+    )
+    revalidateTag(UnstableCacheKey.POST_LIST)
+    revalidateTag(UnstableCacheKey.POST_SINGLE + postId.toString())
+  }
+
+  async decrementLikeCount(postId: Types.ObjectId, session?: ClientSession) {
+    await Post.updateOne(
+      { _id: postId },
+      { $inc: { likeCount: -1 } },
+      { session }
+    )
+    revalidateTag(UnstableCacheKey.POST_LIST)
+    revalidateTag(UnstableCacheKey.POST_SINGLE + postId.toString())
+  }
+
   async getInfinitePosts(cursor: string | null, limit: number) {
     return unstable_cache(
       async () => {

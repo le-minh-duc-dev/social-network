@@ -3,4 +3,5 @@ export enum QueryKey {
     GET_POST = 'GET_POST',
     GET_USER = 'GET_USER',
     GET_POST_COMMENTS = 'GET_POST_COMMENTS',
+    GET_POST_LIKES = 'GET_POST_LIKES',
 }
