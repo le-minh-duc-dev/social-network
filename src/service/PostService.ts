@@ -23,6 +23,26 @@ export class PostService {
     return savedPost
   }
 
+  async incrementCommentCount(postId: Types.ObjectId, session?: ClientSession) {
+    await Post.updateOne(
+      { _id: postId },
+      { $inc: { commentCount: 1 } },
+      { session }
+    )
+    revalidateTag(UnstableCacheKey.POST_LIST)
+    revalidateTag(UnstableCacheKey.POST_SINGLE + postId.toString())
+  }
+
+  async decrementCommentCount(postId: Types.ObjectId, session?: ClientSession) {
+    await Post.updateOne(
+      { _id: postId },
+      { $inc: { commentCount: -1 } },
+      { session }
+    )
+    revalidateTag(UnstableCacheKey.POST_LIST)
+    revalidateTag(UnstableCacheKey.POST_SINGLE + postId.toString())
+  }
+
   async getInfinitePosts(cursor: string | null, limit: number) {
     return unstable_cache(
       async () => {
