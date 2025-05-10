@@ -31,7 +31,7 @@ export default function Feeds() {
     return <div className="mt-6">Error: {error.message}</div>
   }
   return (
-    <div className="mt-6 w-[450px]">
+    <div className="mt-6 w-[450px] grid gap-y-8">
       {posts.map((post) => (
         <Post post={post} key={post._id.toString()} />
       ))}
