@@ -15,9 +15,9 @@ type PostResponse = {
 
 export default function Feeds() {
   const fetchPosts = async ({
-    pageParam = null,
+    pageParam = "",
   }: {
-    pageParam?: string | null
+    pageParam: string
   }): Promise<PostResponse> => {
     return await PostAPI.getPosts(pageParam)
   }
@@ -32,7 +32,7 @@ export default function Feeds() {
   } = useInfiniteQuery({
     queryKey: [QueryKey.GET_POSTS],
     queryFn: fetchPosts,
-    initialPageParam: null,
+    initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   })
 
@@ -44,7 +44,7 @@ export default function Feeds() {
   const virtualizer = useWindowVirtualizer({
     count: hasNextPage ? allPosts.length + 1 : allPosts.length,
     estimateSize: () => 900,
-    overscan: 5,
+    overscan: 0,
   })
 
   const virtualItems = virtualizer.getVirtualItems()

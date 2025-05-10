@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   await connectDB()
 
   const limit = parseInt(searchParams.get("limit") ?? "10")
-  const cursor = searchParams.get("cursor") // last post ID
+  const cursor = searchParams.get("nextCursor") // last post ID
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const query: any = {}
