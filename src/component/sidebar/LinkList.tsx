@@ -74,11 +74,11 @@ export default function LinkList() {
     return pathname.startsWith(url)
   }
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
   return (
     <div>
-      <Create isOpen={isOpen} onOpenChange={onOpenChange} />
+      <Create isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose}/>
       <Listbox
         aria-label="Dynamic Actions"
         items={items}

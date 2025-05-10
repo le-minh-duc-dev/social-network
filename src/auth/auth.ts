@@ -7,7 +7,7 @@ import Google from "next-auth/providers/google"
 
 declare module "next-auth" {
   interface User {
-    id: string
+    _id: string
     email: string
     name: string
     avatarUrl?: string
@@ -24,6 +24,19 @@ declare module "next-auth" {
       avatarUrl?: string
       permissions: Partial<Record<Permission, boolean>>
     } & DefaultSession["user"]
+  }
+}
+
+import { JWT } from "next-auth/jwt"
+
+declare module "next-auth/jwt" {
+  /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
+  interface JWT {
+    id: string
+    isActive: boolean
+    role: Role
+    avatarUrl?: string
+    permissions: Partial<Record<Permission, boolean>>
   }
 }
 
@@ -47,7 +60,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const permissions = PermissionService.getPermissions(user.role)
 
         return {
-          id: user._id.toString(),
+          _id: user._id.toString(),
           email: user.email,
           name: user.fullName,
           avatarUrl: user.avatarUrl,
@@ -65,7 +78,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
+        console.log("User in jwt callback (login):", user)
+        token.id = user._id
         token.role = user.role
         token.permissions = user.permissions
         token.isActive = user.isActive
@@ -74,13 +88,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token
     },
     async session({ session, token }) {
-      session.user.id = token.id as string
-      session.user.role = token.role as Role
-      session.user.permissions = token.permissions as Partial<
-        Record<Permission, boolean>
-      >
-      session.user.isActive = token.isActive as boolean
-      session.user.avatarUrl = token.avatarUrl as string
+      session.user.id = token.id
+      session.user.role = token.role
+      session.user.permissions = token.permissions
+      session.user.isActive = token.isActive
+      session.user.avatarUrl = token.avatarUrl
       return session
     },
   },

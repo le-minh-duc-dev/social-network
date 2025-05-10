@@ -1,5 +1,6 @@
 import { MediaItem, PostDoc } from "@/types/schema"
 import mongoose, { Schema } from "mongoose"
+import { PostPrivacy } from "../enums/PostPrivacy"
 
 const MediaSchema = new Schema<MediaItem>(
   {
@@ -14,6 +15,11 @@ const PostSchema = new Schema<PostDoc>(
     author: { type: Schema.Types.ObjectId, ref: "User", required: true },
     caption: { type: String },
     media: { type: [MediaSchema], default: [] },
+    privacy: {
+      type: String,
+      enum: Object.values(PostPrivacy),
+      default: PostPrivacy.PUBLIC,
+    },
     likeCount: { type: Number, default: 0 },
     commentCount: { type: Number, default: 0 },
   },

@@ -6,7 +6,8 @@ import Sidebar from "@/component/sidebar/SideBar"
 import { UIProvider } from "@/component/provider/UIProvider"
 import { SessionProvider } from "next-auth/react"
 
-import 'react-photo-view/dist/react-photo-view.css';
+import "react-photo-view/dist/react-photo-view.css"
+import MediaUploadProvider from "@/component/provider/MediaUploadProvider"
 const inter = Inter({ subsets: ["latin"] })
 
 export async function generateMetadata() {
@@ -41,13 +42,15 @@ export default async function RootLayout({
         <NextTopLoader />
         <SessionProvider>
           <UIProvider>
-            <div className="flex flex-col h-screen">
-              <main className=" flex-1 flex flex-col">
-                <Sidebar />
-                {children}
-              </main>
-            </div>
-          </UIProvider> 
+            <MediaUploadProvider>
+              <div className="flex flex-col h-screen">
+                <main className=" flex-1 flex flex-col">
+                  <Sidebar />
+                  {children}
+                </main>
+              </div>
+            </MediaUploadProvider>
+          </UIProvider>
         </SessionProvider>
       </body>
     </html>

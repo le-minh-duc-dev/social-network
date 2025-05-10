@@ -4,6 +4,8 @@ import { useDropzone } from "react-dropzone"
 import { useEffect } from "react"
 import FileList from "./fileList/FileList"
 import { useCreatePostContext } from "./CreatePostContext"
+import { FilePreview } from "@/types/FilePreview"
+import { MediaType } from "@/domain/enums/MediaType"
 
 export default function DropZone() {
   const { acceptedFiles, getRootProps, getInputProps, isDragActive } =
@@ -12,7 +14,7 @@ export default function DropZone() {
       maxFiles: 20,
     })
 
-  const {  setFiles } = useCreatePostContext()
+  const { setFiles } = useCreatePostContext()
 
   useEffect(() => {
     setFiles((pre) => {
@@ -21,11 +23,11 @@ export default function DropZone() {
         file: file as File,
         preview: URL.createObjectURL(file),
         size: (file.size / 1024).toFixed(2) + " KB",
-        type: file.type.startsWith("image") ? "image" : "video",
+        type: file.type.startsWith("image") ? MediaType.IMAGE : MediaType.VIDEO,
       }))
       return [...pre, ...newFilePreviews]
     })
-  }, [acceptedFiles])
+  }, [acceptedFiles,setFiles])
 
   return (
     <div className="w-full max-w-xl mx-auto p-6  h-full overflow-hidden flex flex-col">
@@ -47,7 +49,7 @@ export default function DropZone() {
         </p>
       </div>
 
-      <FileList  />
+      <FileList />
     </div>
   )
 }

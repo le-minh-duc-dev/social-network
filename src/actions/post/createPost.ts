@@ -1,0 +1,64 @@
+"use server"
+
+import { RouteProtector } from "@/auth/RouteProtector"
+import { ServerSideAuthService } from "@/auth/ServerSideAuthService"
+import { PostUploadSchema, PostUploadType } from "@/domain/zod/PostUploadSchema"
+import connectDB from "@/lib/connectDB"
+import { MongooseHelper } from "@/lib/MongooseHelper"
+import { CloudinaryService } from "@/service/CloudinaryService"
+import { PostService } from "@/service/PostService"
+import { IMediaService } from "@/types/media_service"
+import mongoose from "mongoose"
+export async function createPost(
+  post: PostUploadType
+): Promise<IResponse<string>> {
+  await RouteProtector.protect()
+
+  console.log("post upload", post)
+
+  // services
+  const mediaService: IMediaService = new CloudinaryService()
+  const postService = new PostService()
+  ///
+
+  const result = PostUploadSchema.safeParse(post)
+  if (!result.success) {
+    console.error("Post upload validation error:", result.error.flatten())
+    mediaService.deleteMediaByURLs(post.media.map((item) => item.url))
+    return {
+      status: 400,
+      message: "Invalid post data",
+      data: "",
+    }
+  }
+  //safe post
+  const safePost = result.data
+
+  //get user
+  const user = await ServerSideAuthService.getAuthUser()
+
+  //get db session
+  await connectDB()
+  const dbSession = await mongoose.startSession()
+  //
+  try {
+    dbSession.startTransaction()
+    const userObjectId = MongooseHelper.toObjectId(user!.id)
+    const newPost = await postService.createPost(
+      userObjectId,
+      safePost,
+      dbSession
+    )
+    await dbSession.commitTransaction()
+    return {
+      status: 200,
+      data: "/posts/" + newPost._id,
+      message: "Post created successfully",
+    }
+  } catch (error) {
+    dbSession.abortTransaction()
+    mediaService.deleteMediaByURLs(safePost.media.map((item) => item.url))
+    console.error("Error creating post:", error)
+  }
+  return { status: 500, message: "Failed to create post" }
+}

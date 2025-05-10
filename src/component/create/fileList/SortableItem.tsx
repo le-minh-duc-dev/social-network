@@ -2,6 +2,8 @@ import { useSortable } from "@dnd-kit/sortable"
 import { Image } from "@heroui/react"
 import React from "react"
 import { CSS } from "@dnd-kit/utilities"
+import { MediaType } from "@/domain/enums/MediaType"
+import { FilePreview } from "@/types/FilePreview"
 
 export default function SortableItem({
   id,
@@ -26,7 +28,7 @@ export default function SortableItem({
       {...listeners}
       className="flex flex-col items-center cursor-move"
     >
-      {file.type === "image" ? (
+      {file.type === MediaType.IMAGE ? (
         <Image
           src={file.preview}
           alt={file.file?.name}

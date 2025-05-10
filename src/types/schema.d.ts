@@ -1,4 +1,6 @@
+import { Document, Types } from "mongoose"
 import { Role } from "@/domain/enums/Role"
+import { PostPrivacy } from "@/domain/enums/PostPrivacy"
 
 export interface UserDoc extends Document {
   _id: Types.ObjectId
@@ -24,7 +26,8 @@ export interface MediaItem {
 export interface PostDoc extends Document {
   author: Types.ObjectId
   caption?: string
-  media: MediaItem[]
+  media: MediaItem[],
+  privacy: PostPrivacy
   likeCount: number
   commentCount: number
   createdAt: Date
@@ -45,7 +48,6 @@ export interface FollowDoc extends Document {
   createdAt: Date
   updatedAt: Date
 }
-
 export interface LikeDoc extends Document {
   post: Types.ObjectId
   user: Types.ObjectId

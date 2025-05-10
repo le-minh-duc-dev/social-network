@@ -1,3 +1,4 @@
+import { FilePreview } from "@/types/FilePreview"
 import { createContext, useContext } from "react"
 
 interface CreatePostContextType {
