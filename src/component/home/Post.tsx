@@ -4,14 +4,16 @@ import { Button, User } from "@heroui/react"
 import React from "react"
 import { IoIosMore } from "react-icons/io"
 import MediaCarousel from "./MediaCarousel"
-import { FaRegBookmark } from "react-icons/fa"
+import { FaRegBookmark, FaRegComment } from "react-icons/fa"
 import CommentForm from "../CommentForm"
 import { LuDot } from "react-icons/lu"
 import Like from "../Like"
-import CommentButton from "./CommentButton"
+import { useFullPostModal } from "@/context/FullPostContext"
 
 export default function Post({ post }: Readonly<{ post: PostType }>) {
   const author: UserType = post.author as UserType
+  const { setPost } = useFullPostModal()
+
   return (
     <div className=" border-b border-white/25 pb-3 ">
       <div className="flex justify-between items-center">
@@ -40,8 +42,10 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
       </div>
       <div className="flex justify-between mt-2">
         <div className="flex ">
-          <Like postId={post._id.toString()}/>
-          <CommentButton post={post} />
+          <Like postId={post._id.toString()} />
+          <Button isIconOnly variant="light" onPress={() => setPost(post)}>
+            <FaRegComment className="text-2xl -scale-x-100" />
+          </Button>
         </div>
         <Button isIconOnly variant="light">
           <FaRegBookmark className="text-xl" />
@@ -59,10 +63,10 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
       </div>
       {post.commentCount > 1 && (
         <div className="mt-2">
-          <p className="text-sm text-gray-500">
+          <button className="text-sm text-gray-500" onClick={() => setPost(post)}>
             View {post.commentCount > 1 ? "all" : ""} {post.commentCount}{" "}
             {post.commentCount > 1 ? "comments" : "comment"}
-          </p>
+          </button>
         </div>
       )}
       <div className="my-2 ">

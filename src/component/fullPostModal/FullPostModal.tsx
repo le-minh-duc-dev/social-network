@@ -15,8 +15,9 @@ export default function FullPostModal({
   isOpen,
   onClose,
   post,
-}: Readonly<{ isOpen: boolean; onClose: () => void; post: Post }>) {
-  const author: UserType = post.author as UserType
+}: Readonly<{ isOpen: boolean; onClose: () => void; post: Post | null }>) {
+  if (!post) return null
+  const author: UserType = post?.author as UserType
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
