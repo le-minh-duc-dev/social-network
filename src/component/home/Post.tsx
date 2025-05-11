@@ -21,7 +21,7 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
           }}
           name={
             <div className="flex items-center gap-x-1">
-              <p>{author.fullName}</p>
+              <p className="font-semibold">{author.fullName}</p>
               <LuDot className="text-lg text-default-400" />
               <p className="text-default-400">
                 {Formater.formatTimeAgo(post.createdAt)}
