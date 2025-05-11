@@ -3,6 +3,10 @@ import { MediaItem } from "@/types/schema"
 import { MediaType } from "@/domain/enums/MediaType"
 import { Button, Image } from "@heroui/react"
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa"
+import { LocalStorageService } from "@/service/LocalStorageService"
+import { ExternalStorageServiceKey } from "@/domain/enums/ExternalStorageServiceKey"
+import { VolumnType } from "@/domain/enums/VolumeType"
+import { IoMdVolumeHigh, IoMdVolumeOff } from "react-icons/io"
 
 export default function MediaCarousel({
   mediaList,
@@ -16,6 +20,9 @@ export default function MediaCarousel({
   const [current, setCurrent] = useState(0)
   const videoRef = useRef<HTMLVideoElement | null>(null)
 
+  //volume
+  const [hasSound, setHasSound] = useState(false)
+
   const nextSlide = () => setCurrent((prev) => (prev + 1) % mediaList.length)
   const prevSlide = () =>
     setCurrent((prev) => (prev - 1 + mediaList.length) % mediaList.length)
@@ -24,14 +31,39 @@ export default function MediaCarousel({
     if (mediaList[current].type === MediaType.VIDEO && videoRef.current) {
       videoRef.current.currentTime = 0
       videoRef.current.play()
+
+      //services
+      const externalStorageService = new LocalStorageService()
+      const soundSetting = externalStorageService.getItem(
+        ExternalStorageServiceKey.VOLUME_SETTINGS
+      )
+      if (soundSetting) {
+        if (soundSetting == VolumnType.ON) {
+          setHasSound(true)
+        } else {
+          setHasSound(false)
+        }
+      }
     }
   }, [current, mediaList])
+
+  function toggleVolume() {
+    setHasSound(!hasSound)
+    const externalStorageService = new LocalStorageService()
+    externalStorageService.saveItem(
+      ExternalStorageServiceKey.VOLUME_SETTINGS,
+      hasSound ? VolumnType.OFF : VolumnType.ON
+    )
+  }
 
   return (
     <div
       className={"relative  flex items-center justify-center " + widthAndAspect}
     >
-      <div key={current} className=" bg-black w-full max-h-full flex items-center justify-center">
+      <div
+        key={current}
+        className=" bg-black w-full max-h-full flex items-center justify-center"
+      >
         {mediaList[current].type === MediaType.IMAGE ? (
           <Image
             src={mediaList[current].url}
@@ -39,13 +71,23 @@ export default function MediaCarousel({
             className={"object-cover rounded-none " + itemWidthHeight}
           />
         ) : (
-          <video
-            ref={videoRef}
-            src={mediaList[current].url}
-            className={"object-cover " + itemWidthHeight}
-            controls
-            muted
-          />
+          <>
+            <video
+              ref={videoRef}
+              src={mediaList[current].url}
+              className={"object-cover " + itemWidthHeight}
+              muted={!hasSound}
+              loop
+            />
+            <Button
+              variant="light"
+              isIconOnly
+              className="absolute bottom-4 right-2"
+              onPress={toggleVolume}
+            >
+              {hasSound ? <IoMdVolumeHigh /> : <IoMdVolumeOff />}
+            </Button>
+          </>
         )}
       </div>
 

@@ -1,7 +1,7 @@
 import React from "react"
 import { Post, User as UserType } from "@/types/schema"
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react"
-import MediaCarousel from "../home/MediaCarousel"
+import MediaCarousel from "../MediaCarousel"
 import { Button, Divider, User } from "@heroui/react"
 import { IoIosMore } from "react-icons/io"
 import Comment from "./Comment"
