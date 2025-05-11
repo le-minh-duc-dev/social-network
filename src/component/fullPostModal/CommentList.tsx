@@ -75,7 +75,6 @@ export default function CommentList({ postId }: Readonly<{ postId: string }>) {
       className="flex-1 max-h-full "
       style={{
         width: `100%`,
-        height: 500,
         overflow: "auto",
       }}
     >

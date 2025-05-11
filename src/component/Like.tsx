@@ -56,7 +56,7 @@ export default function Like({ postId }: Readonly<{ postId: string }>) {
   })
 
   return (
-    <Button isIconOnly variant="light" onPress={() => mutation.mutate()}>
+    <Button isIconOnly variant="light" onPress={() => mutation.mutate()} isDisabled={mutation.isPending}>
       {isLiked ? (
         <FaHeart className="text-2xl text-red-500" />
       ) : (
