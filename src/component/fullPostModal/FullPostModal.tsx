@@ -23,14 +23,21 @@ export default function FullPostModal({
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <DialogBackdrop className="fixed inset-0 bg-black/75" />
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-        <DialogPanel className="w-[70vw] h-[95vh] bg-black space-y-4  grid grid-cols-5 rounded-lg overflow-hidden">
-          <div className="col-span-3 overflow-hidden">
-            <MediaCarousel
-              mediaList={post.media}
-              widthAndAspect="h-full overflow-hidden"
-              itemWidthHeight="h-full w-auto overflow-hidden"
-            />
-          </div>
+        <DialogPanel
+          className={` h-[95vh] bg-black space-y-4  grid  rounded-lg overflow-hidden ${
+            post.media.length > 0 ? "w-[70vw]  grid-cols-5" : "w-[35vw]  "
+          }`}
+        >
+          {post.media.length > 0 && (
+            <div className="col-span-3 overflow-hidden">
+              <MediaCarousel
+                mediaList={post.media}
+                widthAndAspect="h-full overflow-hidden"
+                itemWidthHeight="h-full w-auto overflow-hidden"
+              />{" "}
+            </div>
+          )}
+
           <div className="col-span-2 px-4 flex flex-col overflow-hidden">
             <div className="flex justify-between items-center mt-2 mr-2">
               <User

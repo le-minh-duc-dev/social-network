@@ -1,6 +1,6 @@
 import { Formater } from "@/lib/Formater"
 import { Post as PostType, User as UserType } from "@/types/schema"
-import { Button, User } from "@heroui/react"
+import { Button, Divider, User } from "@heroui/react"
 import React from "react"
 import { IoIosMore } from "react-icons/io"
 import MediaCarousel from "../MediaCarousel"
@@ -35,11 +35,20 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
           <IoIosMore className="text-xl" />
         </Button>
       </div>
-      <div className=" overflow-hidden mt-4 rounded-lg border border-white/25">
-        <div className="">
-          <MediaCarousel mediaList={post.media} />
+      {post.media.length > 0 ? (
+        <div className=" overflow-hidden mt-4 rounded-lg border border-white/25">
+          <div className="">
+            <MediaCarousel mediaList={post.media} />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="mt-4">
+          <p className="text-sm ">
+            <span className="font-bold">{author.fullName}</span> {post.caption}
+          </p>
+          <Divider className="my-4"/>
+        </div>
+      )}
       <div className="flex justify-between mt-2">
         <div className="flex ">
           <Like postId={post._id.toString()} />
@@ -56,14 +65,19 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
           {post.likeCount} {post.likeCount > 1 ? "likes" : "like"}
         </p>
       </div>
-      <div className="">
-        <p className="text-sm ">
-          <span className="font-bold">{author.fullName}</span> {post.caption}
-        </p>
-      </div>
+      {post.media.length > 0 && (
+        <div className="">
+          <p className="text-sm ">
+            <span className="font-bold">{author.fullName}</span> {post.caption}
+          </p>
+        </div>
+      )}
       {post.commentCount > 1 && (
         <div className="mt-2">
-          <button className="text-sm text-gray-500" onClick={() => setPost(post)}>
+          <button
+            className="text-sm text-gray-500"
+            onClick={() => setPost(post)}
+          >
             View {post.commentCount > 1 ? "all" : ""} {post.commentCount}{" "}
             {post.commentCount > 1 ? "comments" : "comment"}
           </button>
