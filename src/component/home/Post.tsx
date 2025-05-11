@@ -72,7 +72,7 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
           </p>
         </div>
       )}
-      {post.commentCount > 1 && (
+      {post.commentCount > 0 && (
         <div className="mt-2">
           <button
             className="text-sm text-gray-500"
