@@ -4,10 +4,11 @@ import { Button, User } from "@heroui/react"
 import React from "react"
 import { IoIosMore } from "react-icons/io"
 import MediaCarousel from "./MediaCarousel"
-import { FaRegBookmark, FaRegComment } from "react-icons/fa"
+import { FaRegBookmark } from "react-icons/fa"
 import CommentForm from "./CommentForm"
 import { LuDot } from "react-icons/lu"
 import Like from "./Like"
+import CommentButton from "./CommentButton"
 
 export default function Post({ post }: Readonly<{ post: PostType }>) {
   const author: UserType = post.author as UserType
@@ -40,9 +41,7 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
       <div className="flex justify-between mt-2">
         <div className="flex ">
           <Like postId={post._id.toString()}/>
-          <Button isIconOnly variant="light">
-            <FaRegComment className="text-2xl -scale-x-100" />
-          </Button>
+          <CommentButton post={post} />
         </div>
         <Button isIconOnly variant="light">
           <FaRegBookmark className="text-xl" />

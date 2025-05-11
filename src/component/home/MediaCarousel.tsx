@@ -6,9 +6,13 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa"
 
 export default function MediaCarousel({
   mediaList,
-}: {
+  widthAndAspect = "w-full aspect-[9/13]",
+  itemWidthHeight = "w-full h-auto",
+}: Readonly<{
   mediaList: MediaItem[]
-}) {
+  widthAndAspect?: string
+  itemWidthHeight?: string
+}>) {
   const [current, setCurrent] = useState(0)
   const videoRef = useRef<HTMLVideoElement | null>(null)
 
@@ -21,22 +25,24 @@ export default function MediaCarousel({
       videoRef.current.currentTime = 0
       videoRef.current.play()
     }
-  }, [current])
+  }, [current, mediaList])
 
   return (
-    <div className="relative w-full aspect-[9/13] flex items-center justify-center">
-      <div key={current} className=" bg-black w-full max-h-full">
+    <div
+      className={"relative  flex items-center justify-center " + widthAndAspect}
+    >
+      <div key={current} className=" bg-black w-full max-h-full flex items-center justify-center">
         {mediaList[current].type === MediaType.IMAGE ? (
           <Image
             src={mediaList[current].url}
             alt="slide"
-            className="w-full h-auto object-cover rounded-none"
+            className={"object-cover rounded-none " + itemWidthHeight}
           />
         ) : (
           <video
             ref={videoRef}
             src={mediaList[current].url}
-            className="w-full h-auto object-cover"
+            className={"object-cover " + itemWidthHeight}
             controls
             muted
           />
@@ -66,7 +72,7 @@ export default function MediaCarousel({
       )}
 
       {/* Dots Indicator */}
-      <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2">
+      <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
         {mediaList.map((_, idx) => (
           <div
             key={idx}
