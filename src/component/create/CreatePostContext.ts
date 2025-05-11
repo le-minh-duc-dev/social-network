@@ -5,7 +5,8 @@ interface CreatePostContextType {
   files: FilePreview[]
   setFiles: React.Dispatch<React.SetStateAction<FilePreview[]>>
   captionRef: React.RefObject<string>,
-  handleSubmit: () => void
+  handleSubmit: () => void,
+   isPending:boolean
 }
 export const CreatePostContext = createContext<CreatePostContextType | undefined>(undefined)
 

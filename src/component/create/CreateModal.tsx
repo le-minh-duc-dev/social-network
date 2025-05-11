@@ -8,19 +8,18 @@ import {
 } from "@heroui/react"
 import DropZone from "./DropZone"
 import { useAuth } from "@/hooks/useAuth"
-import { useCreatePostContext } from "./CreatePostContext";
+import { useCreatePostContext } from "./CreatePostContext"
 export default function CreateModal({
   isOpen,
   onOpenChange,
 }: Readonly<{ isOpen: boolean; onOpenChange: (isOpen: boolean) => void }>) {
   const { authUser } = useAuth()
-  const {captionRef, handleSubmit} = useCreatePostContext()
+  const { captionRef, handleSubmit, isPending } = useCreatePostContext()
   const handleCaptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const caption = e.target.value
     captionRef.current = caption
   }
 
- 
   return (
     <Modal
       isOpen={isOpen}
@@ -44,7 +43,12 @@ export default function CreateModal({
                 Cancel
               </Button>
               <div className="">Create new post</div>
-              <Button variant="light" color="primary" onPress={handleSubmit}>
+              <Button
+                variant="light"
+                color="primary"
+                onPress={handleSubmit}
+                isLoading={isPending}
+              >
                 Share
               </Button>
             </ModalHeader>
