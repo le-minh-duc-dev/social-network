@@ -7,6 +7,7 @@ import { QueryKey } from "@/domain/enums/QueryKey"
 import { PostAPI } from "@/service/PostAPI"
 import { Post as PostType } from "@/types/schema"
 import Post from "./Post"
+import PostSkeleton from "./PostSkeleton"
 
 type PostResponse = {
   posts: PostType[]
@@ -66,7 +67,13 @@ export default function Feeds() {
     isFetchingNextPage,
   ])
 
-  if (isLoading) return <div className="mt-6">Loading...</div>
+  if (isLoading)
+    return (
+      <div className="justify-center items-center flex flex-col">
+        <PostSkeleton />
+        <PostSkeleton />
+      </div>
+    )
   if (error) return <div className="mt-6">Error: {error.message}</div>
 
   return (
@@ -77,40 +84,36 @@ export default function Feeds() {
       }}
       className=""
     >
-     
-        {virtualItems.map((virtualRow) => {
-          const post = allPosts[virtualRow.index]
+      {virtualItems.map((virtualRow) => {
+        const post = allPosts[virtualRow.index]
 
-          return (
-            <div
-              key={virtualRow.key}
-              ref={virtualizer.measureElement}
-              data-index={virtualRow.index}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: "50%",
-                width: "450px",
-                transform: `translateY(${virtualRow.start}px) translateX(-50%)`,
-              }}
-            >
-              {post ? (
-                <div className="pb-4">
-                  <Post post={post} />
-                </div>
-              ) : hasNextPage ? (
-                <div className="py-6 text-center text-gray-400">
-                  Loading more...
-                </div>
-              ) : (
-                <div className="py-6 text-center text-gray-400">
-                  No more posts
-                </div>
-              )}
-            </div>
-          )
-        })}
-      
+        return (
+          <div
+            key={virtualRow.key}
+            ref={virtualizer.measureElement}
+            data-index={virtualRow.index}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: "50%",
+              width: "450px",
+              transform: `translateY(${virtualRow.start}px) translateX(-50%)`,
+            }}
+          >
+            {post ? (
+              <div className="pb-4">
+                <Post post={post} />
+              </div>
+            ) : hasNextPage ? (
+              <PostSkeleton />
+            ) : (
+              <div className="py-6 text-center text-gray-400">
+                No more posts
+              </div>
+            )}
+          </div>
+        )
+      })}
     </div>
   )
 }
