@@ -3,9 +3,7 @@ import { Post, User as UserType } from "@/types/schema"
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react"
 import MediaCarousel from "../home/MediaCarousel"
 import { Button, Divider, User } from "@heroui/react"
-import { Formater } from "@/lib/Formater"
 import { IoIosMore } from "react-icons/io"
-import { LuDot } from "react-icons/lu"
 import Comment from "./Comment"
 
 export default function FullPostModal({
@@ -17,9 +15,9 @@ export default function FullPostModal({
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
-      <DialogBackdrop className="fixed inset-0 bg-black/30" />
+      <DialogBackdrop className="fixed inset-0 bg-black/75" />
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-        <DialogPanel className="w-[70vw] h-[90vh] bg-black space-y-4  grid grid-cols-5 rounded-lg ">
+        <DialogPanel className="w-[70vw] h-[95vh] bg-black space-y-4  grid grid-cols-5 rounded-lg ">
           <div className="col-span-3 overflow-hidden">
             <MediaCarousel
               mediaList={post.media}
