@@ -5,6 +5,11 @@ import MediaCarousel from "../home/MediaCarousel"
 import { Button, Divider, User } from "@heroui/react"
 import { IoIosMore } from "react-icons/io"
 import Comment from "./Comment"
+import Like from "../Like"
+import { FaRegBookmark } from "react-icons/fa"
+import CommentForm from "../CommentForm"
+import { Formater } from "@/lib/Formater"
+import CommentList from "./CommentList"
 
 export default function FullPostModal({
   isOpen,
@@ -17,7 +22,7 @@ export default function FullPostModal({
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <DialogBackdrop className="fixed inset-0 bg-black/75" />
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-        <DialogPanel className="w-[70vw] h-[95vh] bg-black space-y-4  grid grid-cols-5 rounded-lg ">
+        <DialogPanel className="w-[70vw] h-[95vh] bg-black space-y-4  grid grid-cols-5 rounded-lg overflow-hidden">
           <div className="col-span-3 overflow-hidden">
             <MediaCarousel
               mediaList={post.media}
@@ -25,7 +30,7 @@ export default function FullPostModal({
               itemWidthHeight="h-full w-auto overflow-hidden"
             />
           </div>
-          <div className="col-span-2 px-4">
+          <div className="col-span-2 px-4 flex flex-col overflow-hidden">
             <div className="flex justify-between items-center mt-2 mr-2">
               <User
                 avatarProps={{
@@ -39,7 +44,7 @@ export default function FullPostModal({
               </Button>
             </div>
             <Divider className="my-4" />
-            <div className="">
+            <div className="flex flex-col flex-1  overflow-hidden">
               {post.caption && (
                 <Comment
                   name={author.fullName}
@@ -49,6 +54,25 @@ export default function FullPostModal({
                   createdAt={post.createdAt}
                 />
               )}
+
+              <CommentList postId={post._id.toString()} />
+
+              <Divider className="my-3" />
+              <div className="">
+                <div className="flex justify-between mt-2">
+                  <Like postId={post._id.toString()} />
+                  <Button isIconOnly variant="light">
+                    <FaRegBookmark className="text-xl" />
+                  </Button>
+                </div>
+                <div className="text-xs text-default-500 ml-2 mt-3">
+                  {Formater.formatFullTimeAgo(post.createdAt)}
+                </div>
+              </div>
+              <Divider className="my-3" />
+              <div className="pb-4">
+                <CommentForm postId={post._id.toString()} />
+              </div>
             </div>
           </div>
         </DialogPanel>

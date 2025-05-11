@@ -22,8 +22,10 @@ export default function CommentForm({ postId }: Readonly<{ postId: string }>) {
     onSuccess: (data) => {
       if (data.status === 200) {
         setInputValue("")
+
         queryClient.invalidateQueries({
-          queryKey: [QueryKey.GET_POST_COMMENTS, postId],
+          queryKey: [QueryKey.GET_POST_COMMENTS],
+          exact: false,
         })
         queryClient.invalidateQueries({
           queryKey: [QueryKey.GET_POST, postId],
@@ -31,7 +33,7 @@ export default function CommentForm({ postId }: Readonly<{ postId: string }>) {
         queryClient.invalidateQueries({
           queryKey: [QueryKey.GET_POSTS],
           exact: false,
-        })  
+        })
       } else {
         console.error(data.errors)
       }

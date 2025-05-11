@@ -5,9 +5,9 @@ import React from "react"
 import { IoIosMore } from "react-icons/io"
 import MediaCarousel from "./MediaCarousel"
 import { FaRegBookmark } from "react-icons/fa"
-import CommentForm from "./CommentForm"
+import CommentForm from "../CommentForm"
 import { LuDot } from "react-icons/lu"
-import Like from "./Like"
+import Like from "../Like"
 import CommentButton from "./CommentButton"
 
 export default function Post({ post }: Readonly<{ post: PostType }>) {

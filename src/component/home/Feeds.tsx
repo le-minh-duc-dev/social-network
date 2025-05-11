@@ -91,6 +91,7 @@ export default function Feeds() {
               width: "450px",
               transform: `translateY(${virtualRow.start}px) translateX(-50%)`,
             }}
+            data-index={virtualRow.index}
           >
             {post ? (
               <Post post={post} />

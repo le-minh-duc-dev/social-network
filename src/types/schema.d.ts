@@ -36,6 +36,7 @@ export interface Post {
 }
 
 export interface Comment {
+  _id: string | Types.ObjectId
   post: string | Types.ObjectId
   author: string | User
   content: string

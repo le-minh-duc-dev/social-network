@@ -24,7 +24,7 @@ export default function Comment({
           <span className="font-semibold">{name}</span>
           <span className="">{" " + content}</span>
         </p>
-        <div className="text-default-400 text-sm mt-1">
+        <div className="text-default-400 text-xs mt-1">
           {Formater.formatTimeAgo(createdAt)}
         </div>
       </div>
