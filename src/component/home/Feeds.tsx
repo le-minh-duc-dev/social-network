@@ -77,36 +77,40 @@ export default function Feeds() {
       }}
       className=""
     >
-      {virtualItems.map((virtualRow) => {
-        const post = allPosts[virtualRow.index]
+     
+        {virtualItems.map((virtualRow) => {
+          const post = allPosts[virtualRow.index]
 
-        return (
-          <div
-            key={virtualRow.key}
-            ref={virtualizer.measureElement}
-            style={{
-              position: "absolute",
-              top: 0,
-              left: "50%",
-              width: "450px",
-              transform: `translateY(${virtualRow.start}px) translateX(-50%)`,
-            }}
-            data-index={virtualRow.index}
-          >
-            {post ? (
-              <Post post={post} />
-            ) : hasNextPage ? (
-              <div className="py-6 text-center text-gray-400">
-                Loading more...
-              </div>
-            ) : (
-              <div className="py-6 text-center text-gray-400">
-                No more posts
-              </div>
-            )}
-          </div>
-        )
-      })}
+          return (
+            <div
+              key={virtualRow.key}
+              ref={virtualizer.measureElement}
+              data-index={virtualRow.index}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: "50%",
+                width: "450px",
+                transform: `translateY(${virtualRow.start}px) translateX(-50%)`,
+              }}
+            >
+              {post ? (
+                <div className="pb-4">
+                  <Post post={post} />
+                </div>
+              ) : hasNextPage ? (
+                <div className="py-6 text-center text-gray-400">
+                  Loading more...
+                </div>
+              ) : (
+                <div className="py-6 text-center text-gray-400">
+                  No more posts
+                </div>
+              )}
+            </div>
+          )
+        })}
+      
     </div>
   )
 }
