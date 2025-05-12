@@ -1,4 +1,6 @@
 "use client"
+import { useAuth } from "@/hooks/useAuth"
+import { Post, User } from "@/types/schema"
 import {
   Button,
   Dropdown,
@@ -8,7 +10,10 @@ import {
 } from "@heroui/react"
 import { IoIosMore } from "react-icons/io"
 
-export default function PostOption() {
+export default function PostOption({ post }: Readonly<{ post: Post }>) {
+  const { authUser } = useAuth()
+  const author = post?.author as User
+  const isPostAuthor = authUser?._id == author._id
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -17,10 +22,24 @@ export default function PostOption() {
         </Button>
       </DropdownTrigger>
       <DropdownMenu aria-label="Static Actions">
-        <DropdownItem key="edit">Edit</DropdownItem>
-        <DropdownItem key="delete" className="text-danger" color="danger">
-          Delete 
+        <DropdownItem key="copyLink">Copy link</DropdownItem>
+        {isPostAuthor ? null : <DropdownItem key="edit">Edit</DropdownItem>}
+        <DropdownItem
+          key="unfollow"
+          className="text-danger font-bold"
+          color="danger"
+        >
+          <span className="font-bold">Unfollow</span>
         </DropdownItem>
+        {isPostAuthor ? null : (
+          <DropdownItem
+            key="delete"
+            className="text-danger font-bold"
+            color="danger"
+          >
+            <span className="font-bold">Delete</span>
+          </DropdownItem>
+        )}
       </DropdownMenu>
     </Dropdown>
   )

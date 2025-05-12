@@ -31,7 +31,7 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
             </div>
           }
         />
-        <PostOption />
+        <PostOption post={post}/>
       </div>
       {post.media.length > 0 ? (
         <div className=" overflow-hidden mt-4 rounded-lg border border-white/25">

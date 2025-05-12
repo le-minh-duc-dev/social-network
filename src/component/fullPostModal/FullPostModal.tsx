@@ -47,7 +47,7 @@ export default function FullPostModal({
                 }}
                 name={author.fullName}
               />
-              <PostOption />
+              <PostOption post={post}/>
             </div>
             <Divider className="my-4" />
             <div className="flex flex-col flex-1  overflow-hidden">
