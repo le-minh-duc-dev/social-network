@@ -6,11 +6,11 @@ import { PostAPI } from "@/service/PostAPI"
 import { Post as PostType } from "@/types/schema"
 import Post from "./Post"
 import PostSkeleton from "./PostSkeleton"
-import { InfiniteVirtualList } from "../InfiniteVirtualList"
+import { InfiniteWindowVirtualList } from "../InfiniteWindowVirtualList"
 
 export default function Feeds() {
   return (
-    <InfiniteVirtualList<PostType>
+    <InfiniteWindowVirtualList<PostType>
       queryKey={[QueryKey.GET_POSTS]}
       fetchFn={PostAPI.getPosts}
       renderItem={(post) => (

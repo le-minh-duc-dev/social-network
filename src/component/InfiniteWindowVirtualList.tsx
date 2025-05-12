@@ -1,5 +1,5 @@
 import { useInfiniteQuery, QueryKey } from "@tanstack/react-query"
-import { useVirtualizer } from "@tanstack/react-virtual"
+import { useWindowVirtualizer } from "@tanstack/react-virtual"
 import React, { useMemo, useEffect, ReactNode, ComponentType } from "react"
 
 type Props<T> = {
@@ -10,12 +10,17 @@ type Props<T> = {
   renderItem: (item: T, index: number) => ReactNode
   Skeleton?: ComponentType
   ErrorComponent?: (msg: string) => ReactNode
+  itemStyle?: { left: string; width: string; transformExtra: string }
 }
 
-export function InfiniteVirtualList<T>({
+export function InfiniteWindowVirtualList<T>({
   staleTime = 60000,
   estimateSize = () => 900,
- 
+  itemStyle = {
+    left: "50%",
+    width: "450px",
+    transformExtra: `translateX(-50%)`,
+  },
   queryKey,
   fetchFn,
   renderItem,
@@ -49,13 +54,10 @@ export function InfiniteVirtualList<T>({
     [data]
   )
 
-  const parentRef = React.useRef<HTMLDivElement>(null)
-
-  const virtualizer = useVirtualizer({
+  const virtualizer = useWindowVirtualizer({
     count: hasNextPage ? allItems.length + 1 : allItems.length,
-    getScrollElement: () => parentRef.current,
     estimateSize,
-    overscan: 3,
+    overscan: 0,
   })
 
   const virtualItems = virtualizer.getVirtualItems()
@@ -86,7 +88,7 @@ export function InfiniteVirtualList<T>({
   }
 
   if (error) {
-    console.log(error)
+    console.log(error);
     return ErrorComponent ? (
       ErrorComponent(error.message)
     ) : (
@@ -96,52 +98,39 @@ export function InfiniteVirtualList<T>({
 
   return (
     <div
-      ref={parentRef}
-      className="flex-1 h-full overflow-hidden"
       style={{
-        width: `100%`,
-        overflow: "auto",
+        height: virtualizer.getTotalSize(),
+        position: "relative",
       }}
     >
-      <div
-        style={{
-          height: virtualizer.getTotalSize(),
-          width: "100%",
-          position: "relative",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            transform: `translateY(${virtualItems[0]?.start ?? 0}px)`,
-          }}
-        >
-          {virtualItems.map((virtualRow) => {
-            const item = allItems[virtualRow.index]
+      {virtualItems.map((virtualRow) => {
+        const item = allItems[virtualRow.index]
 
-            return (
-              <div
-                key={virtualRow.key}
-                ref={virtualizer.measureElement}
-                data-index={virtualRow.index}
-              >
-                {item ? (
-                  renderItem(item, virtualRow.index)
-                ) : hasNextPage && Skeleton ? (
-                  <Skeleton />
-                ) : (
-                  <div className="text-center text-gray-400 py-6">
-                    No more items
-                  </div>
-                )}
+        return (
+          <div
+            key={virtualRow.key}
+            ref={virtualizer.measureElement}
+            data-index={virtualRow.index}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: itemStyle.left,
+              width: itemStyle.width,
+              transform: `translateY(${virtualRow.start}px) ${itemStyle.transformExtra}`,
+            }}
+          >
+            {item ? (
+              renderItem(item, virtualRow.index)
+            ) : hasNextPage && Skeleton ? (
+              <Skeleton />
+            ) : (
+              <div className="text-center text-gray-400 py-6">
+                No more items
               </div>
-            )
-          })}
-        </div>
-      </div>
+            )}
+          </div>
+        )
+      })}
     </div>
   )
 }
