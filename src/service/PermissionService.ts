@@ -15,4 +15,12 @@ export class PermissionService {
   static getPermissions(role: Role) {
     return data[role] ?? {}
   }
+  static hasDeletePostPermission(
+    userId: string,
+    userRole: Role,
+    postAuthorId: string
+  ): boolean {
+    if (userRole == Role.ADMIN) return true
+    return userId == postAuthorId
+  }
 }

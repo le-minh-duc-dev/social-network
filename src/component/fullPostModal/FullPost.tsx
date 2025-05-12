@@ -8,7 +8,7 @@ import { FaRegBookmark } from "react-icons/fa"
 import CommentForm from "../CommentForm"
 import { Formater } from "@/lib/Formater"
 import CommentList from "./CommentList"
-import PostOption from "../PostOption"
+import PostOption from "../postOption/PostOption"
 export default function FullPost({ post }: Readonly<{ post: Post | null }>) {
   if (!post) return null
   const author: UserType = post?.author as UserType

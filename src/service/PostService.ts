@@ -118,4 +118,11 @@ export class PostService {
 
     return savedPost.modifiedCount > 0
   }
+
+  async deletePost(postId: Types.ObjectId) {
+    const result = await Post.deleteOne({ _id: postId })
+
+    revalidateTag(UnstableCacheKey.POST_LIST)
+    return result.deletedCount > 0
+  }
 }

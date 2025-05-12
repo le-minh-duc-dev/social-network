@@ -8,7 +8,7 @@ import CommentForm from "../CommentForm"
 import { LuDot } from "react-icons/lu"
 import Like from "../Like"
 import { useFullPostModal } from "@/context/FullPostContext"
-import PostOption from "../PostOption"
+import PostOption from "../postOption/PostOption"
 
 export default function Post({ post }: Readonly<{ post: PostType }>) {
   const author: UserType = post.author as UserType
