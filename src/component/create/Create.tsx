@@ -1,12 +1,12 @@
 import React, { useMemo, useRef, useState } from "react"
-import { CreatePostContext } from "./CreatePostContext"
-import CreateModal from "./CreateModal"
+import MutatePostModal from "./MutatePostModal"
 import { useMediaUpload } from "@/context/MediaUploadContext"
 import { createPost } from "@/actions/post/createPost"
 import { FilePreview } from "@/types/FilePreview"
 import { MediaItemDTO } from "@/domain/zod/PostUploadSchema"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { QueryKey } from "@/domain/enums/QueryKey"
+import { MutatePostContext } from "./MutatePostContext"
 
 export default function Create({
   isOpen,
@@ -21,6 +21,7 @@ export default function Create({
 
   const uploadService = useMediaUpload()
   const [files, setFiles] = useState<FilePreview[]>([])
+  const [deletedFiles, setDeletedFiles] = useState<FilePreview[]>([])
   const captionRef = useRef<string>("")
 
   const handleSubmit = async () => {
@@ -61,7 +62,6 @@ export default function Create({
       }
     },
   })
-
   const contextValue = useMemo(
     () => ({
       files,
@@ -69,13 +69,28 @@ export default function Create({
       captionRef,
       handleSubmit: mutation.mutate,
       isPending: mutation.isPending,
+      deletedFiles,
+      setDeletedFiles,
     }),
-    [files, setFiles, captionRef, mutation.mutate, mutation.isPending]
+    [
+      files,
+      setFiles,
+      captionRef,
+      mutation.mutate,
+      mutation.isPending,
+      deletedFiles,
+      setDeletedFiles,
+    ]
   )
 
   return (
-    <CreatePostContext.Provider value={contextValue}>
-      <CreateModal isOpen={isOpen} onOpenChange={onOpenChange} />
-    </CreatePostContext.Provider>
+    <MutatePostContext.Provider value={contextValue}>
+      <MutatePostModal
+        title="Create new post"
+        submitButtonName="Share"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      />
+    </MutatePostContext.Provider>
   )
 }

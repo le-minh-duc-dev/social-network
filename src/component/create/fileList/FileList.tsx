@@ -19,10 +19,10 @@ import { Button } from "@heroui/react"
 import { TiDelete } from "react-icons/ti"
 import { PhotoProvider, PhotoView } from "react-photo-view"
 import { TbZoomScan } from "react-icons/tb"
-import { useCreatePostContext } from "../CreatePostContext"
+import { useMutatePostContext } from "../MutatePostContext"
 
 export default function FileList() {
-  const { files, setFiles } = useCreatePostContext()
+  const { files, setFiles, setDeletedFiles } = useMutatePostContext()
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -44,6 +44,13 @@ export default function FileList() {
 
   const handleDelete = (id: string) => {
     setFiles((prev) => prev.filter((file) => file.id !== id))
+    setDeletedFiles((prev) => {
+      const file = files.find((file) => file.id == id)
+      if (file) {
+        return [...prev, file]
+      }
+      return [...prev]
+    })
   }
 
   return (

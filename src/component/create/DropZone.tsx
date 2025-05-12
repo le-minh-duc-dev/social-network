@@ -3,9 +3,9 @@ import { v4 as uuidv4 } from "uuid"
 import { useDropzone } from "react-dropzone"
 import { useEffect } from "react"
 import FileList from "./fileList/FileList"
-import { useCreatePostContext } from "./CreatePostContext"
 import { FilePreview } from "@/types/FilePreview"
 import { MediaType } from "@/domain/enums/MediaType"
+import { useMutatePostContext } from "./MutatePostContext"
 
 export default function DropZone() {
   const { acceptedFiles, getRootProps, getInputProps, isDragActive } =
@@ -14,7 +14,7 @@ export default function DropZone() {
       maxFiles: 20,
     })
 
-  const { setFiles } = useCreatePostContext()
+  const { setFiles } = useMutatePostContext()
 
   useEffect(() => {
     setFiles((pre) => {

@@ -8,13 +8,15 @@ import {
 } from "@heroui/react"
 import DropZone from "./DropZone"
 import { useAuth } from "@/hooks/useAuth"
-import { useCreatePostContext } from "./CreatePostContext"
-export default function CreateModal({
+import { useMutatePostContext } from "./MutatePostContext"
+export default function MutatePostModal({
+  title,
+  submitButtonName,
   isOpen,
   onOpenChange,
-}: Readonly<{ isOpen: boolean; onOpenChange: (isOpen: boolean) => void }>) {
+}: Readonly<{title:string, submitButtonName:string, isOpen: boolean; onOpenChange: (isOpen: boolean) => void }>) {
   const { authUser } = useAuth()
-  const { captionRef, handleSubmit, isPending } = useCreatePostContext()
+  const { captionRef, handleSubmit, isPending } = useMutatePostContext()
   const handleCaptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const caption = e.target.value
     captionRef.current = caption
@@ -42,14 +44,14 @@ export default function CreateModal({
               <Button variant="light" color="danger" onPress={onClose}>
                 Cancel
               </Button>
-              <div className="">Create new post</div>
+              <div className="">{title}</div>
               <Button
                 variant="light"
                 color="primary"
                 onPress={handleSubmit}
                 isLoading={isPending}
               >
-                Share
+                {submitButtonName}
               </Button>
             </ModalHeader>
             <ModalBody>
