@@ -12,7 +12,7 @@ import {
 import { PiFilmReel, PiFilmReelFill } from "react-icons/pi"
 import UserIcon from "./UserIcon"
 import { usePathname } from "next/navigation"
-import Create from "../create/Create"
+import Create from "../postMutation/Create"
 
 export default function LinkList() {
   const pathname = usePathname()

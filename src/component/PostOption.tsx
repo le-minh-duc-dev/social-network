@@ -10,7 +10,7 @@ import {
   useDisclosure,
 } from "@heroui/react"
 import { IoIosMore } from "react-icons/io"
-import EditPost from "./create/EditPost"
+import EditPost from "./postMutation/EditPost"
 
 export default function PostOption({ post }: Readonly<{ post: Post }>) {
   const { authUser } = useAuth()
