@@ -13,10 +13,24 @@ import { IoIosMore } from "react-icons/io"
 import EditPost from "./postMutation/EditPost"
 import { AppRoute } from "@/domain/enums/AppRoute"
 
+function copyToClipboard(text: string): void {
+  navigator.clipboard.writeText(text)
+    .then(() => {
+      console.log('Copied to clipboard!');
+    })
+    .catch((err) => {
+      console.error('Failed to copy:', err);
+    });
+}
+
+
 export default function PostOption({ post }: Readonly<{ post: Post }>) {
   const { authUser } = useAuth()
   const author = post?.author as User
   const isPostAuthor = authUser?._id == author._id
+
+  const postUrl = AppRoute.POSTS + `/${post._id.toString()}`
+  const fullPostUrl = process.env.NEXT_PUBLIC_BASE_URL + postUrl
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
@@ -35,10 +49,10 @@ export default function PostOption({ post }: Readonly<{ post: Post }>) {
           </Button>
         </DropdownTrigger>
         <DropdownMenu aria-label="Static Actions">
-          <DropdownItem key="copyLink">Copy link</DropdownItem>
+          <DropdownItem key="copyLink" onPress={()=>copyToClipboard(fullPostUrl)}>Copy link</DropdownItem>
           <DropdownItem
             key="goToPost"
-            href={AppRoute.POSTS + `/${post._id.toString()}`}
+            href={postUrl}
           >
             Go to post
           </DropdownItem>

@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useRef, useEffect } from "react"
 import { MediaItem } from "@/types/schema"
 import { MediaType } from "@/domain/enums/MediaType"
