@@ -1,6 +1,8 @@
 import { v2 } from "cloudinary"
 import { CloudinaryService } from "@/service/CloudinaryService"
+import { RouteProtector } from "@/auth/RouteProtector"
 export const POST = async (req: Request) => {
+  await RouteProtector.protect()
   const { cloudStorage } = await req.json()
   console.log(cloudStorage)
   if (cloudStorage !== "default" && cloudStorage !== "v1") {
