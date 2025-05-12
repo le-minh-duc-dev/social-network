@@ -28,7 +28,7 @@ function copyToClipboard(text: string): void {
 export default function PostOption({ post }: Readonly<{ post: Post }>) {
   const { authUser } = useAuth()
   const author = post?.author as User
-  const isPostAuthor = authUser?._id == author._id
+  const isPostAuthor = authUser?.id == author._id.toString()
 
   const postUrl = AppRoute.POSTS + `/${post._id.toString()}`
   const fullPostUrl = process.env.NEXT_PUBLIC_BASE_URL + postUrl
@@ -78,19 +78,21 @@ export default function PostOption({ post }: Readonly<{ post: Post }>) {
           <DropdownItem key="goToPost" href={postUrl}>
             Go to post
           </DropdownItem>
-          {isPostAuthor ? null : (
+          {!isPostAuthor ? null : (
             <DropdownItem key="edit" onPress={onEditPostOpen}>
               Edit
             </DropdownItem>
           )}
-          <DropdownItem
-            key="unfollow"
-            className="text-danger font-bold"
-            color="danger"
-          >
-            <span className="font-bold">Unfollow</span>
-          </DropdownItem>
           {isPostAuthor ? null : (
+            <DropdownItem
+              key="unfollow"
+              className="text-danger font-bold"
+              color="danger"
+            >
+              <span className="font-bold">Unfollow</span>
+            </DropdownItem>
+          )}
+          {!isPostAuthor ? null : (
             <DropdownItem
               key="delete"
               className="text-danger font-bold"
