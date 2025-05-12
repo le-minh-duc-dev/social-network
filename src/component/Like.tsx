@@ -1,7 +1,7 @@
 import { createLike } from "@/actions/like/createLike"
 import { deleteLike } from "@/actions/like/deleteLike"
 import { HttpMessages, HttpStatus } from "@/domain/enums/HttpStatus"
-import { QueryKey } from "@/domain/enums/QueryKey"
+import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
 import { useAuth } from "@/hooks/useAuth"
 import { LikeAPI } from "@/service/LikeAPI"
 import { addToast, Button } from "@heroui/react"
@@ -17,6 +17,7 @@ export default function Like({ postId }: Readonly<{ postId: string }>) {
   const { data } = useQuery({
     queryFn: () => LikeAPI.checkLikeExists(postId),
     queryKey: [QueryKey.GET_POST_LIKES, postId, authUser?._id],
+    staleTime: QueryStaleTime[QueryKey.GET_POST_LIKES],
   })
 
   useEffect(() => {

@@ -3,7 +3,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useWindowVirtualizer } from "@tanstack/react-virtual"
 import { useMemo, useEffect } from "react"
-import { QueryKey } from "@/domain/enums/QueryKey"
+import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
 import { PostAPI } from "@/service/PostAPI"
 import { Post as PostType } from "@/types/schema"
 import Post from "./Post"
@@ -35,6 +35,7 @@ export default function Feeds() {
     queryFn: fetchPosts,
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage.nextCursor,
+    staleTime: QueryStaleTime[QueryKey.GET_POSTS],
   })
 
   const allPosts = useMemo<PostType[]>(

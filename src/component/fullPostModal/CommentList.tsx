@@ -1,4 +1,4 @@
-import { QueryKey } from "@/domain/enums/QueryKey"
+import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
 import { CommentAPI } from "@/service/CommentAPI"
 import { Comment as CommentType, User } from "@/types/schema"
 import { useInfiniteQuery } from "@tanstack/react-query"
@@ -23,6 +23,7 @@ export default function CommentList({ postId }: Readonly<{ postId: string }>) {
     queryFn: fetchFn,
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage.nextCursor,
+    staleTime: QueryStaleTime[QueryKey.GET_POST_COMMENTS],
   })
 
   const allRows = useMemo<CommentType[]>(
