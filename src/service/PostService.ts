@@ -1,6 +1,7 @@
 import { UnstableCacheKey } from "@/domain/enums/UnstableCacheKey"
 import Post from "@/domain/model/Post"
 import { PostUploadType } from "@/domain/zod/PostUploadSchema"
+import { Post as PostType } from "@/types/schema"
 import { ClientSession, Types } from "mongoose"
 import { revalidateTag, unstable_cache } from "next/cache"
 
@@ -82,5 +83,39 @@ export class PostService {
         tags: [UnstableCacheKey.POST_LIST],
       }
     )()
+  }
+
+  async getPostById(id: Types.ObjectId) {
+    return unstable_cache(
+      async (): Promise<PostType> => {
+        return await Post.findById(id).populate(
+          "author",
+          "_id fullName avatarUrl"
+        )
+      },
+      [UnstableCacheKey.POST_LIST + id.toString()],
+      {
+        tags: [UnstableCacheKey.POST_LIST],
+      }
+    )()
+  }
+
+  async updatePost(
+    userId: Types.ObjectId,
+    postId: Types.ObjectId,
+    postData: PostUploadType,
+    dbSession: ClientSession
+  ) {
+    const savedPost = await Post.updateOne(
+      { _id: postId, author: userId },
+      {
+        ...postData,
+      },
+      { session: dbSession }
+    )
+
+    revalidateTag(UnstableCacheKey.POST_LIST)
+
+    return savedPost.modifiedCount > 0
   }
 }

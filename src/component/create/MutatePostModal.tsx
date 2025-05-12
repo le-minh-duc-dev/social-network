@@ -14,7 +14,12 @@ export default function MutatePostModal({
   submitButtonName,
   isOpen,
   onOpenChange,
-}: Readonly<{title:string, submitButtonName:string, isOpen: boolean; onOpenChange: (isOpen: boolean) => void }>) {
+}: Readonly<{
+  title: string
+  submitButtonName: string
+  isOpen: boolean
+  onOpenChange: (isOpen: boolean) => void
+}>) {
   const { authUser } = useAuth()
   const { captionRef, handleSubmit, isPending } = useMutatePostContext()
   const handleCaptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -74,6 +79,7 @@ export default function MutatePostModal({
                     rows={4}
                     onChange={handleCaptionChange}
                     maxLength={2200}
+                    defaultValue={captionRef.current}
                   />
                 </div>
               </div>

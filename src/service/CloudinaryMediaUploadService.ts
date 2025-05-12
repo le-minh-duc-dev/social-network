@@ -2,9 +2,7 @@ import { FilePreview } from "@/types/FilePreview"
 import { IMediaUploadService } from "@/types/media_service"
 
 export class CloudinaryMediaUploadService implements IMediaUploadService {
-  async getSignature(
-    cloudStorage: CloudStorageTypes
-  ): Promise<SignatureType> {
+  async getSignature(cloudStorage: CloudStorageTypes): Promise<SignatureType> {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/cloudinary`,
       {
@@ -62,7 +60,10 @@ export class CloudinaryMediaUploadService implements IMediaUploadService {
       let attempt = 0
       while (attempt < retries) {
         try {
-          const url = await this.uploadFile(file.file!, signData, cloudStorage)
+          const url =
+            !file.file && file.preview.startsWith("http")
+              ? file.preview
+              : await this.uploadFile(file.file!, signData, cloudStorage)
           return { ...file, preview: url }
         } catch {
           attempt++
