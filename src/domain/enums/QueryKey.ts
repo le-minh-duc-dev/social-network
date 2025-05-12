@@ -7,9 +7,9 @@ export enum QueryKey {
 }
 
 export const QueryStaleTime: Record<QueryKey, number> = {
-  [QueryKey.GET_POSTS]: 60000,
-  [QueryKey.GET_POST]: 60000,
+  [QueryKey.GET_POSTS]: 90000,
+  [QueryKey.GET_POST]: 90000,
   [QueryKey.GET_USER]: 300000,
-  [QueryKey.GET_POST_COMMENTS]: 60000,
+  [QueryKey.GET_POST_COMMENTS]: 90000,
   [QueryKey.GET_POST_LIKES]: 180000,
 }
