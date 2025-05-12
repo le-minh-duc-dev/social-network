@@ -11,6 +11,7 @@ import {
 } from "@heroui/react"
 import { IoIosMore } from "react-icons/io"
 import EditPost from "./postMutation/EditPost"
+import { AppRoute } from "@/domain/enums/AppRoute"
 
 export default function PostOption({ post }: Readonly<{ post: Post }>) {
   const { authUser } = useAuth()
@@ -35,6 +36,12 @@ export default function PostOption({ post }: Readonly<{ post: Post }>) {
         </DropdownTrigger>
         <DropdownMenu aria-label="Static Actions">
           <DropdownItem key="copyLink">Copy link</DropdownItem>
+          <DropdownItem
+            key="goToPost"
+            href={AppRoute.POSTS + `/${post._id.toString()}`}
+          >
+            Go to post
+          </DropdownItem>
           {isPostAuthor ? null : (
             <DropdownItem key="edit" onPress={onOpen}>
               Edit
