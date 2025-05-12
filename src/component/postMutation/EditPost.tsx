@@ -10,6 +10,8 @@ import { Post } from "@/types/schema"
 import { v4 as uuidv4 } from "uuid"
 import { MediaType } from "@/domain/enums/MediaType"
 import { updatePost } from "@/actions/post/updatePost"
+import { addToast } from "@heroui/react"
+import { HttpMessages, HttpStatus } from "@/domain/enums/HttpStatus"
 
 export default function EditPost({
   isOpen,
@@ -84,16 +86,29 @@ export default function EditPost({
 
   const mutation = useMutation({
     mutationFn: handleSubmit,
-    onSuccess: (result) => {
-      if (result!.status !== 200) {
-        console.error("Failed to update post:", result!.message)
-      } else {
-        queryClient.invalidateQueries({
-          queryKey: [QueryKey.GET_POSTS],
-          exact: false,
+    onSuccess: (response) => {
+      if (!response) return
+      if (response.status != HttpStatus.NO_CONTENT) {
+        addToast({
+          title: response.errors
+            ? response.errors[0]
+            : HttpMessages[HttpStatus.INTERNAL_SERVER_ERROR],
         })
-        onClose()
+        return
       }
+      queryClient.invalidateQueries({
+        queryKey: [QueryKey.GET_POSTS],
+        exact: false,
+      })
+      addToast({
+        title: "Post updated successfully!",
+      })
+      onClose()
+    },
+    onError: () => {
+      addToast({
+        title: HttpMessages[HttpStatus.INTERNAL_SERVER_ERROR],
+      })
     },
   })
   const contextValue = useMemo(

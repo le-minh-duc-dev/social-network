@@ -2,8 +2,10 @@
 
 import { RouteProtector } from "@/auth/RouteProtector"
 import { ServerSideAuthService } from "@/auth/ServerSideAuthService"
+import {  HttpStatus } from "@/domain/enums/HttpStatus"
 import { PostUploadSchema, PostUploadType } from "@/domain/zod/PostUploadSchema"
 import connectDB from "@/lib/connectDB"
+import { HttpHelper } from "@/lib/HttpHelper"
 import { MongooseHelper } from "@/lib/MongooseHelper"
 import { CloudinaryService } from "@/service/CloudinaryService"
 import { PostService } from "@/service/PostService"
@@ -25,11 +27,7 @@ export async function createPost(
   if (!result.success) {
     console.error("Post upload validation error:", result.error.flatten())
     mediaService.deleteMediaByURLs(post.media.map((item) => item.url))
-    return {
-      status: 400,
-      message: "Invalid post data",
-      data: "",
-    }
+    return HttpHelper.buildHttpErrorResponseData(HttpStatus.BAD_REQUEST)
   }
   //safe post
   const safePost = result.data
@@ -51,7 +49,7 @@ export async function createPost(
     )
     await dbSession.commitTransaction()
     return {
-      status: 200,
+      status: HttpStatus.CREATED,
       data: "/posts/" + newPost._id,
       message: "Post created successfully",
     }
@@ -60,5 +58,5 @@ export async function createPost(
     mediaService.deleteMediaByURLs(safePost.media.map((item) => item.url))
     console.error("Error creating post:", error)
   }
-  return { status: 500, message: "Failed to create post" }
+  return HttpHelper.buildHttpErrorResponseData(HttpStatus.INTERNAL_SERVER_ERROR)
 }

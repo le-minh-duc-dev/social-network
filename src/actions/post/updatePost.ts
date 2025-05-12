@@ -2,8 +2,10 @@
 
 import { RouteProtector } from "@/auth/RouteProtector"
 import { ServerSideAuthService } from "@/auth/ServerSideAuthService"
+import { HttpStatus } from "@/domain/enums/HttpStatus"
 import { PostUploadSchema, PostUploadType } from "@/domain/zod/PostUploadSchema"
 import connectDB from "@/lib/connectDB"
+import { HttpHelper } from "@/lib/HttpHelper"
 import { MongooseHelper } from "@/lib/MongooseHelper"
 import { CloudinaryService } from "@/service/CloudinaryService"
 import { PostService } from "@/service/PostService"
@@ -27,11 +29,7 @@ export async function updatePost(
   if (!result.success) {
     console.error("Post upload validation error:", result.error.flatten())
     mediaService.deleteMediaByURLs(post.media.map((item) => item.url))
-    return {
-      status: 400,
-      message: "Invalid post data",
-      data: "",
-    }
+    return HttpHelper.buildHttpErrorResponseData(HttpStatus.BAD_REQUEST)
   }
   //safe post
   const safePost = result.data
@@ -47,10 +45,7 @@ export async function updatePost(
   } catch (error) {
     console.error("Invalid postId Or userId:", postId, user!.id, error)
 
-    return {
-      status: 400,
-      message: "Failed to update post",
-    }
+    return HttpHelper.buildHttpErrorResponseData(HttpStatus.BAD_REQUEST)
   }
 
   //get db session
@@ -72,7 +67,7 @@ export async function updatePost(
     mediaService.deleteMediaByURLs(deletedMediaUrls)
     await dbSession.commitTransaction()
     return {
-      status: 200,
+      status: HttpStatus.NO_CONTENT,
       message: "Post updated successfully",
     }
   } catch (error) {
@@ -80,5 +75,5 @@ export async function updatePost(
     mediaService.deleteMediaByURLs(safePost.media.map((item) => item.url))
     console.error("Error update post:", error)
   }
-  return { status: 500, message: "Failed to update post" }
+  return HttpHelper.buildHttpErrorResponseData(HttpStatus.INTERNAL_SERVER_ERROR)
 }

@@ -7,6 +7,8 @@ import { MediaItemDTO } from "@/domain/zod/PostUploadSchema"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { QueryKey } from "@/domain/enums/QueryKey"
 import { MutatePostContext } from "./MutatePostContext"
+import { HttpMessages, HttpStatus } from "@/domain/enums/HttpStatus"
+import { addToast } from "@heroui/react"
 
 export default function Create({
   isOpen,
@@ -48,18 +50,32 @@ export default function Create({
 
   const mutation = useMutation({
     mutationFn: handleSubmit,
-    onSuccess: (result) => {
-      if (result!.status !== 200) {
-        console.error("Failed to create post:", result!.message)
-      } else {
-        queryClient.invalidateQueries({
-          queryKey: [QueryKey.GET_POSTS],
-          exact: false,
+    onSuccess: (response) => {
+      if (!response) return
+      if (response.status != HttpStatus.CREATED) {
+        addToast({
+          title: response.errors
+            ? response.errors[0]
+            : HttpMessages[HttpStatus.INTERNAL_SERVER_ERROR],
         })
-        setFiles([])
-        captionRef.current = ""
-        onClose()
+        return
       }
+
+      queryClient.invalidateQueries({
+        queryKey: [QueryKey.GET_POSTS],
+        exact: false,
+      })
+      addToast({
+        title: "Post created successfully!",
+      })
+      setFiles([])
+      captionRef.current = ""
+      onClose()
+    },
+    onError: () => {
+      addToast({
+        title: HttpMessages[HttpStatus.INTERNAL_SERVER_ERROR],
+      })
     },
   })
   const contextValue = useMemo(

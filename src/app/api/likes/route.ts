@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   const cursor = searchParams.get("nextCursor") // last post ID
 
   if (!postId) {
-    return new Response(null, { status: 400 })
+    return new Response(null, { status: HttpStatus.BAD_REQUEST })
   }
 
   let postObjectId
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     postObjectId = MongooseHelper.toObjectId(postId)
   } catch (error) {
     console.error("Invalid postId:", postId, error)
-    return new Response(null, { status: 400 })
+    return new Response(null, { status: HttpStatus.BAD_REQUEST })
   }
 
   await RouteProtector.protect()

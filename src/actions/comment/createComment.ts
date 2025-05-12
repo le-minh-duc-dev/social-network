@@ -2,11 +2,13 @@
 
 import { RouteProtector } from "@/auth/RouteProtector"
 import { ServerSideAuthService } from "@/auth/ServerSideAuthService"
+import { HttpStatus } from "@/domain/enums/HttpStatus"
 import {
   CommentUploadSchema,
   CommentUploadType,
 } from "@/domain/zod/CommentUploadSchema"
 import connectDB from "@/lib/connectDB"
+import { HttpHelper } from "@/lib/HttpHelper"
 import { MongooseHelper } from "@/lib/MongooseHelper"
 import { CommentService } from "@/service/CommentService"
 import { PostService } from "@/service/PostService"
@@ -27,12 +29,7 @@ export async function createComment(
   const result = CommentUploadSchema.safeParse(comment)
   if (!result.success) {
     console.error("Comment upload validation error:", result.error.flatten())
-    return {
-      status: 400,
-      message: "Invalid post data",
-      data: "",
-      errors: result.error.errors.map((item) => item.message),
-    }
+    return HttpHelper.buildHttpErrorResponseData(HttpStatus.BAD_REQUEST)
   }
   //safe comment
   const safeComment = result.data
@@ -60,15 +57,11 @@ export async function createComment(
     //commit transaction
     await dbSession.commitTransaction()
     return {
-      status: 200,
+      status: HttpStatus.CREATED,
     }
   } catch (error) {
     dbSession.abortTransaction()
     console.error("Error creating comment:", error)
   }
-  return {
-    status: 500,
-    message: "Failed to create comment",
-    errors: ["Something went wrong!"],
-  }
+  return HttpHelper.buildHttpErrorResponseData(HttpStatus.INTERNAL_SERVER_ERROR)
 }

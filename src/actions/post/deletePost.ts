@@ -4,6 +4,7 @@ import { RouteProtector } from "@/auth/RouteProtector"
 import { ServerSideAuthService } from "@/auth/ServerSideAuthService"
 import { HttpMessages, HttpStatus } from "@/domain/enums/HttpStatus"
 import connectDB from "@/lib/connectDB"
+import { HttpHelper } from "@/lib/HttpHelper"
 import { MongooseHelper } from "@/lib/MongooseHelper"
 import { CloudinaryService } from "@/service/CloudinaryService"
 import { PermissionService } from "@/service/PermissionService"
@@ -27,10 +28,7 @@ export async function deletePost(postId: string): Promise<IResponse<string>> {
   } catch (error) {
     console.error("Invalid postId Or userId:", postId, user!.id, error)
 
-    return {
-      status: HttpStatus.BAD_REQUEST,
-      errors: ["Failed to delete post"],
-    }
+    return HttpHelper.buildHttpErrorResponseData(HttpStatus.BAD_REQUEST)
   }
 
   //get db session
@@ -75,8 +73,5 @@ export async function deletePost(postId: string): Promise<IResponse<string>> {
     dbSession.abortTransaction()
     console.error("Error update post:", error)
   }
-  return {
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    errors: ["Failed to delete post"],
-  }
+  return HttpHelper.buildHttpErrorResponseData(HttpStatus.INTERNAL_SERVER_ERROR)
 }

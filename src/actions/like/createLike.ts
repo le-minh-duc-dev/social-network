@@ -2,8 +2,10 @@
 
 import { RouteProtector } from "@/auth/RouteProtector"
 import { ServerSideAuthService } from "@/auth/ServerSideAuthService"
+import { HttpStatus } from "@/domain/enums/HttpStatus"
 
 import connectDB from "@/lib/connectDB"
+import { HttpHelper } from "@/lib/HttpHelper"
 import { MongooseHelper } from "@/lib/MongooseHelper"
 import { LikeService } from "@/service/LikeService"
 import { PostService } from "@/service/PostService"
@@ -34,15 +36,11 @@ export async function createLike(postId: string): Promise<IResponse<string>> {
     //commit transaction
     await dbSession.commitTransaction()
     return {
-      status: 200,
+      status: HttpStatus.CREATED,
     }
   } catch (error) {
     dbSession.abortTransaction()
     console.error("Error creating Like:", error)
   }
-  return {
-    status: 500,
-    message: "Failed to create Like",
-    errors: ["Something went wrong!"],
-  }
+  return HttpHelper.buildHttpErrorResponseData(HttpStatus.INTERNAL_SERVER_ERROR)
 }

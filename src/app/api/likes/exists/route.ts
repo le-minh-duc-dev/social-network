@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   const postId = searchParams.get("postId")
 
   if (!postId) {
-    return new Response(null, { status: 400 })
+    return new Response(null, { status: HttpStatus.BAD_REQUEST })
   }
 
   const user = await ServerSideAuthService.getAuthUser()
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     postObjectId = MongooseHelper.toObjectId(postId)
   } catch (error) {
     console.error("Invalid postId:", postId, error)
-    return new Response(null, { status: 400 })
+    return new Response(null, { status: HttpStatus.BAD_REQUEST })
   }
 
   await RouteProtector.protect()

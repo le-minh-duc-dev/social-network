@@ -1,6 +1,8 @@
 import { createComment } from "@/actions/comment/createComment"
+import { HttpMessages, HttpStatus } from "@/domain/enums/HttpStatus"
 import { QueryKey } from "@/domain/enums/QueryKey"
 import { CommentUploadSchema } from "@/domain/zod/CommentUploadSchema"
+import { addToast } from "@heroui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import React, { useState } from "react"
 
@@ -19,27 +21,38 @@ export default function CommentForm({ postId }: Readonly<{ postId: string }>) {
 
   const { mutate } = useMutation({
     mutationFn: handleCreateComment,
-    onSuccess: (data) => {
-      if (data.status === 200) {
-        setInputValue("")
-
-        queryClient.invalidateQueries({
-          queryKey: [QueryKey.GET_POST_COMMENTS],
-          exact: false,
+    onSuccess: (response) => {
+      if (response.status != HttpStatus.CREATED) {
+        addToast({
+          title: response.errors
+            ? response.errors[0]
+            : HttpMessages[HttpStatus.INTERNAL_SERVER_ERROR],
         })
-        queryClient.invalidateQueries({
-          queryKey: [QueryKey.GET_POST, postId],
-        })
-        queryClient.invalidateQueries({
-          queryKey: [QueryKey.GET_POSTS],
-          exact: false,
-        })
-      } else {
-        console.error(data.errors)
+        return
       }
+
+      setInputValue("")
+
+      queryClient.invalidateQueries({
+        queryKey: [QueryKey.GET_POST_COMMENTS],
+        exact: false,
+      })
+      queryClient.invalidateQueries({
+        queryKey: [QueryKey.GET_POST, postId],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [QueryKey.GET_POSTS],
+        exact: false,
+      })
+
+      addToast({
+        title: "Comment created successfully!",
+      })
     },
-    onError: (error) => {
-      console.error("Error creating comment:", error)
+    onError: () => {
+      addToast({
+        title: HttpMessages[HttpStatus.INTERNAL_SERVER_ERROR],
+      })
     },
   })
 
