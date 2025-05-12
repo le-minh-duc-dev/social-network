@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
   const nextCursor = hasMore ? posts[posts.length - 1]._id.toString() : null
 
   return Response.json({
-    posts,
+    list: posts,
     nextCursor,
     hasMore,
   })

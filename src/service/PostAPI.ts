@@ -6,9 +6,9 @@ export class PostAPI {
   static async getPosts(
     nextCursor: string,
     limit: number = 2
-  ): Promise<{ posts: Post[]; nextCursor: string | null }> {
+  ): Promise<InfiniteResponse<Post>> {
     const res = await fetch(
-      this.baseUrl + `?nextCursor=${nextCursor}&limit=${limit}`,
+      PostAPI.baseUrl + `?nextCursor=${nextCursor}&limit=${limit}`,
       {
         credentials: "include",
       }
