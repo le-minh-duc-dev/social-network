@@ -14,6 +14,7 @@ export interface User {
   followingCount: number
   role: Role
   isActive: boolean
+  isVerified: boolean
   createdAt: Date
   updatedAt: Date
 }

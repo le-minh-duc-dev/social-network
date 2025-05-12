@@ -5,7 +5,7 @@ import { Role } from "../enums/Role"
 
 const UserSchema = new Schema<User>(
   {
-    email: { type: String, required: true, unique: true, index:true },
+    email: { type: String, required: true, unique: true, index: true },
     password: { type: String },
     fullName: { type: String, required: true },
     bio: { type: String },
@@ -17,11 +17,11 @@ const UserSchema = new Schema<User>(
       required: true,
     },
     isActive: { type: Boolean, default: false },
+    isVerified: { type: Boolean, default: false },
     followersCount: { type: Number, default: 0 },
     followingCount: { type: Number, default: 0 },
   },
   { timestamps: true }
 )
 
-export default mongoose.models.User ||
-  mongoose.model<User>("User", UserSchema)
+export default mongoose.models.User || mongoose.model<User>("User", UserSchema)
