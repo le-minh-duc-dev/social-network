@@ -13,8 +13,11 @@ import React from "react"
 import { LuMenu } from "react-icons/lu"
 import { IoSettingsOutline } from "react-icons/io5"
 import { FaRegBookmark } from "react-icons/fa"
+import { useAuth } from "@/hooks/useAuth"
 
 export default function More() {
+  const { authUser } = useAuth()
+
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -25,37 +28,38 @@ export default function More() {
       </DropdownTrigger>
       <DropdownMenu
         aria-label="Action event example"
-        classNames={{base:"w-64"}}
+        classNames={{ base: "w-64" }}
         onAction={(key) => {
           if (key == "logout") {
             signOut({ redirectTo: AppRoute.LOGIN })
           }
         }}
       >
-        <DropdownSection showDivider>
-          <DropdownItem
-            classNames={{base:"p-3"}}
+        {authUser?.isActive ? (
+          <DropdownSection showDivider>
+            <DropdownItem
+              classNames={{ base: "p-3" }}
+              key="settings"
+              href={AppRoute.USER_SETTINGS}
+              startContent={<IoSettingsOutline className="text-lg" />}
+            >
+              Settings
+            </DropdownItem>
+            <DropdownItem
+              classNames={{ base: "p-3" }}
+              key="saved"
+              href={AppRoute.SAVED}
+              startContent={<FaRegBookmark className="text-lg" />}
+            >
+              Saved
+            </DropdownItem>
+          </DropdownSection>
+        ) : null}
 
-            key="settings"
-            href={AppRoute.USER_SETTINGS}
-            startContent={<IoSettingsOutline className="text-lg" />}
-          >
-            Settings
-          </DropdownItem>
-          <DropdownItem
-            classNames={{base:"p-3"}}
-
-            key="saved"
-            href={AppRoute.SAVED}
-            startContent={<FaRegBookmark className="text-lg" />}
-          >
-            Saved
-          </DropdownItem>
-        </DropdownSection>
         <DropdownSection>
-          <DropdownItem
-                      classNames={{base:"p-3"}}
-          key="logout">Log out</DropdownItem>
+          <DropdownItem classNames={{ base: "p-3" }} key="logout">
+            Log out
+          </DropdownItem>
         </DropdownSection>
       </DropdownMenu>
     </Dropdown>

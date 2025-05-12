@@ -13,9 +13,11 @@ import { PiFilmReel, PiFilmReelFill } from "react-icons/pi"
 import UserIcon from "./UserIcon"
 import { usePathname } from "next/navigation"
 import Create from "../postMutation/Create"
+import { useAuth } from "@/hooks/useAuth"
 
 export default function LinkList() {
   const pathname = usePathname()
+  const {authUser} = useAuth()
   const items: {
     type: "link" | "action"
     url: string
@@ -76,6 +78,7 @@ export default function LinkList() {
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
+  if(!authUser?.isActive) return <div></div>
   return (
     <div>
       <Create isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose}/>
