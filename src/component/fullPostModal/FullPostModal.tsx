@@ -3,13 +3,13 @@ import { Post, User as UserType } from "@/types/schema"
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react"
 import MediaCarousel from "../MediaCarousel"
 import { Button, Divider, User } from "@heroui/react"
-import { IoIosMore } from "react-icons/io"
 import Comment from "./Comment"
 import Like from "../Like"
 import { FaRegBookmark } from "react-icons/fa"
 import CommentForm from "../CommentForm"
 import { Formater } from "@/lib/Formater"
 import CommentList from "./CommentList"
+import PostOption from "../PostOption"
 
 export default function FullPostModal({
   isOpen,
@@ -47,9 +47,7 @@ export default function FullPostModal({
                 }}
                 name={author.fullName}
               />
-              <Button isIconOnly variant="light">
-                <IoIosMore className="text-xl" />
-              </Button>
+              <PostOption />
             </div>
             <Divider className="my-4" />
             <div className="flex flex-col flex-1  overflow-hidden">
