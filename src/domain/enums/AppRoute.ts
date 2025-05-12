@@ -1,6 +1,7 @@
 export enum AppRoute {
   HOME = "/",
   ADMIN = "/admin",
+  ADMIN_MANAGE_USERS = "/admin/manage-users",
   LOGIN = "/login",
   WELCOME_NEW_MEMBER = "/welcome-new-member",
   SEARCH = "/search",
