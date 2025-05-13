@@ -50,6 +50,15 @@ export class UserService {
     )()
   }
 
+  async deleteUserById(
+    userObjectId: Types.ObjectId,
+    session?: ClientSession
+  ): Promise<boolean> {
+    await connectDB()
+    const result = await UserModel.deleteOne({ _id: userObjectId }, { session })
+    return result.deletedCount > 0
+  }
+
   async existsByEmail(email: string) {
     await connectDB()
     return unstable_cache(
@@ -71,12 +80,14 @@ export class UserService {
 
   async updateUser(
     userId: string,
-    updateData: UpdateQuery<UserType>
+    updateData: UpdateQuery<UserType>,
+    session?: ClientSession
   ): Promise<UserType | null> {
     await connectDB()
     const savedUser = await UserModel.findByIdAndUpdate(userId, updateData, {
       new: true,
       runValidators: true,
+      session,
     })
     revalidateTag(UnstableCacheKey.USER_LIST)
     return savedUser
