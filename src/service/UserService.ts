@@ -1,15 +1,36 @@
 import { UnstableCacheKey } from "@/domain/enums/UnstableCacheKey"
 import UserModel from "@/domain/model/User"
 import connectDB from "@/lib/connectDB"
-import { User } from "@/types/schema"
-import { FilterQuery, UpdateQuery } from "mongoose"
+import { FilterQuery, Types, UpdateQuery } from "mongoose"
 import { revalidateTag, unstable_cache } from "next/cache"
 
+import { User as UserType } from "@/types/schema"
+
 export class UserService {
+  async getInfiniteUsers(cursor: string | null, limit: number) {
+    return unstable_cache(
+      async () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const query: any = {}
+        if (cursor) {
+          query._id = { $lt: new Types.ObjectId(cursor) }
+        }
+
+        return await UserModel.find(query)
+          .sort({ _id: -1 }) // newest first
+          .limit(limit + 1)
+      },
+      [UnstableCacheKey.USER_LIST + cursor + limit],
+      {
+        tags: [UnstableCacheKey.USER_LIST],
+      }
+    )()
+  }
+
   async findUserByEmail(email: string) {
     await connectDB()
     return unstable_cache(
-      async (): Promise<User | null> => await UserModel.findOne({ email }),
+      async (): Promise<UserType | null> => await UserModel.findOne({ email }),
       [UnstableCacheKey.USER_EMAIL + email],
       {
         tags: [UnstableCacheKey.USER_LIST],
@@ -20,7 +41,7 @@ export class UserService {
   async existsByEmail(email: string) {
     await connectDB()
     return unstable_cache(
-      async (): Promise<User | null> => await UserModel.findOne({ email }),
+      async (): Promise<UserType | null> => await UserModel.findOne({ email }),
       [UnstableCacheKey.USER_EXISTS_BY_EMAIL + email],
       {
         tags: [UnstableCacheKey.USER_LIST],
@@ -28,7 +49,7 @@ export class UserService {
     )
   }
 
-  async createUser(data: Partial<User>): Promise<User> {
+  async createUser(data: Partial<UserType>): Promise<UserType> {
     await connectDB()
     const user = new UserModel(data)
     const newUser = await user.save()
@@ -38,8 +59,8 @@ export class UserService {
 
   async updateUser(
     userId: string,
-    updateData: UpdateQuery<User>
-  ): Promise<User | null> {
+    updateData: UpdateQuery<UserType>
+  ): Promise<UserType | null> {
     await connectDB()
     const savedUser = await UserModel.findByIdAndUpdate(userId, updateData, {
       new: true,
@@ -49,11 +70,11 @@ export class UserService {
     return savedUser
   }
 
-  async findUsers(filter: FilterQuery<User> = {}, limit = 10, skip = 0) {
+  async findUsers(filter: FilterQuery<UserType> = {}, limit = 10, skip = 0) {
     await connectDB()
 
     return unstable_cache(
-      async (): Promise<User[]> =>
+      async (): Promise<UserType[]> =>
         await UserModel.find(filter)
           .sort({ createdAt: -1 })
           .skip(skip)
@@ -65,16 +86,14 @@ export class UserService {
     )()
   }
 
-  async countUsers(filter: FilterQuery<User> = {}) {
+  async countUsers(filter: FilterQuery<UserType> = {}) {
     await connectDB()
-     return unstable_cache(
-      async (): Promise<number> =>
-         await UserModel.countDocuments(filter),
+    return unstable_cache(
+      async (): Promise<number> => await UserModel.countDocuments(filter),
       [UnstableCacheKey.USER_LIST_COUNT + filter.isVerified],
       {
         tags: [UnstableCacheKey.USER_LIST],
       }
     )()
-    
   }
 }

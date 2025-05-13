@@ -1,3 +1,5 @@
+import { User } from "@/types/schema"
+
 export class UserAPI {
   static readonly baseUrl = process.env.NEXT_PUBLIC_BASE_URL + "/api/users"
 
@@ -5,6 +7,19 @@ export class UserAPI {
     const res = await fetch(UserAPI.baseUrl + `/count`, {
       credentials: "include",
     })
+    return await res.json()
+  }
+
+  static async getUsers(
+    nextCursor: string,
+    limit: number = 2
+  ): Promise<InfiniteResponse<User>> {
+    const res = await fetch(
+      UserAPI.baseUrl + `?nextCursor=${nextCursor}&limit=${limit}`,
+      {
+        credentials: "include",
+      }
+    )
     return await res.json()
   }
 
