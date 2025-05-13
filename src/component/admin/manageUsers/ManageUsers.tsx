@@ -1,7 +1,7 @@
 "use client"
 import React from "react"
 import TotalUsers from "./TotalUsers"
-import UserList from "./UserList"
+import UserList from "./userList/UserList"
 
 export default function ManageUsers() {
   return (

@@ -8,17 +8,18 @@ import {
   TableRow,
   TableCell,
   User,
-  Chip,
   Tooltip,
   Spinner,
 } from "@heroui/react"
 import { FaRegEye } from "react-icons/fa"
 import { TbMoodEdit } from "react-icons/tb"
-import { MdDeleteForever } from "react-icons/md"
+import { MdDeleteForever, MdVerified } from "react-icons/md"
 import { UserAPI } from "@/service/UserAPI"
 import { useInfiniteScroll } from "@heroui/use-infinite-scroll"
 import { useAsyncList } from "@react-stately/data"
 import { User as UserType } from "@/types/schema"
+import ActiveToggle from "./ActiveToggle"
+import VerifiedToggle from "./VerifiedToggle"
 export const columns = [
   { name: "NAME", uid: "fullName" },
   { name: "ROLE", uid: "role" },
@@ -26,21 +27,6 @@ export const columns = [
   { name: "VERIFICATION", uid: "isVerified" },
   { name: "ACTIONS", uid: "actions" },
 ]
-const statusColorMap: Partial<
-  Record<
-    string,
-    | "success"
-    | "danger"
-    | "default"
-    | "primary"
-    | "secondary"
-    | "warning"
-    | undefined
-  >
-> = {
-  active: "success",
-  inactive: "danger",
-}
 
 export default function UserList() {
   const [isLoading, setIsLoading] = useState(true)
@@ -76,7 +62,12 @@ export default function UserList() {
           <User
             avatarProps={{ radius: "lg", src: user.avatarUrl }}
             description={user.email}
-            name={user.fullName}
+            name={
+              <div className="flex gap-x-2 items-center">
+                <div className="">{user.fullName}</div>
+                {user.isVerified && <MdVerified className="text-blue-500" />}
+              </div>
+            }
           >
             {user.email}
           </User>
@@ -91,27 +82,9 @@ export default function UserList() {
           </div>
         )
       case "isActive":
-        return (
-          <Chip
-            className="capitalize"
-            color={statusColorMap[user.isActive ? "active" : "inactive"]}
-            size="sm"
-            variant="flat"
-          >
-            {user.isActive ? "Active" : "Inactive"}
-          </Chip>
-        )
+        return <ActiveToggle user={user} />
       case "isVerified":
-        return (
-          <Chip
-            className="capitalize"
-            color={statusColorMap[user.isVerified ? "active" : "inactive"]}
-            size="sm"
-            variant="flat"
-          >
-            {user.isVerified ? "Verified" : "Inverified"}
-          </Chip>
-        )
+        return <VerifiedToggle user={user} />
       case "actions":
         return (
           <div className="relative flex justify-center items-center gap-2">
