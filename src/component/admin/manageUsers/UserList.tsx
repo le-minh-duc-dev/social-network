@@ -11,7 +11,6 @@ import {
   Chip,
   Tooltip,
   Spinner,
-  SortDescriptor,
 } from "@heroui/react"
 import { FaRegEye } from "react-icons/fa"
 import { TbMoodEdit } from "react-icons/tb"
@@ -61,40 +60,6 @@ export default function UserList() {
         items: res.list,
         cursor: res.nextCursor,
       }
-    },
-    async sort({
-      items,
-      sortDescriptor,
-    }: {
-      items: unknown[]
-      sortDescriptor: SortDescriptor
-    }) {
-      const column = sortDescriptor.column as keyof UserType
-
-      const sorted = [...(items as UserType[])].sort((a, b) => {
-        const first = a[column]!
-        const second = b[column]!
-
-        // Boolean sorting
-        if (typeof first === "boolean" && typeof second === "boolean") {
-          return sortDescriptor.direction === "ascending"
-            ? Number(first) - Number(second)
-            : Number(second) - Number(first)
-        }
-
-        // String or number sorting
-        let cmp =
-          (parseInt(first.toString()) || first) <
-          (parseInt(second.toString()) || second)
-            ? -1
-            : 1
-
-        if (sortDescriptor.direction === "descending") cmp *= -1
-
-        return cmp
-      })
-
-      return { items: sorted }
     },
   })
 
@@ -149,7 +114,7 @@ export default function UserList() {
         )
       case "actions":
         return (
-          <div className="relative flex items-center gap-2">
+          <div className="relative flex justify-center items-center gap-2">
             <Tooltip content="Details">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <FaRegEye />
@@ -186,15 +151,12 @@ export default function UserList() {
         table: "min-h-[500px]",
       }}
       selectionMode="multiple"
-      sortDescriptor={list.sortDescriptor}
-      onSortChange={list.sort}
     >
       <TableHeader columns={columns}>
         {(column) => (
           <TableColumn
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
-            allowsSorting={column.uid !== "actions"} // Enable sorting for all except actions
           >
             {column.name}
           </TableColumn>
