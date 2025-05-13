@@ -8,11 +8,7 @@ export default function VerifiedToggle({
   user: User
 }>) {
   return (
-    <Switch
-      size="sm"
-      defaultSelected={user.isVerified}
-      color={user.isVerified ? "success" : "danger"}
-    >
+    <Switch size="sm" defaultSelected={user.isVerified} color={"success"}>
       {user.isVerified ? "Verified" : "Unverified"}
     </Switch>
   )

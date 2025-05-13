@@ -1,7 +1,7 @@
 import { UnstableCacheKey } from "@/domain/enums/UnstableCacheKey"
 import UserModel from "@/domain/model/User"
 import connectDB from "@/lib/connectDB"
-import { FilterQuery, Types, UpdateQuery } from "mongoose"
+import { ClientSession, FilterQuery, Types, UpdateQuery } from "mongoose"
 import { revalidateTag, unstable_cache } from "next/cache"
 
 import { User as UserType } from "@/types/schema"
@@ -95,5 +95,21 @@ export class UserService {
         tags: [UnstableCacheKey.USER_LIST],
       }
     )()
+  }
+
+  async toggleField(
+    userObjectId: Types.ObjectId,
+    field: keyof Pick<UserType, "isActive" | "isVerified">,
+    status: boolean,
+    session?: ClientSession
+  ) {
+    const result = await UserModel.updateOne(
+      { _id: userObjectId },
+      { $set: { [field]: status } }, // ✅ computed property
+      { session }
+    )
+    revalidateTag(UnstableCacheKey.USER_LIST)
+
+    return result.modifiedCount > 0
   }
 }
