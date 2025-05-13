@@ -38,6 +38,18 @@ export class UserService {
     )()
   }
 
+  async findUserById(userObjectId: Types.ObjectId) {
+    await connectDB()
+    return unstable_cache(
+      async (): Promise<UserType | null> =>
+        await UserModel.findOne({ _id: userObjectId }),
+      [UnstableCacheKey.USER_LIST + userObjectId.toString()],
+      {
+        tags: [UnstableCacheKey.USER_LIST],
+      }
+    )()
+  }
+
   async existsByEmail(email: string) {
     await connectDB()
     return unstable_cache(

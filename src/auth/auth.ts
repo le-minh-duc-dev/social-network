@@ -4,7 +4,7 @@ import { PermissionService } from "@/service/PermissionService"
 import { UserService } from "@/service/UserService"
 import NextAuth, { DefaultSession } from "next-auth"
 import Google from "next-auth/providers/google"
-
+import WelcomeEmailTemplate from "@/email/WelcomeEmailTemplate"
 declare module "next-auth" {
   interface Session {
     user: {
@@ -18,6 +18,7 @@ declare module "next-auth" {
 }
 
 import {} from "next-auth/jwt"
+import { EmailService } from "@/service/EmailService"
 
 declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
@@ -35,7 +36,6 @@ declare module "next-auth/jwt" {
 }
 
 const JWT_EXPIRATION_DURATION = 15 * 60 //SECONDS
-
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -56,6 +56,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             fullName,
             avatarUrl,
           })
+          EmailService.send(
+            WelcomeEmailTemplate({ name: fullName }),
+            [email],
+            "Welcome To Social Network"
+          )
         }
 
         return {

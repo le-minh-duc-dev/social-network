@@ -11,6 +11,9 @@ import { UserService } from "@/service/UserService"
 import mongoose from "mongoose"
 
 import { User as UserType } from "@/types/schema"
+import { EmailService } from "@/service/EmailService"
+import AccountApprovedEmail from "@/email/AccountApprovedEmail"
+import { after } from "next/server"
 export async function toggleField(
   userId: string,
   field: keyof Pick<UserType, "isActive" | "isVerified">,
@@ -47,8 +50,20 @@ export async function toggleField(
     if (!isUpdated) {
       HttpHelper.buildHttpErrorResponseData(HttpStatus.INTERNAL_SERVER_ERROR)
     }
+
     //commit transaction
     await dbSession.commitTransaction()
+    after(async () => {
+      if (status && field == "isActive") {
+        const user = await userService.findUserById(userObjectId)
+        console.log("Sending email...", user)
+        await EmailService.send(
+          AccountApprovedEmail({ name: user!.fullName }),
+          [user!.email],
+          "Your account has been approved!"
+        )
+      }
+    })
     return {
       status: HttpStatus.NO_CONTENT,
     }
