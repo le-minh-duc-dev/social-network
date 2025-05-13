@@ -34,9 +34,8 @@ declare module "next-auth/jwt" {
   }
 }
 
-const JWT_EXPIRATION_DURATION = 15*60 //SECONDS
+const JWT_EXPIRATION_DURATION = 15 * 60 //SECONDS
 
-let refreshLock = false
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -70,15 +69,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async jwt({ token, account }) {
-      if (refreshLock) {
-        throw new Error("Token refresh failed")
-      }
       // On first sign-in
       if (
         (!token.id && !token.role && !token.avatarUrl) ||
         Date.now() > token.expires_at * 1000
       ) {
-        refreshLock = true
         console.log("FETCH USER DATA FOR JWT-----------------")
         const userService = new UserService()
         const user = await userService.findUserByEmail(token.email!)
@@ -105,7 +100,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       // Token still valid
       if (Date.now() < token.expires_at * 1000) {
-        refreshLock = false
         return token
       }
 
@@ -138,12 +132,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.refresh_token =
           refreshedTokens.refresh_token ?? token.refresh_token
 
-        refreshLock = false
         return token
       } catch (error) {
         console.error("Error refreshing token", error)
         token.error = "RefreshTokenError"
-        refreshLock = false
         return token
       }
     },
