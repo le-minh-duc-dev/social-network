@@ -61,6 +61,29 @@ export default function UserList() {
         cursor: res.nextCursor,
       }
     },
+    async sort({ items, sortDescriptor }) {
+      return {
+        items: [...items].sort((a, b) => {
+          const first = a[sortDescriptor.column]
+          const second = b[sortDescriptor.column]
+
+          // Support boolean sorting
+          if (typeof first === "boolean" && typeof second === "boolean") {
+            return sortDescriptor.direction === "ascending"
+              ? Number(first) - Number(second)
+              : Number(second) - Number(first)
+          }
+
+          // Support string or number
+          let cmp =
+            (parseInt(first) || first) < (parseInt(second) || second) ? -1 : 1
+
+          if (sortDescriptor.direction === "descending") cmp *= -1
+
+          return cmp
+        }),
+      }
+    },
   })
 
   const [loaderRef, scrollerRef] = useInfiniteScroll({
@@ -151,12 +174,15 @@ export default function UserList() {
         table: "min-h-[500px]",
       }}
       selectionMode="multiple"
+      sortDescriptor={list.sortDescriptor}
+      onSortChange={list.sort}
     >
       <TableHeader columns={columns}>
         {(column) => (
           <TableColumn
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
+            allowsSorting={column.uid !== "actions"} // Enable sorting for all except actions
           >
             {column.name}
           </TableColumn>
