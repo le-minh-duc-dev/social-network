@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react"
 import {
   Table,
@@ -10,6 +11,7 @@ import {
   Chip,
   Tooltip,
   Spinner,
+  SortDescriptor,
 } from "@heroui/react"
 import { FaRegEye } from "react-icons/fa"
 import { TbMoodEdit } from "react-icons/tb"
@@ -25,7 +27,6 @@ export const columns = [
   { name: "VERIFICATION", uid: "isVerified" },
   { name: "ACTIONS", uid: "actions" },
 ]
-
 const statusColorMap: Partial<
   Record<
     string,
@@ -61,28 +62,39 @@ export default function UserList() {
         cursor: res.nextCursor,
       }
     },
-    async sort({ items, sortDescriptor }) {
-      return {
-        items: [...items].sort((a, b) => {
-          const first = a[sortDescriptor.column]
-          const second = b[sortDescriptor.column]
+    async sort({
+      items,
+      sortDescriptor,
+    }: {
+      items: unknown[]
+      sortDescriptor: SortDescriptor
+    }) {
+      const column = sortDescriptor.column as keyof UserType
 
-          // Support boolean sorting
-          if (typeof first === "boolean" && typeof second === "boolean") {
-            return sortDescriptor.direction === "ascending"
-              ? Number(first) - Number(second)
-              : Number(second) - Number(first)
-          }
+      const sorted = [...(items as UserType[])].sort((a, b) => {
+        const first = a[column]!
+        const second = b[column]!
 
-          // Support string or number
-          let cmp =
-            (parseInt(first) || first) < (parseInt(second) || second) ? -1 : 1
+        // Boolean sorting
+        if (typeof first === "boolean" && typeof second === "boolean") {
+          return sortDescriptor.direction === "ascending"
+            ? Number(first) - Number(second)
+            : Number(second) - Number(first)
+        }
 
-          if (sortDescriptor.direction === "descending") cmp *= -1
+        // String or number sorting
+        let cmp =
+          (parseInt(first.toString()) || first) <
+          (parseInt(second.toString()) || second)
+            ? -1
+            : 1
 
-          return cmp
-        }),
-      }
+        if (sortDescriptor.direction === "descending") cmp *= -1
+
+        return cmp
+      })
+
+      return { items: sorted }
     },
   })
 
