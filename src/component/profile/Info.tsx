@@ -3,6 +3,7 @@ import { Avatar, Button } from "@heroui/react"
 import { useQuery } from "@tanstack/react-query"
 import { QueryKey } from "@/domain/enums/QueryKey"
 import { useAuth } from "@/hooks/useAuth"
+import { MdVerified } from "react-icons/md"
 
 export default function Info() {
   const { authUser } = useAuth()
@@ -22,7 +23,12 @@ export default function Info() {
       <Avatar src={user?.avatarUrl} alt="Your avatar" className="w-32 h-32" />
       <div className="flex flex-col justify-center">
         <div className="flex items-center gap-x-6">
-          <h1 className="text-xl font-bold">{user?.fullName}</h1>
+          <div className="text-xl font-bold flex items-center gap-x-2">
+            {user?.fullName}{" "}
+            {user?.isVerified && (
+              <MdVerified className="text-blue-500 inline-block" />
+            )}
+          </div>
           <Button>Edit profile</Button>
         </div>
         <div className="flex gap-x-4 mt-2">
