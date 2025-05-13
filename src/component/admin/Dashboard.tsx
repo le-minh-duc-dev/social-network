@@ -1,7 +1,10 @@
-import React from 'react'
+'use client'
+import React from "react"
 
 export default function Dashboard() {
   return (
-    <div>b</div>
+    <div>
+     
+    </div>
   )
 }

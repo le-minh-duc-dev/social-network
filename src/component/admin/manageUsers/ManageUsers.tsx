@@ -1,11 +1,13 @@
-'use client'
-import React from 'react'
-import TotalUsers from './TotalUsers'
+"use client"
+import React from "react"
+import TotalUsers from "./TotalUsers"
 
 export default function ManageUsers() {
   return (
     <div>
-      <TotalUsers/>
+      <div className="flex gap-x-8 m-4">
+        <TotalUsers />
+      </div>
     </div>
   )
 }
