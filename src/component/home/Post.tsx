@@ -9,6 +9,7 @@ import { LuDot } from "react-icons/lu"
 import Like from "../Like"
 import { useFullPostModal } from "@/context/FullPostContext"
 import PostOption from "../postOption/PostOption"
+import { MdVerified } from "react-icons/md"
 
 export default function Post({ post }: Readonly<{ post: PostType }>) {
   const author: UserType = post.author as UserType
@@ -24,6 +25,7 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
           name={
             <div className="flex items-center gap-x-1">
               <p className="font-semibold">{author.fullName}</p>
+               {author.isVerified && <MdVerified className="text-blue-500" />}
               <LuDot className="text-lg text-default-400" />
               <p className="text-default-400">
                 {Formater.formatTimeAgo(post.createdAt)}

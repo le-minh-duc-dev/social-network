@@ -76,7 +76,7 @@ export class PostService {
         return await Post.find(query)
           .sort({ _id: -1 }) // newest first
           .limit(limit + 1)
-          .populate("author", "_id fullName avatarUrl")
+          .populate("author", "_id fullName avatarUrl isVerified")
       },
       [UnstableCacheKey.POST_LIST + cursor + limit],
       {

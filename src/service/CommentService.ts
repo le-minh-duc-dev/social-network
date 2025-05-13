@@ -41,7 +41,7 @@ export class CommentService {
         return await Comment.find(query)
           .sort({ _id: -1 }) // newest first
           .limit(limit + 1)
-          .populate("author", "_id fullName avatarUrl")
+          .populate("author", "_id fullName avatarUrl isVerified")
       },
       [UnstableCacheKey.POST_COMMENT_LIST + post + cursor + limit],
       {

@@ -9,6 +9,7 @@ import CommentForm from "../CommentForm"
 import { Formater } from "@/lib/Formater"
 import CommentList from "./CommentList"
 import PostOption from "../postOption/PostOption"
+import { MdVerified } from "react-icons/md"
 export default function FullPost({ post }: Readonly<{ post: Post | null }>) {
   if (!post) return null
   const author: UserType = post?.author as UserType
@@ -35,7 +36,14 @@ export default function FullPost({ post }: Readonly<{ post: Post | null }>) {
               src: author.avatarUrl,
               size: "sm",
             }}
-            name={author.fullName}
+            name={
+              <div className="flex items-center">
+                {author.fullName}
+                {author.isVerified && (
+                  <MdVerified className="text-blue-500 inline-block ml-1" />
+                )}
+              </div>
+            }
           />
           <PostOption post={post} />
         </div>
@@ -48,6 +56,7 @@ export default function FullPost({ post }: Readonly<{ post: Post | null }>) {
               isComment={false}
               avatarUrl={author.avatarUrl}
               createdAt={post.createdAt}
+              isVerified={author.isVerified}
             />
           )}
 

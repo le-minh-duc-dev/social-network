@@ -18,6 +18,7 @@ export default function CommentList({ postId }: Readonly<{ postId: string }>) {
             avatarUrl={(comment.author as User)?.avatarUrl}
             createdAt={comment.createdAt}
             content={comment.content}
+            isVerified={(comment.author as User)?.isVerified}
           />
         </div>
       )}
