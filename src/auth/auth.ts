@@ -46,12 +46,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientId: process.env.AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
       async profile(profile) {
+        const userService = new UserService()
         const email = profile.email
         const fullName = profile.name
         const avatarUrl = profile.picture
-        let user = await UserService.findUserByEmail(email)
+        let user = await userService.findUserByEmail(email)
 
-        user ??= await UserService.createUser({
+        user ??= await userService.createUser({
           email,
           fullName,
           avatarUrl,

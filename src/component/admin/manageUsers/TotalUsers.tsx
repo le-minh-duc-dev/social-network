@@ -1,4 +1,7 @@
-import { Card, CardBody } from "@heroui/react"
+import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
+import { UserAPI } from "@/service/UserAPI"
+import { Card, CardBody, Skeleton } from "@heroui/react"
+import { useQueries } from "@tanstack/react-query"
 import {
   PieChart,
   Pie,
@@ -7,16 +10,50 @@ import {
   Label,
   Legend,
   Tooltip,
+  TooltipProps,
 } from "recharts"
 
-const data = [
-  { name: "Verified", value: 50 },
-  { name: "Not Verified", value: 450 },
-]
+import {
+  ValueType,
+  NameType,
+} from "recharts/types/component/DefaultTooltipContent"
+
 const COLORS = ["#00C49F", "#FF8042"]
 
 export default function TotalUsers() {
-  const totalUsers = 500
+  const results = useQueries({
+    queries: [
+      {
+        queryKey: [QueryKey.GET_USERS, "count"],
+        queryFn: UserAPI.getTotalUsers,
+        staleTime: QueryStaleTime[QueryKey.GET_USERS],
+      },
+      {
+        queryKey: [QueryKey.GET_USERS, "count", "verified"],
+        queryFn: UserAPI.getVerifiedUsers,
+        staleTime: QueryStaleTime[QueryKey.GET_USERS],
+      },
+    ],
+  })
+
+  const [totalUsersRe, verifiedUsersRe] = results
+
+  const totalUsers = totalUsersRe.data?.count ?? 0
+  const verifiedUsers = verifiedUsersRe.data?.count ?? 0
+  const notVerifiedUsers = totalUsers - verifiedUsers
+
+  const data = [
+    { name: "Verified", value: verifiedUsers },
+    { name: "Not Verified", value: notVerifiedUsers },
+  ]
+
+  if (totalUsersRe.isLoading || verifiedUsersRe.isLoading)
+    return (
+      <Card className="h-[300px] w-[500px]   ">
+        <Skeleton className="w-full h-full" />
+      </Card>
+    )
+
   return (
     <Card className="h-[300px] w-[500px]   ">
       <CardBody>
@@ -69,10 +106,6 @@ export default function TotalUsers() {
     </Card>
   )
 }
-
-
-import { TooltipProps } from "recharts"
-import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent"
 
 // Your custom tooltip component
 const CustomTooltip = ({

@@ -8,5 +8,9 @@ interface IResponse<T> {
 interface InfiniteResponse<T> {
   list: T[]
   nextCursor: string
-  hasMore:boolean
+  hasMore: boolean
+}
+
+interface CountResponse {
+  count: number
 }
