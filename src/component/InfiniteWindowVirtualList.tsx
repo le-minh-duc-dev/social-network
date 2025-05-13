@@ -1,6 +1,6 @@
 import { useInfiniteQuery, QueryKey } from "@tanstack/react-query"
 import { useWindowVirtualizer } from "@tanstack/react-virtual"
-import React, { useMemo, useEffect, ReactNode, ComponentType } from "react"
+import React, { useMemo, useEffect, ReactNode } from "react"
 
 type Props<T> = {
   queryKey: QueryKey
@@ -8,7 +8,7 @@ type Props<T> = {
   staleTime?: number
   estimateSize?: () => number
   renderItem: (item: T, index: number) => ReactNode
-  Skeleton?: ComponentType
+  skeleton?: ReactNode
   ErrorComponent?: (msg: string) => ReactNode
   itemStyle?: { left: string; width: string; transformExtra: string }
 }
@@ -24,7 +24,7 @@ export function InfiniteWindowVirtualList<T>({
   queryKey,
   fetchFn,
   renderItem,
-  Skeleton,
+  skeleton,
   ErrorComponent,
 }: Readonly<Props<T>>) {
   const queryFn = async ({
@@ -82,13 +82,13 @@ export function InfiniteWindowVirtualList<T>({
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center">
-        {Skeleton ? <Skeleton /> : <p>Loading...</p>}
+        {skeleton ?? <p>Loading...</p>}
       </div>
     )
   }
 
   if (error) {
-    console.log(error);
+    console.log(error)
     return ErrorComponent ? (
       ErrorComponent(error.message)
     ) : (
@@ -121,8 +121,8 @@ export function InfiniteWindowVirtualList<T>({
           >
             {item ? (
               renderItem(item, virtualRow.index)
-            ) : hasNextPage && Skeleton ? (
-              <Skeleton />
+            ) : hasNextPage && skeleton ? (
+              skeleton
             ) : (
               <div className="text-center text-gray-400 py-6">
                 No more items

@@ -1,6 +1,5 @@
 "use client"
 
-
 import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
 import { PostAPI } from "@/service/PostAPI"
 import { Post as PostType } from "@/types/schema"
@@ -18,9 +17,13 @@ export default function Feeds() {
           <Post post={post} />
         </div>
       )}
-      Skeleton={PostSkeleton}
+      skeleton={
+        <div className="flex flex-col gap-y-4">
+          <PostSkeleton />
+          <PostSkeleton />
+        </div>
+      }
       staleTime={QueryStaleTime[QueryKey.GET_POSTS]}
     />
   )
-  
 }
