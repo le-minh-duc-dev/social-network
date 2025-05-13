@@ -138,7 +138,7 @@ export default function UserList() {
         loadingContent={<Spinner color="white" />}
       >
         {(item: UserType) => (
-          <TableRow key={item._id.toString()}>
+          <TableRow key={item._id.toString()} >
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey.toString())}</TableCell>
             )}

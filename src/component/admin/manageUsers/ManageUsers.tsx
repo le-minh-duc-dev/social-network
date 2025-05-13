@@ -1,7 +1,12 @@
 "use client"
 import React from "react"
 import TotalUsers from "./TotalUsers"
-import UserList from "./userList/UserList"
+import dynamic from "next/dynamic"
+import { Skeleton } from "@heroui/react"
+const UserList = dynamic(() => import("./userList/UserList"), {
+  ssr: false,
+  loading: () => <Skeleton className="w-full h-96" />,
+})
 
 export default function ManageUsers() {
   return (
