@@ -16,7 +16,7 @@ export default function Like({ postId }: Readonly<{ postId: string }>) {
 
   const { data } = useQuery({
     queryFn: () => LikeAPI.checkLikeExists(postId),
-    queryKey: [QueryKey.GET_POST_LIKES, postId, authUser?._id],
+    queryKey: [QueryKey.GET_POST_LIKES, postId, authUser?.id],
     staleTime: QueryStaleTime[QueryKey.GET_POST_LIKES],
   })
 

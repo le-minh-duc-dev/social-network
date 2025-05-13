@@ -1,4 +1,5 @@
 import { RouteProtector } from "@/auth/RouteProtector"
+import { HttpStatus } from "@/domain/enums/HttpStatus"
 import connectDB from "@/lib/connectDB"
 import { MongooseHelper } from "@/lib/MongooseHelper"
 import { LikeService } from "@/service/LikeService"
