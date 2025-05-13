@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import React, { useMemo } from "react"
 import {
   Table,
   TableHeader,
@@ -16,10 +16,11 @@ import { TbMoodEdit } from "react-icons/tb"
 import { MdDeleteForever, MdVerified } from "react-icons/md"
 import { UserAPI } from "@/service/UserAPI"
 import { useInfiniteScroll } from "@heroui/use-infinite-scroll"
-import { useAsyncList } from "@react-stately/data"
 import { User as UserType } from "@/types/schema"
 import ActiveToggle from "./ActiveToggle"
 import VerifiedToggle from "./VerifiedToggle"
+import { useInfiniteQuery } from "@tanstack/react-query"
+import { QueryKey } from "@/domain/enums/QueryKey"
 export const columns = [
   { name: "NAME", uid: "fullName" },
   { name: "ROLE", uid: "role" },
@@ -29,29 +30,25 @@ export const columns = [
 ]
 
 export default function UserList() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasMore, setHasMore] = useState(false)
+  const { fetchNextPage, hasNextPage, isFetchingNextPage, data } =
+    useInfiniteQuery({
+      queryKey: [QueryKey.GET_USERS],
+      queryFn: async ({ pageParam }) => await UserAPI.getUsers(pageParam ?? ""),
+      initialPageParam: "",
 
-  const list = useAsyncList({
-    async load({ cursor }) {
-      if (cursor) {
-        setIsLoading(false)
-      }
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    })
 
-      const res = await UserAPI.getUsers(cursor ?? "")
-
-      setHasMore(res.nextCursor !== null)
-
-      return {
-        items: res.list,
-        cursor: res.nextCursor,
-      }
-    },
-  })
+  const allItems = useMemo<UserType[]>(
+    () => data?.pages.flatMap((page) => page.list) ?? [],
+    [data]
+  )
 
   const [loaderRef, scrollerRef] = useInfiniteScroll({
-    hasMore,
-    onLoadMore: list.loadMore,
+    hasMore: hasNextPage,
+    onLoadMore: () => {
+      void fetchNextPage() // call it without awaiting
+    },
   })
 
   const renderCell = React.useCallback((user: UserType, columnKey: string) => {
@@ -113,7 +110,7 @@ export default function UserList() {
       aria-label="Example table with custom cells"
       baseRef={scrollerRef}
       bottomContent={
-        hasMore ? (
+        hasNextPage ? (
           <div className="flex w-full justify-center">
             <Spinner ref={loaderRef} color="white" />
           </div>
@@ -136,8 +133,8 @@ export default function UserList() {
         )}
       </TableHeader>
       <TableBody
-        isLoading={isLoading}
-        items={list.items as UserType[]}
+        isLoading={isFetchingNextPage}
+        items={allItems}
         loadingContent={<Spinner color="white" />}
       >
         {(item: UserType) => (
