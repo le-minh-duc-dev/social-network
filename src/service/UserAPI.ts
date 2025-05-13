@@ -23,6 +23,19 @@ export class UserAPI {
     return await res.json()
   }
 
+
+  static async getUserById(
+    userId: string,
+  ): Promise<IResponse<User>> {
+    const res = await fetch(
+      UserAPI.baseUrl + `/${userId}`,
+      {
+        credentials: "include",
+      }
+    )
+    return await res.json()
+  }
+
   static async getVerifiedUsers(): Promise<CountResponse> {
     const res = await fetch(UserAPI.baseUrl + `/count?isVerified=true`, {
       credentials: "include",

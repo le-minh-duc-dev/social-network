@@ -10,6 +10,7 @@ export interface User {
   fullName: string
   bio?: string
   avatarUrl?: string
+  postsCount: number
   followersCount: number
   followingCount: number
   role: Role

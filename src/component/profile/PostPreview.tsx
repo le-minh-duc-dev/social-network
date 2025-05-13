@@ -1,0 +1,40 @@
+import { useFullPostModal } from "@/context/FullPostContext"
+import { MediaType } from "@/domain/enums/MediaType"
+import { Post } from "@/types/schema"
+import React from "react"
+import { BiSolidCopy } from "react-icons/bi"
+export default function PostPreview({ post }: Readonly<{ post: Post }>) {
+  const { setPost } = useFullPostModal()
+  const firstMedia = post.media[0]
+  if (!firstMedia) {
+    return (
+      <button
+        className="h-[450px]  pt-4 hover:opacity-85 flex justify-center items-center"
+        onClick={() => setPost(post)}
+      >
+        <p>{post.caption}</p>
+      </button>
+    )
+  }
+  return (
+    <button
+      className="h-[450px] overflow-hidden pt-4 hover:opacity-85 relative"
+      onClick={() => setPost(post)}
+    >
+      <BiSolidCopy className="top-8 right-4 absolute text-lg" />
+      {firstMedia.type == MediaType.IMAGE ? (
+        <img
+          src={post.media[0].url}
+          alt={post.caption}
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        <video
+          src={post.media[0].url}
+          className="w-full h-full object-cover"
+          muted
+        />
+      )}
+    </button>
+  )
+}

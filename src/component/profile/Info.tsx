@@ -1,0 +1,51 @@
+import { UserAPI } from "@/service/UserAPI"
+import { Avatar, Button } from "@heroui/react"
+import { useQuery } from "@tanstack/react-query"
+import { QueryKey } from "@/domain/enums/QueryKey"
+import { useAuth } from "@/hooks/useAuth"
+
+export default function Info() {
+  const { authUser } = useAuth()
+
+  const { data, isLoading } = useQuery({
+    queryKey: [QueryKey.GET_USER, authUser?.id],
+    queryFn: async () => await UserAPI.getUserById(authUser!.id),
+    enabled: !!authUser,
+  })
+
+  const user = data?.data
+  if (isLoading) {
+    return <div className="h-full">Loading...</div>
+  }
+  return (
+    <div className="mt-12 flex gap-x-20 items-start">
+      <Avatar src={user?.avatarUrl} alt="Your avatar" className="w-32 h-32" />
+      <div className="flex flex-col justify-center">
+        <div className="flex items-center gap-x-6">
+          <h1 className="text-xl font-bold">{user?.fullName}</h1>
+          <Button>Edit profile</Button>
+        </div>
+        <div className="flex gap-x-4 mt-2">
+          <p className="text-gray-500 text-sm">
+            <span className="font-semibold text-foreground">
+              {user?.postsCount ?? 0}
+            </span>{" "}
+            posts
+          </p>
+          <p className="text-gray-500 text-sm">
+            <span className="font-semibold text-foreground">
+              {user?.followersCount}
+            </span>{" "}
+            followers
+          </p>
+          <p className="text-gray-500 text-sm">
+            <span className="font-semibold text-foreground">
+              {user?.followingCount}
+            </span>{" "}
+            following
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}

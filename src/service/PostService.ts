@@ -64,13 +64,20 @@ export class PostService {
     revalidateTag(UnstableCacheKey.POST_SINGLE + postId.toString())
   }
 
-  async getInfinitePosts(cursor: string | null, limit: number) {
+  async getInfinitePosts(
+    cursor: string | null,
+    limit: number,
+    authorObjectId?: Types.ObjectId
+  ) {
     return unstable_cache(
       async () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const query: any = {}
         if (cursor) {
           query._id = { $lt: new Types.ObjectId(cursor) }
+        }
+        if (authorObjectId) {
+          query.author = authorObjectId
         }
 
         return await Post.find(query)
