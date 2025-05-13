@@ -6,7 +6,6 @@ import { RoleService } from "@/service/RoleService"
 export class RouteProtector {
   static async protect(role?: Role, onlyActiveAccount: boolean = true) {
     const session = await auth()
-    console.log(session?.user)
     if (!session) {
       redirect(AppRoute.LOGIN)
     } else if (onlyActiveAccount && !session.user.isActive) {
