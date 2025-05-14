@@ -11,4 +11,5 @@ export enum AppRoute {
   SAVED = "/saved",
   USER_SETTINGS = "/user-settings",
   POSTS = "/posts",
+  EXPLORE = "/explore",
 }

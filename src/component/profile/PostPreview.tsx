@@ -12,7 +12,7 @@ export default function PostPreview({
   if (!firstMedia) {
     return (
       <button
-        className="h-[450px]  pt-4 hover:opacity-85 flex justify-center items-center"
+        className={" pt-4 hover:opacity-85 flex justify-center items-center "+ height}
         onClick={() => setPost(post)}
       >
         <p>{post.caption}</p>

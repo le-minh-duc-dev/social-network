@@ -70,7 +70,8 @@ export class PostService {
     limit: number,
     authorObjectId?: Types.ObjectId,
     allowedPrivacy?: PostPrivacy[],
-    authUserId?: Types.ObjectId
+    authUserId?: Types.ObjectId,
+    isExplore: boolean = false
   ) {
     return unstable_cache(
       async () => {
@@ -84,8 +85,16 @@ export class PostService {
           if (allowedPrivacy && allowedPrivacy.length > 0) {
             query.privacy = { $in: allowedPrivacy }
           }
+        } else if (isExplore) {
+          query.$and = [
+            { privacy: { $in: [PostPrivacy.PUBLIC, PostPrivacy.FOLLOWERS] } },
+            { author: { $ne: authUserId } },
+          ]
         } else {
-          query.$or = [{ privacy: PostPrivacy.PUBLIC }, { author: authUserId }]
+          query.$or = [
+            { privacy: { $in: [PostPrivacy.PUBLIC, PostPrivacy.FOLLOWERS] } },
+            { author: authUserId },
+          ]
         }
 
         return await Post.find(query)
@@ -93,7 +102,15 @@ export class PostService {
           .limit(limit + 1)
           .populate("author", "_id fullName avatarUrl isVerified")
       },
-      [UnstableCacheKey.POST_LIST + cursor + limit],
+      [
+        UnstableCacheKey.POST_LIST +
+          cursor +
+          limit +
+          authorObjectId +
+          allowedPrivacy +
+          authUserId +
+          isExplore,
+      ],
       {
         tags: [UnstableCacheKey.POST_LIST],
       }

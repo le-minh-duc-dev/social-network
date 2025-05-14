@@ -14,6 +14,7 @@ import UserIcon from "./UserIcon"
 import { usePathname } from "next/navigation"
 import Create from "../postMutation/Create"
 import { useAuth } from "@/hooks/useAuth"
+import { MdExplore, MdOutlineExplore } from "react-icons/md"
 
 export default function LinkList() {
   const pathname = usePathname()
@@ -38,6 +39,13 @@ export default function LinkList() {
       label: "Search",
       defaultIcon: <IoSearchOutline className="text-2xl" />,
       activeIcon: <IoSearchSharp className="text-2xl" />,
+    },
+     {
+      type: "link",
+      url: AppRoute.EXPLORE,
+      label: "Explore",
+      defaultIcon: <MdOutlineExplore  className="text-2xl" />,
+      activeIcon: <MdExplore  className="text-2xl" />,
     },
     {
       type: "link",

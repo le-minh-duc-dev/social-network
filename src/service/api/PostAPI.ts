@@ -6,11 +6,12 @@ export class PostAPI {
   static async getPosts(
     nextCursor: string,
     limit: number = 2,
-    authorId: string = ""
+    authorId: string = "",
+    isExplore: boolean = false
   ): Promise<InfiniteResponse<Post>> {
     const res = await fetch(
       PostAPI.baseUrl +
-        `?nextCursor=${nextCursor}&limit=${limit}&authorId=${authorId}`,
+        `?nextCursor=${nextCursor}&limit=${limit}&authorId=${authorId}&isExplore=${isExplore}`,
       {
         credentials: "include",
       }

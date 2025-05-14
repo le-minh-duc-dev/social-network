@@ -13,17 +13,18 @@ export async function GET(request: NextRequest) {
   const limit = parseInt(searchParams.get("limit") ?? "10")
   const cursor = searchParams.get("nextCursor") // last post ID
   const authorId = searchParams.get("authorId") // author ID
+  const isExplore = searchParams.get("isExplore") == "true" // author ID
+
   await RouteProtector.protect()
 
   const authUser = await ServerSideAuthService.getAuthUser()
+  const authUserObjectId = MongooseHelper.toObjectId(authUser?.id ?? "")
 
   let userObjectId
-  let authUserObjectId
 
   if (authorId) {
     try {
       userObjectId = MongooseHelper.toObjectId(authorId ?? "")
-      authUserObjectId = MongooseHelper.toObjectId(authUser?.id ?? "")
     } catch (error) {
       console.error("Invalid userId:", authorId, error)
 
@@ -53,7 +54,8 @@ export async function GET(request: NextRequest) {
       limit,
       undefined,
       undefined,
-      authUserObjectId
+      authUserObjectId,
+      isExplore
     )
   }
 
