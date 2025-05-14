@@ -7,11 +7,14 @@ import Link from "next/link"
 import React, { ReactNode, useState } from "react"
 import { MdVerified } from "react-icons/md"
 import FollowButton from "./FollowButton"
+import { useAuth } from "@/hooks/useAuth"
 
 export default function ProfilePreview({
   children,
   userId,
 }: Readonly<{ children: ReactNode; userId: string }>) {
+  const { authUser } = useAuth()
+
   const { data, isLoading } = useQuery({
     queryKey: [QueryKey.GET_USERS, userId],
     queryFn: async () => await UserAPI.getUserById(userId),
@@ -52,21 +55,23 @@ export default function ProfilePreview({
             <ItemCount title="followers" count={user?.followersCount ?? 0} />
             <ItemCount title="following" count={user?.followingCount ?? 0} />
           </div>
-          <div className="flex w-full  mt-4 gap-x-4">
-            {isFollowing ? (
-              <Button className="flex-1" color="primary">
-                Message
-              </Button>
-            ) : null}
-            <FollowButton
-              followingId={userId}
-              onChangeCallback={(isFollowing) => {
-                console.log("onChangeCallback", isFollowing);
-                setIsFollowing(isFollowing)
-              }}
-              className="flex-1"
-            />
-          </div>
+          {authUser?.id != userId && (
+            <div className="flex w-full  mt-4 gap-x-4">
+              {isFollowing ? (
+                <Button className="flex-1" color="primary">
+                  Message
+                </Button>
+              ) : null}
+              <FollowButton
+                followingId={userId}
+                onChangeCallback={(isFollowing) => {
+                  console.log("onChangeCallback", isFollowing)
+                  setIsFollowing(isFollowing)
+                }}
+                className="flex-1"
+              />
+            </div>
+          )}
         </div>
       }
     >
