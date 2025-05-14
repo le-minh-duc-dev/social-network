@@ -11,6 +11,7 @@ import { useFullPostModal } from "@/context/FullPostContext"
 import PostOption from "../postOption/PostOption"
 import { MdVerified } from "react-icons/md"
 import Saved from "../Saved"
+import ProfilePreview from "../profilePreview/ProfilePreview"
 
 export default function Post({ post }: Readonly<{ post: PostType }>) {
   const author: UserType = post.author as UserType
@@ -19,21 +20,23 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
   return (
     <div className=" border-b border-white/25 pb-3 ">
       <div className="flex justify-between items-center">
-        <User
-          avatarProps={{
-            src: author.avatarUrl,
-          }}
-          name={
-            <div className="flex items-center gap-x-1">
-              <p className="font-semibold">{author.fullName}</p>
-              {author.isVerified && <MdVerified className="text-blue-500" />}
-              <LuDot className="text-lg text-default-400" />
-              <p className="text-default-400">
-                {Formater.formatTimeAgo(post.createdAt)}
-              </p>
-            </div>
-          }
-        />
+        <ProfilePreview userId={author._id.toString()}>
+          <User
+            avatarProps={{
+              src: author.avatarUrl,
+            }}
+            name={
+              <div className="flex items-center gap-x-1">
+                <p className="font-semibold">{author.fullName}</p>
+                {author.isVerified && <MdVerified className="text-blue-500" />}
+                <LuDot className="text-lg text-default-400" />
+                <p className="text-default-400">
+                  {Formater.formatTimeAgo(post.createdAt)}
+                </p>
+              </div>
+            }
+          />
+        </ProfilePreview>
         <PostOption post={post} />
       </div>
       {post.media.length > 0 ? (

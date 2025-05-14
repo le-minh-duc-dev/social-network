@@ -12,13 +12,7 @@ module.exports = {
   plugins: [
     heroui({
       themes: {
-        dark: {
-          colors: {
-            primary: {
-              DEFAULT: "#67e8f9",
-            },
-          },
-        },
+        dark: {},
       },
     }),
   ],

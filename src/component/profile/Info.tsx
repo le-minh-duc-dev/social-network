@@ -2,16 +2,16 @@ import { UserAPI } from "@/service/api/UserAPI"
 import { Avatar, Button } from "@heroui/react"
 import { useQuery } from "@tanstack/react-query"
 import { QueryKey } from "@/domain/enums/QueryKey"
-import { useAuth } from "@/hooks/useAuth"
 import { MdVerified } from "react-icons/md"
+import { useProfileContext } from "./ProfileContext"
 
 export default function Info() {
-  const { authUser } = useAuth()
+  const {userId} = useProfileContext()
 
   const { data, isLoading } = useQuery({
-    queryKey: [QueryKey.GET_USER, authUser?.id],
-    queryFn: async () => await UserAPI.getUserById(authUser!.id),
-    enabled: !!authUser,
+    queryKey: [QueryKey.GET_USER, userId],
+    queryFn: async () => await UserAPI.getUserById(userId),
+    enabled: !!userId,
   })
 
   const user = data?.data
@@ -23,7 +23,7 @@ export default function Info() {
       <Avatar src={user?.avatarUrl} alt="Your avatar" className="w-32 h-32" />
       <div className="flex flex-col justify-center">
         <div className="flex items-center gap-x-6">
-          <div className="text-xl font-bold flex items-center gap-x-2">
+          <div className="text-xl font-bold flex  items-center gap-x-2">
             {user?.fullName}{" "}
             {user?.isVerified && (
               <MdVerified className="text-blue-500 inline-block" />
