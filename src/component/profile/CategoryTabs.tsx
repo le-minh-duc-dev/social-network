@@ -12,7 +12,7 @@ export default function CategoryTabs() {
         classNames={{ tabList: "gap-x-12" }}
       >
         <Tab
-          key="photos"
+          key="Posts"
           title={
             <div className="flex items-center space-x-2">
               <TfiLayoutGrid3 className="text-xs" />
@@ -21,7 +21,7 @@ export default function CategoryTabs() {
           }
         />
         <Tab
-          key="music"
+          key="Reels"
           title={
             <div className="flex items-center space-x-2">
               <PiFilmReel />
@@ -30,7 +30,7 @@ export default function CategoryTabs() {
           }
         />
         <Tab
-          key="videos"
+          key="Saved"
           title={
             <div className="flex items-center space-x-2">
               <FaRegBookmark />

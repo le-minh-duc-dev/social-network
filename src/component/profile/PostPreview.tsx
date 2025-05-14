@@ -3,6 +3,7 @@ import { MediaType } from "@/domain/enums/MediaType"
 import { Post } from "@/types/schema"
 import React from "react"
 import { BiSolidCopy } from "react-icons/bi"
+import { TbPhotoVideo } from "react-icons/tb"
 export default function PostPreview({ post }: Readonly<{ post: Post }>) {
   const { setPost } = useFullPostModal()
   const firstMedia = post.media[0]
@@ -21,7 +22,12 @@ export default function PostPreview({ post }: Readonly<{ post: Post }>) {
       className="h-[450px] overflow-hidden pt-4 hover:opacity-85 relative"
       onClick={() => setPost(post)}
     >
-      <BiSolidCopy className="top-8 right-4 absolute text-lg" />
+      {" "}
+      {firstMedia.type == MediaType.VIDEO ? (
+        <TbPhotoVideo className="top-8 right-4 absolute text-lg" />
+      ) : (
+        <BiSolidCopy className="top-8 right-4 absolute text-lg" />
+      )}
       {firstMedia.type == MediaType.IMAGE ? (
         <img
           src={post.media[0].url}
