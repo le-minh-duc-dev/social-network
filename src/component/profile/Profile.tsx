@@ -8,6 +8,7 @@ import { GoPlus } from "react-icons/go"
 import { useMemo, useState } from "react"
 import { ProfileContext } from "./ProfileContext"
 import ReelList from "./ReelList"
+import SavedList from "./SavedList"
 export type TabType = "posts" | "reels" | "saved"
 export default function Profile() {
   const [currentTab, setCurrentTab] = useState<TabType>("posts")
@@ -23,7 +24,7 @@ export default function Profile() {
       case "reels":
         return <ReelList />
       case "saved":
-        return <div>Saved</div>
+        return <SavedList />
     }
   }, [currentTab])
   return (

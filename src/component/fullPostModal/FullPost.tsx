@@ -1,15 +1,15 @@
 import React from "react"
 import { Post, User as UserType } from "@/types/schema"
 import MediaCarousel from "../MediaCarousel"
-import { Button, Divider, User } from "@heroui/react"
+import { Divider, User } from "@heroui/react"
 import Comment from "./Comment"
 import Like from "../Like"
-import { FaRegBookmark } from "react-icons/fa"
 import CommentForm from "../CommentForm"
 import { Formater } from "@/lib/Formater"
 import CommentList from "./CommentList"
 import PostOption from "../postOption/PostOption"
 import { MdVerified } from "react-icons/md"
+import Saved from "../Saved"
 export default function FullPost({ post }: Readonly<{ post: Post | null }>) {
   if (!post) return null
   const author: UserType = post?.author as UserType
@@ -66,9 +66,7 @@ export default function FullPost({ post }: Readonly<{ post: Post | null }>) {
           <div className="">
             <div className="flex justify-between mt-2">
               <Like postId={post._id.toString()} />
-              <Button isIconOnly variant="light">
-                <FaRegBookmark className="text-xl" />
-              </Button>
+              <Saved postId={post._id.toString()} />
             </div>
             <div className="text-xs text-default-500 ml-2 mt-3">
               {Formater.formatFullTimeAgo(post.createdAt)}

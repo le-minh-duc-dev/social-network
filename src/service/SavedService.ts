@@ -56,7 +56,14 @@ export class SavedService {
         return await Saved.find(query)
           .sort({ _id: -1 }) // newest first
           .limit(limit + 1)
-          .populate("post")
+          .populate({
+            path: "post",
+            populate: {
+              path: "author",
+              model: "User", 
+              select: "_id fullName avatarUrl isVerified", 
+            },
+          })
       },
       [UnstableCacheKey.USER_SAVED + userObjectId + cursor + limit],
       {

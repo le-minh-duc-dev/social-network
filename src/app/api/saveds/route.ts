@@ -4,7 +4,7 @@ import { HttpStatus } from "@/domain/enums/HttpStatus"
 import connectDB from "@/lib/connectDB"
 import { MongooseHelper } from "@/lib/MongooseHelper"
 import { SavedService } from "@/service/SavedService"
-import { Post, User } from "@/types/schema"
+import { Post } from "@/types/schema"
 import { NextRequest } from "next/server"
 
 export async function GET(request: NextRequest) {
@@ -41,20 +41,15 @@ export async function GET(request: NextRequest) {
   const hasMore = result.length > limit
   const saveds = hasMore ? result.slice(0, limit) : result
 
-  saveds.forEach((saved) => {
-    const post = saved.post as Post
-    post.author = {
-      _id: authUser!.id,
-      fullName: authUser!.name!,
-      avatarUrl: authUser!.avatarUrl!,
-    } as User
+  const posts = saveds.map((saved) => {
+    return saved.post as Post
   })
 
   //next cursor
   const nextCursor = hasMore ? saveds[saveds.length - 1]._id.toString() : null
 
   return Response.json({
-    saveds,
+    list: posts,
     nextCursor,
     hasMore,
   })
