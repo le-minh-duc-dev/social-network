@@ -4,11 +4,9 @@ import { UserAPI } from "@/service/api/UserAPI"
 import { Button, Tooltip, User } from "@heroui/react"
 import { useQuery } from "@tanstack/react-query"
 import Link from "next/link"
-import React, { ReactNode } from "react"
-import { IoMdPersonAdd } from "react-icons/io"
+import React, { ReactNode, useState } from "react"
 import { MdVerified } from "react-icons/md"
-
-const isFollowing = true
+import FollowButton from "./FollowButton"
 
 export default function ProfilePreview({
   children,
@@ -19,6 +17,8 @@ export default function ProfilePreview({
     queryFn: async () => await UserAPI.getUserById(userId),
     enabled: !!userId,
   })
+
+  const [isFollowing, setIsFollowing] = useState(false)
 
   const user = data?.data
   if (isLoading) {
@@ -54,21 +54,18 @@ export default function ProfilePreview({
           </div>
           <div className="flex w-full  mt-4 gap-x-4">
             {isFollowing ? (
-              <>
-                <Button className="flex-1" color="primary">
-                  Message
-                </Button>
-                <Button className="flex-1">Following</Button>
-              </>
-            ) : (
-              <Button
-                className="flex-1"
-                startContent={<IoMdPersonAdd />}
-                color="primary"
-              >
-                Follow
+              <Button className="flex-1" color="primary">
+                Message
               </Button>
-            )}
+            ) : null}
+            <FollowButton
+              followingId={userId}
+              onChangeCallback={(isFollowing) => {
+                console.log("onChangeCallback", isFollowing);
+                setIsFollowing(isFollowing)
+              }}
+              className="flex-1"
+            />
           </div>
         </div>
       }

@@ -25,7 +25,7 @@ export class LikeService {
     post: Types.ObjectId,
     dbSession: ClientSession
   ) {
-    const deletedLike = await Like.findOneAndDelete(
+    const deletedLike = await Like.deleteOne(
       {
         user,
         post,
@@ -35,7 +35,7 @@ export class LikeService {
 
     revalidateTag(UnstableCacheKey.POST_LIKE_LIST + post)
 
-    return deletedLike
+    return deletedLike.deletedCount > 0
   }
 
   async getInfiniteLikes(

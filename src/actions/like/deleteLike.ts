@@ -29,8 +29,15 @@ export async function deleteLike(postId: string): Promise<IResponse<string>> {
     dbSession.startTransaction()
     const userObjectId = MongooseHelper.toObjectId(user!.id)
     const postObjectId = MongooseHelper.toObjectId(postId)
-    await likeService.deleteLike(userObjectId, postObjectId, dbSession)
+    const isDeleted = await likeService.deleteLike(
+      userObjectId,
+      postObjectId,
+      dbSession
+    )
 
+    if (!isDeleted) {
+      return HttpHelper.buildHttpErrorResponseData(HttpStatus.BAD_REQUEST)
+    }
     //increment Like count
     await postService.decrementLikeCount(postObjectId, dbSession)
     //commit transaction

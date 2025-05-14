@@ -7,25 +7,27 @@ import { HttpStatus } from "@/domain/enums/HttpStatus"
 import connectDB from "@/lib/connectDB"
 import { HttpHelper } from "@/lib/HttpHelper"
 import { MongooseHelper } from "@/lib/MongooseHelper"
-import { SavedService } from "@/service/SavedService"
+import { FollowService } from "@/service/FollowService"
 import mongoose from "mongoose"
-export async function deleteSaved(postId: string): Promise<IResponse<string>> {
+export async function deleteFollow(
+  followingId: string
+): Promise<IResponse<string>> {
   await RouteProtector.protect()
 
   // services
-  const savedService = new SavedService()
+  const followService = new FollowService()
   ///
 
   //get user
-  const user = await ServerSideAuthService.getAuthUser()
+  const authUser = await ServerSideAuthService.getAuthUser()
 
-  let postObjectId
-  let userObjectId
+  let followingObjectId
+  let followerObjectId
   try {
-    postObjectId = MongooseHelper.toObjectId(postId)
-    userObjectId = MongooseHelper.toObjectId(user!.id)
+    followingObjectId = MongooseHelper.toObjectId(followingId)
+    followerObjectId = MongooseHelper.toObjectId(authUser!.id)
   } catch (error) {
-    console.error("Invalid postId Or userId:", postId, user!.id, error)
+    console.error("Invalid postId Or userId:", followingId, authUser!.id, error)
 
     return HttpHelper.buildHttpErrorResponseData(HttpStatus.BAD_REQUEST)
   }
@@ -37,17 +39,16 @@ export async function deleteSaved(postId: string): Promise<IResponse<string>> {
   try {
     dbSession.startTransaction()
 
-    const isDeleted = await savedService.deleteSaved(
-      userObjectId,
-      postObjectId,
+    const isDeleted = await followService.deletefollow(
+      followerObjectId,
+      followingObjectId,
       dbSession
     )
 
     if (!isDeleted) {
-      return HttpHelper.buildHttpErrorResponseData(
-        HttpStatus.BAD_REQUEST
-      )
+      return HttpHelper.buildHttpErrorResponseData(HttpStatus.BAD_REQUEST)
     }
+
     //commit transaction
     await dbSession.commitTransaction()
     return {
