@@ -8,6 +8,7 @@ import connectDB from "@/lib/connectDB"
 import { HttpHelper } from "@/lib/HttpHelper"
 import { MongooseHelper } from "@/lib/MongooseHelper"
 import { FollowService } from "@/service/FollowService"
+import { UserService } from "@/service/UserService"
 import mongoose from "mongoose"
 export async function createFollow(
   followingId: string
@@ -16,6 +17,8 @@ export async function createFollow(
 
   // services
   const followService = new FollowService()
+  const userService = new UserService()
+
   ///
 
   //get user
@@ -42,6 +45,17 @@ export async function createFollow(
     await followService.createfollow(
       followerObjectId,
       followingObjectId,
+      dbSession
+    )
+
+    await userService.incrementCount(
+      followerObjectId,
+      "followingCount",
+      dbSession
+    )
+    await userService.incrementCount(
+      followingObjectId,
+      "followersCount",
       dbSession
     )
 

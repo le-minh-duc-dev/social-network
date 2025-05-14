@@ -2,6 +2,8 @@ import { Types } from "mongoose"
 import { Role } from "@/domain/enums/Role"
 import { PostPrivacy } from "@/domain/enums/PostPrivacy"
 
+export type UserCountableField = "postsCount" | "followersCount" | "followingCount"
+
 export interface User {
   _id: string | Types.ObjectId
   username: string

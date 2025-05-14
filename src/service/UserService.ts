@@ -4,7 +4,7 @@ import connectDB from "@/lib/connectDB"
 import { ClientSession, FilterQuery, Types, UpdateQuery } from "mongoose"
 import { revalidateTag, unstable_cache } from "next/cache"
 
-import { User as UserType } from "@/types/schema"
+import { UserCountableField, User as UserType } from "@/types/schema"
 
 export class UserService {
   async getInfiniteUsers(cursor: string | null, limit: number) {
@@ -134,5 +134,33 @@ export class UserService {
     revalidateTag(UnstableCacheKey.USER_LIST)
 
     return result.modifiedCount > 0
+  }
+
+  async incrementCount(
+    userId: Types.ObjectId,
+    field: UserCountableField,
+    session?: ClientSession
+  ) {
+    await UserModel.updateOne(
+      { _id: userId },
+      { $inc: { [field]: 1 } },
+      { session }
+    )
+    revalidateTag(UnstableCacheKey.USER_LIST)
+    revalidateTag(UnstableCacheKey.USER_LIST + userId.toString())
+  }
+
+  async decrementCount(
+    userId: Types.ObjectId,
+    field: UserCountableField,
+    session?: ClientSession
+  ) {
+    await UserModel.updateOne(
+      { _id: userId },
+      { $inc: { [field]: -1 } },
+      { session }
+    )
+    revalidateTag(UnstableCacheKey.USER_LIST)
+    revalidateTag(UnstableCacheKey.USER_LIST + userId.toString())
   }
 }

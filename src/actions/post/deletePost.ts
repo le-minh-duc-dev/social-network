@@ -9,15 +9,17 @@ import { MongooseHelper } from "@/lib/MongooseHelper"
 import { CloudinaryService } from "@/service/CloudinaryService"
 import { PermissionService } from "@/service/PermissionService"
 import { PostService } from "@/service/PostService"
+import { UserService } from "@/service/UserService"
 import { IMediaService } from "@/types/media_service"
 import { User } from "@/types/schema"
-import mongoose from "mongoose"
+import mongoose, { Types } from "mongoose"
 export async function deletePost(postId: string): Promise<IResponse<string>> {
   await RouteProtector.protect()
 
   // services
   const mediaService: IMediaService = new CloudinaryService()
   const postService = new PostService()
+  const userService = new UserService()
 
   //get user
   const user = await ServerSideAuthService.getAuthUser()
@@ -64,6 +66,13 @@ export async function deletePost(postId: string): Promise<IResponse<string>> {
     if (!isDeleted) {
       throw new Error("Something went wrong!")
     }
+
+    await userService.decrementCount(
+      new Types.ObjectId(author._id.toString()),
+      "postsCount",
+      dbSession
+    )
+
     mediaService.deleteMediaByURLs(mediaUrls)
     await dbSession.commitTransaction()
     return {

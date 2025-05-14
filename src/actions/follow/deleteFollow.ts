@@ -8,6 +8,7 @@ import connectDB from "@/lib/connectDB"
 import { HttpHelper } from "@/lib/HttpHelper"
 import { MongooseHelper } from "@/lib/MongooseHelper"
 import { FollowService } from "@/service/FollowService"
+import { UserService } from "@/service/UserService"
 import mongoose from "mongoose"
 export async function deleteFollow(
   followingId: string
@@ -16,6 +17,8 @@ export async function deleteFollow(
 
   // services
   const followService = new FollowService()
+  const userService = new UserService()
+
   ///
 
   //get user
@@ -48,6 +51,17 @@ export async function deleteFollow(
     if (!isDeleted) {
       return HttpHelper.buildHttpErrorResponseData(HttpStatus.BAD_REQUEST)
     }
+
+    await userService.decrementCount(
+      followerObjectId,
+      "followingCount",
+      dbSession
+    )
+    await userService.decrementCount(
+      followingObjectId,
+      "followersCount",
+      dbSession
+    )
 
     //commit transaction
     await dbSession.commitTransaction()

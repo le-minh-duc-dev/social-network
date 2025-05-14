@@ -9,6 +9,7 @@ import { HttpHelper } from "@/lib/HttpHelper"
 import { MongooseHelper } from "@/lib/MongooseHelper"
 import { CloudinaryService } from "@/service/CloudinaryService"
 import { PostService } from "@/service/PostService"
+import { UserService } from "@/service/UserService"
 import { IMediaService } from "@/types/media_service"
 import mongoose from "mongoose"
 export async function createPost(
@@ -21,6 +22,7 @@ export async function createPost(
   // services
   const mediaService: IMediaService = new CloudinaryService()
   const postService = new PostService()
+  const userService = new UserService()
   ///
 
   const result = PostUploadSchema.safeParse(post)
@@ -47,6 +49,9 @@ export async function createPost(
       safePost,
       dbSession
     )
+
+    await userService.incrementCount(userObjectId,"postsCount",dbSession)
+
     await dbSession.commitTransaction()
     return {
       status: HttpStatus.CREATED,
