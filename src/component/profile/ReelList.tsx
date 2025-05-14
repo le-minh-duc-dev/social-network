@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo } from "react"
 import { Post as PostType } from "@/types/schema"
 import { PostAPI } from "@/service/api/PostAPI"
-import { useAuth } from "@/hooks/useAuth"
 import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useWindowVirtualizer } from "@tanstack/react-virtual"
 import PostPreview from "./PostPreview"
 import { MediaType } from "@/domain/enums/MediaType"
+import { useProfileContext } from "./ProfileContext"
 
 interface PostTypeWithKey extends PostType {
   key: string
@@ -15,13 +15,14 @@ interface PostTypeWithKey extends PostType {
 export default function ReelList() {
   const ITEMS_PER_ROW = 4
 
-  const { authUser } = useAuth()
+  const { userId } = useProfileContext()
+
   const queryFn = async ({
     pageParam = "",
   }: {
     pageParam: string
   }): Promise<InfiniteResponse<PostType>> => {
-    return await PostAPI.getPosts(pageParam, 2, authUser!.id)
+    return await PostAPI.getPosts(pageParam, 2, userId)
   }
   const {
     data,
@@ -31,11 +32,12 @@ export default function ReelList() {
     isLoading,
     error,
   } = useInfiniteQuery({
-    queryKey: [QueryKey.GET_POSTS, "USER", authUser?.id],
+    queryKey: [QueryKey.GET_POSTS, "USER", userId],
     queryFn,
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     staleTime: QueryStaleTime[QueryKey.GET_POSTS],
+    enabled: !!userId,
   })
 
   const allItems = useMemo<PostTypeWithKey[]>(
@@ -85,7 +87,7 @@ export default function ReelList() {
     isFetchingNextPage,
   ])
 
-  if (isLoading) {
+  if (!userId || isLoading) {
     return (
       <div className="flex flex-col items-center justify-center">
         {<p>Loading...</p>}

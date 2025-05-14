@@ -17,7 +17,7 @@ import { useAuth } from "@/hooks/useAuth"
 
 export default function LinkList() {
   const pathname = usePathname()
-  const {authUser} = useAuth()
+  const { authUser } = useAuth()
   const items: {
     type: "link" | "action"
     url: string
@@ -64,7 +64,7 @@ export default function LinkList() {
 
     {
       type: "link",
-      url: AppRoute.PROFILE,
+      url: AppRoute.PROFILE + "?userId=" + authUser?.id,
       label: "Profile",
       defaultIcon: <UserIcon />,
       activeIcon: <UserIcon />,
@@ -78,10 +78,10 @@ export default function LinkList() {
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
-  if(!authUser?.isActive) return <div></div>
+  if (!authUser?.isActive) return <div></div>
   return (
     <div>
-      <Create isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose}/>
+      <Create isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} />
       <Listbox
         aria-label="Dynamic Actions"
         items={items}

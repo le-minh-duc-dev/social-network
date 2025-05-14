@@ -1,3 +1,4 @@
+import { PostPrivacy } from "@/domain/enums/PostPrivacy"
 import { UnstableCacheKey } from "@/domain/enums/UnstableCacheKey"
 import Post from "@/domain/model/Post"
 import { PostUploadType } from "@/domain/zod/PostUploadSchema"
@@ -67,7 +68,9 @@ export class PostService {
   async getInfinitePosts(
     cursor: string | null,
     limit: number,
-    authorObjectId?: Types.ObjectId
+    authorObjectId?: Types.ObjectId,
+    allowedPrivacy?: PostPrivacy[],
+    authUserId?: Types.ObjectId
   ) {
     return unstable_cache(
       async () => {
@@ -78,6 +81,11 @@ export class PostService {
         }
         if (authorObjectId) {
           query.author = authorObjectId
+          if (allowedPrivacy && allowedPrivacy.length > 0) {
+            query.privacy = { $in: allowedPrivacy }
+          }
+        } else {
+          query.$or = [{ privacy: PostPrivacy.PUBLIC }, { author: authUserId }]
         }
 
         return await Post.find(query)

@@ -13,18 +13,18 @@ import { useSearchParams } from "next/navigation"
 export type TabType = "posts" | "reels" | "saved"
 export default function Profile() {
   const searchParams = useSearchParams()
-  const userId = searchParams.get("userId")
+  const userId = searchParams.get("userId") ?? ""
   const queryTab = searchParams.get("queryTab") as TabType | null
-  const [currentTab, setCurrentTab] = useState<TabType>(queryTab??"posts")
+  const [currentTab, setCurrentTab] = useState<TabType>(queryTab ?? "posts")
 
-  useEffect(()=>{
+  useEffect(() => {
     if (queryTab) {
       setCurrentTab(queryTab)
-    }   
-  },[queryTab])
+    }
+  }, [queryTab])
   const contextValue = useMemo(
-    () => ({ currentTab, setCurrentTab }),
-    [currentTab, setCurrentTab]
+    () => ({ currentTab, setCurrentTab, userId }),
+    [currentTab, setCurrentTab, userId]
   )
   const tabContent = useMemo(() => {
     switch (currentTab) {

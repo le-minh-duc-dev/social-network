@@ -3,7 +3,8 @@ import { TabType } from "./Profile"
 
 interface ProfileContextType {
   currentTab: TabType
-  setCurrentTab: React.Dispatch<React.SetStateAction<TabType>>
+  setCurrentTab: React.Dispatch<React.SetStateAction<TabType>>,
+  userId: string 
 }
 
 export const ProfileContext = React.createContext<ProfileContextType | null>(null)
