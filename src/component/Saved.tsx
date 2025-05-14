@@ -54,6 +54,16 @@ export default function Saved({ postId }: Readonly<{ postId: string }>) {
         queryKey: [QueryKey.GET_USER_SAVEDS],
         exact: false,
       })
+      if (response.status == HttpStatus.CREATED) {
+        addToast({
+          title: "Post saved successfully",
+        })
+      }
+      if (response.status == HttpStatus.NO_CONTENT) {
+        addToast({
+          title: "Post unsaved successfully",
+        })
+      }
     },
     onError: () => {
       setIsSaved(!isSaved)
