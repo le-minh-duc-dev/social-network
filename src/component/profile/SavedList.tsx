@@ -98,6 +98,7 @@ export default function SavedList() {
           return (
             <div
               key={item.key}
+              data-index={item.index}
               className={item.index % 2 ? "ListItemOdd" : "ListItemEven"}
               ref={virtualizer.measureElement}
               style={{
@@ -113,7 +114,7 @@ export default function SavedList() {
               {row ? (
                 <div className="grid grid-cols-3 gap-4 ">
                   {row.map((post) => (
-                    <PostPreview key={post._id.toString()} post={post} />
+                    <PostPreview key={post._id.toString()} post={post} height="aspect-[4/5]"/>
                   ))}
                 </div>
               ) : (

@@ -115,6 +115,7 @@ export default function ReelList() {
           return (
             <div
               key={item.key}
+              data-index={item.index}
               className={item.index % 2 ? "ListItemOdd" : "ListItemEven"}
               ref={virtualizer.measureElement}
               style={{
@@ -133,7 +134,7 @@ export default function ReelList() {
                     <PostPreview
                       key={post.key}
                       post={post}
-                      height="h-[350px]"
+                      height="aspect-[4/5]"
                     />
                   ))}
                 </div>

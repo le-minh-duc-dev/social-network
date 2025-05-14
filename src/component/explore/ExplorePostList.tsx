@@ -95,6 +95,7 @@ export default function ExplorePostList() {
             <div
               key={item.key}
               className={item.index % 2 ? "ListItemOdd" : "ListItemEven"}
+              data-index={item.index}
               ref={virtualizer.measureElement}
               style={{
                 position: "absolute",
@@ -109,7 +110,7 @@ export default function ExplorePostList() {
               {row ? (
                 <div className="grid grid-cols-3 gap-4 ">
                   {row.map((post) => (
-                    <PostPreview key={post._id.toString()} post={post} height="h-[350px]"/>
+                    <PostPreview key={post._id.toString()} post={post} height="aspect-[4/5]"/>
                   ))}
                 </div>
               ) : (

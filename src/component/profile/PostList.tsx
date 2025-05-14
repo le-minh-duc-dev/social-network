@@ -99,6 +99,7 @@ export default function PostList() {
             <div
               key={item.key}
               className={item.index % 2 ? "ListItemOdd" : "ListItemEven"}
+              data-index={item.index}
               ref={virtualizer.measureElement}
               style={{
                 position: "absolute",
@@ -113,7 +114,7 @@ export default function PostList() {
               {row ? (
                 <div className="grid grid-cols-3 gap-4 ">
                   {row.map((post) => (
-                    <PostPreview key={post._id.toString()} post={post} />
+                    <PostPreview key={post._id.toString()} post={post} height="aspect-[4/5]"/>
                   ))}
                 </div>
               ) : (
