@@ -5,7 +5,7 @@ import { FaRegBookmark } from "react-icons/fa"
 import { useProfileContext } from "./ProfileContext"
 import { TabType } from "./Profile"
 export default function CategoryTabs() {
-  const { setCurrentTab } = useProfileContext()
+  const { setCurrentTab,currentTab } = useProfileContext()
   return (
     <div className="flex justify-center">
       <Tabs
@@ -15,6 +15,7 @@ export default function CategoryTabs() {
         onSelectionChange={(key) => {
           setCurrentTab(key.toString() as TabType)
         }}
+        selectedKey={currentTab}
       >
         <Tab
           key="posts"

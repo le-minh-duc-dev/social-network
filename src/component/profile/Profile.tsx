@@ -5,14 +5,23 @@ import Info from "./Info"
 import CategoryTabs from "./CategoryTabs"
 import PostList from "./PostList"
 import { GoPlus } from "react-icons/go"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { ProfileContext } from "./ProfileContext"
 import ReelList from "./ReelList"
 import SavedList from "./SavedList"
+import { useSearchParams } from "next/navigation"
 export type TabType = "posts" | "reels" | "saved"
 export default function Profile() {
-  const [currentTab, setCurrentTab] = useState<TabType>("posts")
+  const searchParams = useSearchParams()
+  const userId = searchParams.get("userId")
+  const queryTab = searchParams.get("queryTab") as TabType | null
+  const [currentTab, setCurrentTab] = useState<TabType>(queryTab??"posts")
 
+  useEffect(()=>{
+    if (queryTab) {
+      setCurrentTab(queryTab)
+    }   
+  },[queryTab])
   const contextValue = useMemo(
     () => ({ currentTab, setCurrentTab }),
     [currentTab, setCurrentTab]
