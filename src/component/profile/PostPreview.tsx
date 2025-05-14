@@ -4,7 +4,7 @@ import { Post } from "@/types/schema"
 import React from "react"
 import { BiSolidCopy } from "react-icons/bi"
 import { TbPhotoVideo } from "react-icons/tb"
-export default function PostPreview({ post }: Readonly<{ post: Post }>) {
+export default function PostPreview({ post, height="h-[450px]" }: Readonly<{ post: Post,height?:string }>) {
   const { setPost } = useFullPostModal()
   const firstMedia = post.media[0]
   if (!firstMedia) {
@@ -19,7 +19,7 @@ export default function PostPreview({ post }: Readonly<{ post: Post }>) {
   }
   return (
     <button
-      className="h-[450px] overflow-hidden pt-4 hover:opacity-85 relative"
+      className={" overflow-hidden pt-4 hover:opacity-85 relative "+height}
       onClick={() => setPost(post)}
     >
       {" "}

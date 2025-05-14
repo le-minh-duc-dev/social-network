@@ -116,7 +116,7 @@ export default function MediaCarousel({
 
       {/* Dots Indicator */}
       <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
-        {mediaList.map((_, idx) => (
+        {mediaList.length>1 && mediaList.map((_, idx) => (
           <div
             key={idx}
             onClick={() => setCurrent(idx)}

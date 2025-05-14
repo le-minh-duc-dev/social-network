@@ -1,18 +1,23 @@
-import React from "react"
 import { Tab, Tabs } from "@heroui/react"
 import { TfiLayoutGrid3 } from "react-icons/tfi"
 import { PiFilmReel } from "react-icons/pi"
 import { FaRegBookmark } from "react-icons/fa"
+import { useProfileContext } from "./ProfileContext"
+import { TabType } from "./Profile"
 export default function CategoryTabs() {
+  const { setCurrentTab } = useProfileContext()
   return (
     <div className="flex justify-center">
       <Tabs
         aria-label="Tabs variants"
         variant="underlined"
         classNames={{ tabList: "gap-x-12" }}
+        onSelectionChange={(key) => {
+          setCurrentTab(key.toString() as TabType)
+        }}
       >
         <Tab
-          key="Posts"
+          key="posts"
           title={
             <div className="flex items-center space-x-2">
               <TfiLayoutGrid3 className="text-xs" />
@@ -21,7 +26,7 @@ export default function CategoryTabs() {
           }
         />
         <Tab
-          key="Reels"
+          key="reels"
           title={
             <div className="flex items-center space-x-2">
               <PiFilmReel />
@@ -30,7 +35,7 @@ export default function CategoryTabs() {
           }
         />
         <Tab
-          key="Saved"
+          key="saved"
           title={
             <div className="flex items-center space-x-2">
               <FaRegBookmark />
