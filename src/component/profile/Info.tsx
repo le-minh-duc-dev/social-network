@@ -4,9 +4,14 @@ import { useQuery } from "@tanstack/react-query"
 import { QueryKey } from "@/domain/enums/QueryKey"
 import { MdVerified } from "react-icons/md"
 import { useProfileContext } from "./ProfileContext"
+import { useAuth } from "@/hooks/useAuth"
+import FollowButton from "../profilePreview/FollowButton"
 
 export default function Info() {
-  const {userId} = useProfileContext()
+  const { authUser } = useAuth()
+  const { userId } = useProfileContext()
+
+  const isSameUser = authUser?.id === userId
 
   const { data, isLoading } = useQuery({
     queryKey: [QueryKey.GET_USER, userId],
@@ -29,7 +34,11 @@ export default function Info() {
               <MdVerified className="text-blue-500 inline-block" />
             )}
           </div>
-          <Button>Edit profile</Button>
+          {isSameUser ? (
+            <Button>Edit profile</Button>
+          ) : (
+            <FollowButton followingId={userId} />
+          )}
         </div>
         <div className="flex gap-x-4 mt-2">
           <p className="text-gray-500 text-sm">
