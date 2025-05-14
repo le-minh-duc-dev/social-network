@@ -58,3 +58,13 @@ export interface Like {
   createdAt: Date
   updatedAt: Date
 }
+
+
+export interface Saved {
+  _id: string | Types.ObjectId
+  post: string | Post
+  user: string | User
+  createdAt: Date
+  updatedAt: Date
+}
+

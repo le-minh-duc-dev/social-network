@@ -1,4 +1,4 @@
-import { UserAPI } from "@/service/UserAPI"
+import { UserAPI } from "@/service/api/UserAPI"
 import { Avatar, Button } from "@heroui/react"
 import { useQuery } from "@tanstack/react-query"
 import { QueryKey } from "@/domain/enums/QueryKey"

@@ -1,7 +1,7 @@
 "use client"
 
 import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
-import { PostAPI } from "@/service/PostAPI"
+import { PostAPI } from "@/service/api/PostAPI"
 import { Post as PostType } from "@/types/schema"
 import Post from "./Post"
 import PostSkeleton from "./PostSkeleton"

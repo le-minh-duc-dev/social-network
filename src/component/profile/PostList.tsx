@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react"
 import { Post as PostType } from "@/types/schema"
-import { PostAPI } from "@/service/PostAPI"
+import { PostAPI } from "@/service/api/PostAPI"
 import { useAuth } from "@/hooks/useAuth"
 import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
 import { useInfiniteQuery } from "@tanstack/react-query"

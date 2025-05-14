@@ -3,13 +3,14 @@ import { Post as PostType, User as UserType } from "@/types/schema"
 import { Button, Divider, User } from "@heroui/react"
 import React from "react"
 import MediaCarousel from "../MediaCarousel"
-import { FaRegBookmark, FaRegComment } from "react-icons/fa"
+import { FaRegComment } from "react-icons/fa"
 import CommentForm from "../CommentForm"
 import { LuDot } from "react-icons/lu"
 import Like from "../Like"
 import { useFullPostModal } from "@/context/FullPostContext"
 import PostOption from "../postOption/PostOption"
 import { MdVerified } from "react-icons/md"
+import Saved from "../Saved"
 
 export default function Post({ post }: Readonly<{ post: PostType }>) {
   const author: UserType = post.author as UserType
@@ -25,7 +26,7 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
           name={
             <div className="flex items-center gap-x-1">
               <p className="font-semibold">{author.fullName}</p>
-               {author.isVerified && <MdVerified className="text-blue-500" />}
+              {author.isVerified && <MdVerified className="text-blue-500" />}
               <LuDot className="text-lg text-default-400" />
               <p className="text-default-400">
                 {Formater.formatTimeAgo(post.createdAt)}
@@ -33,7 +34,7 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
             </div>
           }
         />
-        <PostOption post={post}/>
+        <PostOption post={post} />
       </div>
       {post.media.length > 0 ? (
         <div className=" overflow-hidden mt-4 rounded-lg border border-white/25">
@@ -56,9 +57,7 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
             <FaRegComment className="text-2xl -scale-x-100" />
           </Button>
         </div>
-        <Button isIconOnly variant="light">
-          <FaRegBookmark className="text-xl" />
-        </Button>
+        <Saved postId={post._id.toString()} />
       </div>
       <div className="my-2">
         <p className="text-sm font-semibold">

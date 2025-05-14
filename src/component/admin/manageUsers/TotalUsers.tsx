@@ -1,5 +1,5 @@
 import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
-import { UserAPI } from "@/service/UserAPI"
+import { UserAPI } from "@/service/api/UserAPI"
 import { Card, CardBody, Skeleton } from "@heroui/react"
 import { useQueries } from "@tanstack/react-query"
 import {

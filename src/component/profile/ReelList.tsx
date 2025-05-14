@@ -1,12 +1,17 @@
 import React, { useEffect, useMemo } from "react"
 import { Post as PostType } from "@/types/schema"
-import { PostAPI } from "@/service/PostAPI"
+import { PostAPI } from "@/service/api/PostAPI"
 import { useAuth } from "@/hooks/useAuth"
 import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useWindowVirtualizer } from "@tanstack/react-virtual"
 import PostPreview from "./PostPreview"
 import { MediaType } from "@/domain/enums/MediaType"
+
+interface PostTypeWithKey extends PostType {
+  key: string
+}
+
 export default function ReelList() {
   const ITEMS_PER_ROW = 4
 
@@ -33,14 +38,18 @@ export default function ReelList() {
     staleTime: QueryStaleTime[QueryKey.GET_POSTS],
   })
 
-  const allItems = useMemo<PostType[]>(
+  const allItems = useMemo<PostTypeWithKey[]>(
     () =>
       data?.pages
         .flatMap((page) => page.list)
         .flatMap((post) =>
           post.media
             .filter((m) => m.type == MediaType.VIDEO)
-            .map((m) => ({ ...post, media: [m] }))
+            .map((m, index) => ({
+              ...post,
+              media: [m],
+              key: post._id.toString() + index,
+            }))
         ) ?? [],
     [data]
   )
@@ -119,7 +128,11 @@ export default function ReelList() {
               {row ? (
                 <div className="grid grid-cols-4 gap-4 ">
                   {row.map((post) => (
-                    <PostPreview  key={post._id.toString()} post={post} height="h-[350px]"/>
+                    <PostPreview
+                      key={post.key}
+                      post={post}
+                      height="h-[350px]"
+                    />
                   ))}
                 </div>
               ) : (

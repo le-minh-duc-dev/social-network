@@ -14,7 +14,7 @@ import {
 import { FaRegEye } from "react-icons/fa"
 import { TbMoodEdit } from "react-icons/tb"
 import { MdDeleteForever, MdVerified } from "react-icons/md"
-import { UserAPI } from "@/service/UserAPI"
+import { UserAPI } from "@/service/api/UserAPI"
 import { useInfiniteScroll } from "@heroui/use-infinite-scroll"
 import { User as UserType } from "@/types/schema"
 import ActiveToggle from "./ActiveToggle"

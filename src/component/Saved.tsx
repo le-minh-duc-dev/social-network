@@ -1,43 +1,43 @@
-import { createLike } from "@/actions/like/createLike"
-import { deleteLike } from "@/actions/like/deleteLike"
+import { createSaved } from "@/actions/saved/createSaved"
+import { deleteSaved } from "@/actions/saved/deleteSaved"
 import { HttpMessages, HttpStatus } from "@/domain/enums/HttpStatus"
 import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
 import { useAuth } from "@/hooks/useAuth"
-import { LikeAPI } from "@/service/api/LikeAPI"
+import { SavedAPI } from "@/service/api/SavedAPI"
 import { addToast, Button } from "@heroui/react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import React, { useEffect, useState } from "react"
-import { FaHeart, FaRegHeart } from "react-icons/fa"
+import { FaBookmark, FaRegBookmark } from "react-icons/fa"
 
-export default function Like({ postId }: Readonly<{ postId: string }>) {
+export default function Saved({ postId }: Readonly<{ postId: string }>) {
   const { authUser } = useAuth()
-  const [isLiked, setIsLiked] = useState(false)
+  const [isSaved, setIsSaved] = useState(false)
   const queryClient = useQueryClient()
 
   const { data } = useQuery({
-    queryFn: () => LikeAPI.checkLikeExists(postId),
-    queryKey: [QueryKey.GET_POST_LIKES, postId, authUser?.id],
-    staleTime: QueryStaleTime[QueryKey.GET_POST_LIKES],
+    queryFn: () => SavedAPI.checkSavedExists(postId),
+    queryKey: [QueryKey.GET_USER_SAVEDS, postId, authUser?.id],
+    staleTime: QueryStaleTime[QueryKey.GET_USER_SAVEDS],
   })
 
   useEffect(() => {
     if (data) {
-      setIsLiked(data.exists)
+      setIsSaved(data.exists)
     }
   }, [data])
 
-  const toggleLike = async () => {
-    if (isLiked) {
-      setIsLiked(false)
-      return await deleteLike(postId)
+  const toggleSaved = async () => {
+    if (isSaved) {
+      setIsSaved(false)
+      return await deleteSaved(postId)
     } else {
-      setIsLiked(true)
-      return await createLike(postId)
+      setIsSaved(true)
+      return await createSaved(postId)
     }
   }
 
   const mutation = useMutation({
-    mutationFn: toggleLike,
+    mutationFn: toggleSaved,
     onSuccess: (response) => {
       if (
         response.status != HttpStatus.CREATED &&
@@ -51,19 +51,12 @@ export default function Like({ postId }: Readonly<{ postId: string }>) {
         return
       }
       queryClient.invalidateQueries({
-        queryKey: [QueryKey.GET_POST_LIKES],
-        exact: false,
-      })
-      queryClient.invalidateQueries({
-        queryKey: [QueryKey.GET_POST, postId],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [QueryKey.GET_POSTS],
+        queryKey: [QueryKey.GET_USER_SAVEDS],
         exact: false,
       })
     },
     onError: () => {
-      setIsLiked(!isLiked)
+      setIsSaved(!isSaved)
       addToast({
         title: HttpMessages[HttpStatus.INTERNAL_SERVER_ERROR],
       })
@@ -77,10 +70,10 @@ export default function Like({ postId }: Readonly<{ postId: string }>) {
       onPress={() => mutation.mutate()}
       isDisabled={mutation.isPending}
     >
-      {isLiked ? (
-        <FaHeart className="text-2xl text-red-500" />
+      {isSaved ? (
+        <FaBookmark className="text-xl" />
       ) : (
-        <FaRegHeart className="text-2xl" />
+        <FaRegBookmark className="text-xl" />
       )}
     </Button>
   )
