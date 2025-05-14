@@ -1,5 +1,5 @@
-'use client'
-import React, { useState, useRef, useEffect } from "react"
+"use client"
+import React, { useState, useEffect } from "react"
 import { MediaItem } from "@/types/schema"
 import { MediaType } from "@/domain/enums/MediaType"
 import { Button, Image } from "@heroui/react"
@@ -8,6 +8,7 @@ import { LocalStorageService } from "@/service/LocalStorageService"
 import { ExternalStorageServiceKey } from "@/domain/enums/ExternalStorageServiceKey"
 import { VolumnType } from "@/domain/enums/VolumeType"
 import { IoMdVolumeHigh, IoMdVolumeOff } from "react-icons/io"
+import Video from "./Video"
 
 export default function MediaCarousel({
   mediaList,
@@ -19,7 +20,6 @@ export default function MediaCarousel({
   itemWidthHeight?: string
 }>) {
   const [current, setCurrent] = useState(0)
-  const videoRef = useRef<HTMLVideoElement | null>(null)
 
   //volume
   const [hasSound, setHasSound] = useState(false)
@@ -29,24 +29,18 @@ export default function MediaCarousel({
     setCurrent((prev) => (prev - 1 + mediaList.length) % mediaList.length)
 
   useEffect(() => {
-    if (mediaList[current].type === MediaType.VIDEO && videoRef.current) {
-      videoRef.current.currentTime = 0
-      videoRef.current.play()
-
-      //services
-      const externalStorageService = new LocalStorageService()
-      const soundSetting = externalStorageService.getItem(
-        ExternalStorageServiceKey.VOLUME_SETTINGS
-      )
-      if (soundSetting) {
-        if (soundSetting == VolumnType.ON) {
-          setHasSound(true)
-        } else {
-          setHasSound(false)
-        }
+    const externalStorageService = new LocalStorageService()
+    const soundSetting = externalStorageService.getItem(
+      ExternalStorageServiceKey.VOLUME_SETTINGS
+    )
+    if (soundSetting) {
+      if (soundSetting == VolumnType.ON) {
+        setHasSound(true)
+      } else {
+        setHasSound(false)
       }
     }
-  }, [current, mediaList])
+  }, [])
 
   function toggleVolume() {
     setHasSound(!hasSound)
@@ -73,13 +67,21 @@ export default function MediaCarousel({
           />
         ) : (
           <>
-            <video
+            <Video
+              src={mediaList[current].url}
+              autoPlayOnView
+              loop
+              muted={!hasSound}
+              className={"object-cover " + itemWidthHeight}
+              controls={false}
+            />
+            {/* <video
               ref={videoRef}
               src={mediaList[current].url}
               className={"object-cover " + itemWidthHeight}
               muted={!hasSound}
-              loop
-            />
+              loop 
+            />*/}
             <Button
               variant="light"
               isIconOnly
@@ -116,15 +118,16 @@ export default function MediaCarousel({
 
       {/* Dots Indicator */}
       <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
-        {mediaList.length>1 && mediaList.map((_, idx) => (
-          <div
-            key={idx}
-            onClick={() => setCurrent(idx)}
-            className={`w-2 h-2 rounded-full ${
-              idx === current ? "bg-white" : "bg-gray-500"
-            } cursor-pointer`}
-          />
-        ))}
+        {mediaList.length > 1 &&
+          mediaList.map((_, idx) => (
+            <div
+              key={idx}
+              onClick={() => setCurrent(idx)}
+              className={`w-2 h-2 rounded-full ${
+                idx === current ? "bg-white" : "bg-gray-500"
+              } cursor-pointer`}
+            />
+          ))}
       </div>
     </div>
   )
