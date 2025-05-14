@@ -1,10 +1,12 @@
 import { useFullPostModal } from "@/context/FullPostContext"
 import { MediaType } from "@/domain/enums/MediaType"
 import { Post } from "@/types/schema"
+import { Image } from "@heroui/react"
 import React from "react"
-import { BiSolidCopy } from "react-icons/bi"
-import { TbPhotoVideo } from "react-icons/tb"
-export default function PostPreview({ post, height="h-[450px]" }: Readonly<{ post: Post,height?:string }>) {
+export default function PostPreview({
+  post,
+  height = "h-[450px]",
+}: Readonly<{ post: Post; height?: string }>) {
   const { setPost } = useFullPostModal()
   const firstMedia = post.media[0]
   if (!firstMedia) {
@@ -19,14 +21,18 @@ export default function PostPreview({ post, height="h-[450px]" }: Readonly<{ pos
   }
   return (
     <button
-      className={" overflow-hidden pt-4 hover:opacity-85 relative "+height}
+      className={" overflow-hidden pt-4 hover:opacity-85 relative " + height}
       onClick={() => setPost(post)}
     >
       {" "}
       {firstMedia.type == MediaType.VIDEO ? (
-        <TbPhotoVideo className="top-8 right-4 absolute text-lg" />
+        <div className="top-8 right-2 absolute text-lg invert block">
+          <Image src="/images/video_icon.png" width={25} height={22} alt="" />
+        </div>
       ) : (
-        <BiSolidCopy className="top-8 right-4 absolute text-lg" />
+        <div className="top-8 right-2 absolute text-lg invert block">
+          <Image src="/images/stack_icon.svg" width={18} height={18} alt="" />
+        </div>
       )}
       {firstMedia.type == MediaType.IMAGE ? (
         <img
