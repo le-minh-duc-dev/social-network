@@ -42,7 +42,7 @@ export default function ProfilePreview({
             name={
               <div className="flex items-center gap-x-1">
                 <Link
-                  href={AppRouteManager.PROFILE + `?userId=${userId}`}
+                  href={AppRouteManager.profile(userId)}
                   className="font-semibold"
                 >
                   {user!.fullName}
