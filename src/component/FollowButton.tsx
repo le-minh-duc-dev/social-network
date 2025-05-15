@@ -76,6 +76,10 @@ export default function FollowButton({
         queryKey: [QueryKey.GET_USERS, followingId],
         exact: false,
       })
+      queryClient.invalidateQueries({
+        queryKey: [QueryKey.GET_POSTS],
+        exact: false,
+      })
       if (response.status == HttpStatus.CREATED) {
         addToast({
           title: "Request follow successfully",

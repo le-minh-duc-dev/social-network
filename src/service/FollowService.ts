@@ -20,6 +20,7 @@ export class FollowService {
     const savedNewfollow = await newfollow.save({ session: dbSession })
 
     revalidateTag(UnstableCacheKey.USER_FOLLOW + follower)
+    revalidateTag(UnstableCacheKey.POST_LIST)
 
     return savedNewfollow
   }
@@ -38,6 +39,7 @@ export class FollowService {
     )
 
     revalidateTag(UnstableCacheKey.USER_FOLLOW + follower)
+    revalidateTag(UnstableCacheKey.POST_LIST)
 
     return result.deletedCount > 0
   }
