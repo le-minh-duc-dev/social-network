@@ -1,8 +1,16 @@
 "use client"
 
 import { AppRouteManager } from "@/service/AppRouteManager"
-import { Button, Card, CardBody, CardHeader, Image } from "@heroui/react"
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Divider,
+  Image,
+} from "@heroui/react"
 import { signIn } from "next-auth/react"
+import LoginForm from "./LoginForm"
 
 export default function Login() {
   return (
@@ -14,7 +22,7 @@ export default function Login() {
         }}
       >
         <CardHeader>
-          <h1 className="text-3xl mb-12 mx-auto font-semibold">Đăng nhập</h1>
+          <h1 className="text-3xl mb-12 mx-auto font-semibold">Login</h1>
         </CardHeader>
         <CardBody>
           <form
@@ -41,7 +49,7 @@ export default function Login() {
               </div>
             </Button>
           </form>
-          <form
+          {/* <form
             action={() => {
               signIn("github", {
                 redirectTo: AppRouteManager.HOME,
@@ -65,7 +73,13 @@ export default function Login() {
                 <div className=""></div>
               </div>
             </Button>
-          </form>
+          </form> */}
+          <div className="flex my-8 items-center">
+            <Divider className="flex-1" />
+            <span className="mx-4 text-default-400 text-sm">Or with email and password</span>
+            <Divider className="flex-1" />
+          </div>
+          <LoginForm />
         </CardBody>
       </Card>
     </div>
