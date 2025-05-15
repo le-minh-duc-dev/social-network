@@ -40,12 +40,12 @@ export default function LinkList() {
       defaultIcon: <IoSearchOutline className="text-2xl" />,
       activeIcon: <IoSearchSharp className="text-2xl" />,
     },
-     {
+    {
       type: "link",
       url: AppRouteManager.EXPLORE,
       label: "Explore",
-      defaultIcon: <MdOutlineExplore  className="text-2xl" />,
-      activeIcon: <MdExplore  className="text-2xl" />,
+      defaultIcon: <MdOutlineExplore className="text-2xl" />,
+      activeIcon: <MdExplore className="text-2xl" />,
     },
     {
       type: "link",
@@ -72,7 +72,7 @@ export default function LinkList() {
 
     {
       type: "link",
-      url: AppRouteManager.PROFILE + "?userId=" + authUser?.id,
+      url: AppRouteManager.profile(authUser!.id),
       label: "Profile",
       defaultIcon: <UserIcon />,
       activeIcon: <UserIcon />,

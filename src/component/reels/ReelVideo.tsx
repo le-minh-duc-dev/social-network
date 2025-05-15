@@ -1,5 +1,5 @@
 import { Post, User as UserType } from "@/types/schema"
-import React from "react"
+import React, { useState } from "react"
 import Video from "../Video"
 import FollowButton from "../FollowButton"
 import { MdVerified } from "react-icons/md"
@@ -10,12 +10,35 @@ import { AppRouteManager } from "@/service/AppRouteManager"
 import Like from "../Like"
 import { FaRegComment } from "react-icons/fa"
 import { PiShareFat } from "react-icons/pi"
+import { IoMdVolumeHigh, IoMdVolumeOff } from "react-icons/io"
+import { LocalStorageService } from "@/service/LocalStorageService"
+import { ExternalStorageServiceKey } from "@/domain/enums/ExternalStorageServiceKey"
+import { VolumnType } from "@/domain/enums/VolumeType"
 
-export default function ReelVideo({ post }: Readonly<{ post?: Post }>) {
+export default function ReelVideo({
+  post,
+  isOpenCommentList,
+  toggleCommentList,
+}: Readonly<{
+  post?: Post
+  isOpenCommentList: boolean
+  toggleCommentList?: () => void
+}>) {
   const { authUser } = useAuth()
   const author = post?.author as UserType
 
+  //volume
+  const [hasSound, setHasSound] = useState(false)
+
   const isOwnPost = author?._id.toString() === authUser?.id
+  function toggleVolume() {
+    setHasSound(!hasSound)
+    const externalStorageService = new LocalStorageService()
+    externalStorageService.saveItem(
+      ExternalStorageServiceKey.VOLUME_SETTINGS,
+      hasSound ? VolumnType.OFF : VolumnType.ON
+    )
+  }
   return (
     <div className="aspect-[9/16] h-screen flex items-center justify-center p-6 relative">
       {post && (
@@ -33,7 +56,8 @@ export default function ReelVideo({ post }: Readonly<{ post?: Post }>) {
               isIconOnly
               className="rounded-full"
               variant="flat"
-              onPress={() => {}}
+              color={isOpenCommentList ? "primary" : "default"}
+              onPress={toggleCommentList}
             >
               <FaRegComment className="text-2xl -scale-x-100" />
             </Button>
@@ -51,6 +75,16 @@ export default function ReelVideo({ post }: Readonly<{ post?: Post }>) {
       )}
       {post ? (
         <>
+          <div className="absolute top-20 right-6">
+            <Button
+              variant="light"
+              isIconOnly
+              className="absolute bottom-4 right-2 text-lg z-10 "
+              onPress={toggleVolume}
+            >
+              {hasSound ? <IoMdVolumeHigh /> : <IoMdVolumeOff />}
+            </Button>
+          </div>
           <Video
             key={post._id.toString()}
             src={post.media[0].url}
@@ -58,6 +92,7 @@ export default function ReelVideo({ post }: Readonly<{ post?: Post }>) {
             autoPlay
             className="object-cover w-full h-full rounded-xl"
             loop={true}
+            muted={!hasSound}
           />
           <div className="absolute bottom-12 left-10">
             <User

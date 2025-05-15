@@ -8,14 +8,24 @@ import React, { useMemo, useRef, useState } from "react"
 import ReelVideo from "./ReelVideo"
 import { FaChevronCircleDown, FaChevronCircleUp } from "react-icons/fa"
 import { Button } from "@heroui/react"
+import CommentList from "./CommentList"
 
 interface PostTypeWithKey extends Post {
   key: string
 }
 
 export default function Reels() {
+  //Current index of the post
   const [currentIndex, setCurrentIndex] = useState(0)
+
+  //isOpen comment list
+  const [isOpenCommentList, setIsOpenCommentList] = useState(false)
+
+  //Scroll timeout ref
+
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  //Fetch posts
   const queryFn = async ({
     pageParam = "",
   }: {
@@ -50,6 +60,7 @@ export default function Reels() {
 
   const currentPost = allItems[currentIndex]
 
+  //Handle change index
   const handleChangeIndex = (direction: "up" | "down") => {
     if (direction === "down") {
       if (currentIndex < allItems.length - 1) {
@@ -63,6 +74,7 @@ export default function Reels() {
     }
   }
 
+  //Handle scroll
   const handleScroll = (e: React.WheelEvent) => {
     e.preventDefault()
     if (scrollTimeoutRef.current) return
@@ -80,9 +92,12 @@ export default function Reels() {
   }
 
   return (
-    <div className="flex-1  z-0  overflow-hidden" onWheel={handleScroll}>
-      <div className="flex justify-center items-center h-full overflow-hidden relative">
-        <ReelVideo post={currentPost} />
+    <div className="flex-1  z-0  overflow-hidden relative">
+      <div
+        className="flex justify-center items-center h-full overflow-hidden relative"
+        onWheel={handleScroll}
+      >
+        <ReelVideo post={currentPost} isOpenCommentList={isOpenCommentList} toggleCommentList={()=>setIsOpenCommentList(!isOpenCommentList)}/>
 
         {currentPost && (
           <div className="flex flex-col gap-y-8">
@@ -107,6 +122,11 @@ export default function Reels() {
           </div>
         )}
       </div>
+      {currentPost && isOpenCommentList && (
+        <div className="absolute top-0 right-0 w-96 h-full bg-default-100">
+          <CommentList post={currentPost} />
+        </div>
+      )}
     </div>
   )
 }
