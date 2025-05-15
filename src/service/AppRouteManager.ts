@@ -1,0 +1,14 @@
+export const AppRouteManager = {
+  HOME: "/",
+  ADMIN: "/admin",
+  ADMIN_MANAGE_USERS: "/admin/manage-users",
+  LOGIN: "/login",
+  WELCOME_NEW_MEMBER: "/welcome-new-member",
+  SEARCH: "/search",
+  REEL: "/reel",
+  NOTIFICATION: "/notification",
+  profile: (userId: string) => "/profile?userId=" + userId,
+  saved:(userId: string) =>  AppRouteManager.profile(userId) + "&queryTab="+ "saved",
+  USER_SETTINGS: "/user-settings",
+  EXPLORE: "/explore",
+}

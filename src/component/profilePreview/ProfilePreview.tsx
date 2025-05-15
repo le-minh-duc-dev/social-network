@@ -1,4 +1,4 @@
-import { AppRoute } from "@/domain/enums/AppRoute"
+import { AppRouteManager } from "@/service/AppRouteManager"
 import { QueryKey } from "@/domain/enums/QueryKey"
 import { UserAPI } from "@/service/api/UserAPI"
 import { Button, Tooltip, User } from "@heroui/react"
@@ -42,7 +42,7 @@ export default function ProfilePreview({
             name={
               <div className="flex items-center gap-x-1">
                 <Link
-                  href={AppRoute.PROFILE + `?userId=${userId}`}
+                  href={AppRouteManager.PROFILE + `?userId=${userId}`}
                   className="font-semibold"
                 >
                   {user!.fullName}

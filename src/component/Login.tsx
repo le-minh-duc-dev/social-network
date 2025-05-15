@@ -1,6 +1,6 @@
 "use client"
 
-import { AppRoute } from "@/domain/enums/AppRoute"
+import { AppRouteManager } from "@/service/AppRouteManager"
 import { Button, Card, CardBody, CardHeader, Image } from "@heroui/react"
 import { signIn } from "next-auth/react"
 
@@ -20,7 +20,7 @@ export default function Login() {
           <form
             action={() => {
               signIn("google", {
-                redirectTo: AppRoute.HOME,
+                redirectTo: AppRouteManager.HOME,
               })
             }}
           >
@@ -44,7 +44,7 @@ export default function Login() {
           <form
             action={() => {
               signIn("github", {
-                redirectTo: AppRoute.HOME,
+                redirectTo: AppRouteManager.HOME,
               })
             }}
             className="mt-4"

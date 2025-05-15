@@ -4,8 +4,11 @@ import { PiFilmReel } from "react-icons/pi"
 import { FaRegBookmark } from "react-icons/fa"
 import { useProfileContext } from "./ProfileContext"
 import { TabType } from "./Profile"
+import { useAuth } from "@/hooks/useAuth"
 export default function CategoryTabs() {
-  const { setCurrentTab,currentTab } = useProfileContext()
+  const { setCurrentTab, currentTab, userId } = useProfileContext()
+  const { authUser } = useAuth()
+
   return (
     <div className="flex justify-center">
       <Tabs
@@ -35,15 +38,17 @@ export default function CategoryTabs() {
             </div>
           }
         />
-        <Tab
-          key="saved"
-          title={
-            <div className="flex items-center space-x-2">
-              <FaRegBookmark />
-              <span className="uppercase font-semibold">Saved</span>
-            </div>
-          }
-        />
+        {userId == authUser?.id ? (
+          <Tab
+            key="saved"
+            title={
+              <div className="flex items-center space-x-2">
+                <FaRegBookmark />
+                <span className="uppercase font-semibold">Saved</span>
+              </div>
+            }
+          />
+        ) : null}
       </Tabs>
     </div>
   )

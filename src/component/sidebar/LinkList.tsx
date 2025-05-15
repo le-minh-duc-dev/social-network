@@ -1,5 +1,5 @@
 "use client"
-import { AppRoute } from "@/domain/enums/AppRoute"
+import { AppRouteManager } from "@/service/AppRouteManager"
 import { Listbox, ListboxItem, useDisclosure } from "@heroui/react"
 import React, { ReactNode } from "react"
 import { GoHome, GoHomeFill } from "react-icons/go"
@@ -28,35 +28,35 @@ export default function LinkList() {
   }[] = [
     {
       type: "link",
-      url: AppRoute.HOME,
+      url: AppRouteManager.HOME,
       label: "Home",
       defaultIcon: <GoHome className="text-2xl" />,
       activeIcon: <GoHomeFill className="text-2xl" />,
     },
     {
       type: "link",
-      url: AppRoute.SEARCH,
+      url: AppRouteManager.SEARCH,
       label: "Search",
       defaultIcon: <IoSearchOutline className="text-2xl" />,
       activeIcon: <IoSearchSharp className="text-2xl" />,
     },
      {
       type: "link",
-      url: AppRoute.EXPLORE,
+      url: AppRouteManager.EXPLORE,
       label: "Explore",
       defaultIcon: <MdOutlineExplore  className="text-2xl" />,
       activeIcon: <MdExplore  className="text-2xl" />,
     },
     {
       type: "link",
-      url: AppRoute.REEL,
+      url: AppRouteManager.REEL,
       label: "Reels",
       defaultIcon: <PiFilmReel className="text-2xl" />,
       activeIcon: <PiFilmReelFill className="text-2xl" />,
     },
     {
       type: "link",
-      url: AppRoute.NOTIFICATION,
+      url: AppRouteManager.NOTIFICATION,
       label: "Notifications",
       defaultIcon: <IoIosHeartEmpty className="text-2xl" />,
       activeIcon: <IoMdHeart className="text-2xl" />,
@@ -72,7 +72,7 @@ export default function LinkList() {
 
     {
       type: "link",
-      url: AppRoute.PROFILE + "?userId=" + authUser?.id,
+      url: AppRouteManager.PROFILE + "?userId=" + authUser?.id,
       label: "Profile",
       defaultIcon: <UserIcon />,
       activeIcon: <UserIcon />,

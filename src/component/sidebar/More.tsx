@@ -1,5 +1,5 @@
 "use client"
-import { AppRoute } from "@/domain/enums/AppRoute"
+import { AppRouteManager } from "@/service/AppRouteManager"
 import { signOut } from "next-auth/react"
 import {
   Button,
@@ -31,7 +31,7 @@ export default function More() {
         classNames={{ base: "w-64" }}
         onAction={(key) => {
           if (key == "logout") {
-            signOut({ redirectTo: AppRoute.LOGIN })
+            signOut({ redirectTo: AppRouteManager.LOGIN })
           }
         }}
       >
@@ -40,7 +40,7 @@ export default function More() {
             <DropdownItem
               classNames={{ base: "p-3" }}
               key="settings"
-              href={AppRoute.USER_SETTINGS}
+              href={AppRouteManager.USER_SETTINGS}
               startContent={<IoSettingsOutline className="text-lg" />}
             >
               Settings
@@ -48,7 +48,7 @@ export default function More() {
             <DropdownItem
               classNames={{ base: "p-3" }}
               key="saved"
-              href={AppRoute.SAVED}
+              href={AppRouteManager.saved(authUser.id)}
               startContent={<FaRegBookmark className="text-lg" />}
             >
               Saved

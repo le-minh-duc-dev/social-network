@@ -1,4 +1,4 @@
-import { AppRoute } from "@/domain/enums/AppRoute"
+import { AppRouteManager } from "@/service/AppRouteManager"
 import {
   Listbox,
   ListboxItem,
@@ -26,11 +26,11 @@ export default function ActionList() {
       >
         <ListboxSection  title="Home">
           <ListboxItem
-            href={AppRoute.ADMIN}
+            href={AppRouteManager.ADMIN}
             startContent={<RxDashboard className="text-2xl" />}
             classNames={{
               title: `text-base ${
-                isPathNameMatched(AppRoute.ADMIN) ? "font-semibold" : ""
+                isPathNameMatched(AppRouteManager.ADMIN) ? "font-semibold" : ""
               }`,
               base: "mt-4",
             }}
@@ -40,11 +40,11 @@ export default function ActionList() {
         </ListboxSection>
         <ListboxSection  title="Users">
           <ListboxItem
-            href={AppRoute.ADMIN_MANAGE_USERS}
+            href={AppRouteManager.ADMIN_MANAGE_USERS}
             startContent={<FaUsers className="text-2xl" />}
             classNames={{
               title: `text-base ${
-                isPathNameMatched(AppRoute.ADMIN_MANAGE_USERS)
+                isPathNameMatched(AppRouteManager.ADMIN_MANAGE_USERS)
                   ? "font-semibold"
                   : ""
               }`,

@@ -11,7 +11,7 @@ import {
 } from "@heroui/react"
 import { IoIosMore } from "react-icons/io"
 import EditPost from "../postMutation/EditPost"
-import { AppRoute } from "@/domain/enums/AppRoute"
+import { AppRouteManager } from "@/service/AppRouteManager"
 import DeletePost from "./DeletePost"
 
 function copyToClipboard(text: string): void {
@@ -30,7 +30,7 @@ export default function PostOption({ post }: Readonly<{ post: Post }>) {
   const author = post?.author as User
   const isPostAuthor = authUser?.id == author._id.toString()
 
-  const postUrl = AppRoute.POSTS + `/${post._id.toString()}`
+  const postUrl = AppRouteManager.POSTS + `/${post._id.toString()}`
   const fullPostUrl = process.env.NEXT_PUBLIC_BASE_URL + postUrl
 
   const {

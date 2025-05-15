@@ -1,4 +1,4 @@
-import { AppRoute } from "@/domain/enums/AppRoute"
+import { AppRouteManager } from "@/service/AppRouteManager"
 import { auth } from "./auth"
 import { redirect } from "next/navigation"
 import { Role } from "@/domain/enums/Role"
@@ -7,19 +7,19 @@ export class RouteProtector {
   static async protect(role?: Role, onlyActiveAccount: boolean = true) {
     const session = await auth()
     if (!session) {
-      redirect(AppRoute.LOGIN)
+      redirect(AppRouteManager.LOGIN)
     } else if (onlyActiveAccount && !session.user.isActive) {
-      redirect(AppRoute.WELCOME_NEW_MEMBER)
+      redirect(AppRouteManager.WELCOME_NEW_MEMBER)
     } else if (
       role &&
       RoleService.hasLessPrivilegeThan(session.user.role, role)
     ) {
-      redirect(AppRoute.HOME)
+      redirect(AppRouteManager.HOME)
     }
   }
 
   static async protectLoginAgain() {
     const session = await auth()
-    if (session) redirect(AppRoute.HOME)
+    if (session) redirect(AppRouteManager.HOME)
   }
 }

@@ -1,6 +1,6 @@
 import { RouteProtector } from "@/auth/RouteProtector"
 import SinglePost from "@/component/SinglePost"
-import { AppRoute } from "@/domain/enums/AppRoute"
+import { AppRouteManager } from "@/service/AppRouteManager"
 import { PostService } from "@/service/PostService"
 import { Types } from "mongoose"
 import { redirect } from "next/navigation"
@@ -17,7 +17,7 @@ export default async function page({
     postObjectId = new Types.ObjectId(postId)
   } catch (error) {
     console.log(error)
-    redirect(AppRoute.HOME)
+    redirect(AppRouteManager.HOME)
   }
   const postService = new PostService()
 

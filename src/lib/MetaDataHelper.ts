@@ -1,10 +1,10 @@
-import { AppRoute } from "@/domain/enums/AppRoute";
+import { AppRouteManager } from "@/service/AppRouteManager";
 
 export class MetaDataHelper {
   static generateMetaData(
     title: string = "Social Network - Ducle's project",
     description: string = "Le Minh Duc - Final-year IT student specializing in Java, Spring Boot, and scalable backend systems. Explore my real-time chat app, microservices projects, and full-stack development portfolio.",
-    url: string = AppRoute.HOME
+    url: string = AppRouteManager.HOME
   ) {
     return {
       title,
