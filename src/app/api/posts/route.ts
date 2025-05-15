@@ -2,7 +2,6 @@
 import { RouteProtector } from "@/auth/RouteProtector"
 import { ServerSideAuthService } from "@/auth/ServerSideAuthService"
 import { HttpStatus } from "@/domain/enums/HttpStatus"
-import { PostPrivacy } from "@/domain/enums/PostPrivacy"
 import connectDB from "@/lib/connectDB"
 import { MongooseHelper } from "@/lib/MongooseHelper"
 import { PostService } from "@/service/PostService"
@@ -20,11 +19,11 @@ export async function GET(request: NextRequest) {
   const authUser = await ServerSideAuthService.getAuthUser()
   const authUserObjectId = MongooseHelper.toObjectId(authUser?.id ?? "")
 
-  let userObjectId
+  let authorObjectId = undefined
 
   if (authorId) {
     try {
-      userObjectId = MongooseHelper.toObjectId(authorId ?? "")
+      authorObjectId = MongooseHelper.toObjectId(authorId ?? "")
     } catch (error) {
       console.error("Invalid userId:", authorId, error)
 
@@ -39,25 +38,13 @@ export async function GET(request: NextRequest) {
   const postService = new PostService()
 
   //get posts
-  let result
-  if (authorId) {
-    if (authorId == authUser!.id) {
-      result = await postService.getInfinitePosts(cursor, limit, userObjectId)
-    } else {
-      result = await postService.getInfinitePosts(cursor, limit, userObjectId, [
-        PostPrivacy.PUBLIC,
-      ])
-    }
-  } else {
-    result = await postService.getInfinitePosts(
-      cursor,
-      limit,
-      undefined,
-      undefined,
-      authUserObjectId,
-      isExplore
-    )
-  }
+  const result = await postService.getInfinitePosts(
+    cursor,
+    limit,
+    authUserObjectId,
+    authorObjectId,
+    isExplore
+  )
 
   //check if there are more posts
   const hasMore = result.length > limit

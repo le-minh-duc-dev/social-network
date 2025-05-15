@@ -70,9 +70,8 @@ export class PostService {
   async getInfinitePosts(
     cursor: string | null,
     limit: number,
+    authUserId: Types.ObjectId,
     authorObjectId?: Types.ObjectId,
-    allowedPrivacy?: PostPrivacy[],
-    authUserId?: Types.ObjectId,
     isExplore: boolean = false
   ) {
     return unstable_cache(
@@ -87,16 +86,29 @@ export class PostService {
 
         // CASE 1: User profile
         if (authorObjectId) {
+          // Check if authUser is following the author
+          const followStatus =
+            await followService.getFollowStateByFollowerAndFollowing(
+              authUserId,
+              authorObjectId
+            )
+
           query.author = authorObjectId
-          if (allowedPrivacy?.length) {
-            query.privacy = { $in: allowedPrivacy }
+          query.$or = [{ privacy: PostPrivacy.PUBLIC }]
+
+          if (followStatus === "following") {
+            query.$or.push({ privacy: PostPrivacy.FOLLOWERS })
+          }
+
+          if (authUserId?.toString() === authorObjectId.toString()) {
+            query.$or.push({ privacy: PostPrivacy.PRIVATE })
           }
         }
 
         // CASE 2: Explore feed logic
         else if (isExplore) {
           const followingList = await followService.getFollowingIdList(
-            authUserId!
+            authUserId
           )
 
           query.$or = [
@@ -114,7 +126,7 @@ export class PostService {
         // CASE 3: Home feed logic
         else {
           const followingList = await followService.getFollowingIdList(
-            authUserId!
+            authUserId
           )
 
           query.$or = [
@@ -137,7 +149,6 @@ export class PostService {
           cursor +
           limit +
           authorObjectId +
-          allowedPrivacy +
           authUserId +
           isExplore,
       ],
