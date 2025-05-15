@@ -7,11 +7,12 @@ export class PostAPI {
     nextCursor: string,
     limit: number = 2,
     authorId: string = "",
-    isExplore: boolean = false
+    isExplore: boolean = false,
+    isReels: boolean = false
   ): Promise<InfiniteResponse<Post>> {
     const res = await fetch(
       PostAPI.baseUrl +
-        `?nextCursor=${nextCursor}&limit=${limit}&authorId=${authorId}&isExplore=${isExplore}`,
+        `?nextCursor=${nextCursor}&limit=${limit}&authorId=${authorId}&isExplore=${isExplore}&isReels=${isReels}`,
       {
         credentials: "include",
       }

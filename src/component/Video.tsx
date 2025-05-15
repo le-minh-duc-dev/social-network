@@ -56,9 +56,19 @@ const Video: React.FC<VideoProps> = ({
     }
   }, [autoPlayOnView, threshold, onView, onPause])
 
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play()
+      } else {
+        videoRef.current.pause()
+      }
+    }
+  }
   return (
     <video
       ref={videoRef}
+      onClick={togglePlay}
       muted
       playsInline
       {...props}

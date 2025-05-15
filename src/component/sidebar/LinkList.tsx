@@ -49,7 +49,7 @@ export default function LinkList() {
     },
     {
       type: "link",
-      url: AppRouteManager.REEL,
+      url: AppRouteManager.REELS,
       label: "Reels",
       defaultIcon: <PiFilmReel className="text-2xl" />,
       activeIcon: <PiFilmReelFill className="text-2xl" />,

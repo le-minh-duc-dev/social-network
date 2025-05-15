@@ -72,7 +72,8 @@ export class PostService {
     limit: number,
     authUserId: Types.ObjectId,
     authorObjectId?: Types.ObjectId,
-    isExplore: boolean = false
+    isExplore: boolean = false,
+    isReels: boolean = false
   ) {
     return unstable_cache(
       async () => {
@@ -107,9 +108,8 @@ export class PostService {
 
         // CASE 2: Explore feed logic
         else if (isExplore) {
-          const followingList = await followService.getFollowingIdList(
-            authUserId
-          )
+          const followingList =
+            await followService.getFollowingIdList(authUserId)
 
           query.$or = [
             { privacy: PostPrivacy.PUBLIC },
@@ -121,13 +121,24 @@ export class PostService {
           ]
           // Exclude own posts
           query.author = { $ne: authUserId }
+        } else if (isReels) {
+          const followingList =
+            await followService.getFollowingIdList(authUserId)
+
+          query.$or = [
+            { privacy: PostPrivacy.PUBLIC },
+
+            {
+              privacy: PostPrivacy.FOLLOWERS,
+              author: { $in: followingList },
+            },
+          ]
         }
 
         // CASE 3: Home feed logic
         else {
-          const followingList = await followService.getFollowingIdList(
-            authUserId
-          )
+          const followingList =
+            await followService.getFollowingIdList(authUserId)
 
           query.$or = [
             { privacy: PostPrivacy.PUBLIC },

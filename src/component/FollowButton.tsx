@@ -5,7 +5,7 @@ import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
 import { useAuth } from "@/hooks/useAuth"
 import { FollowAPI } from "@/service/api/FollowAPI"
 import { FollowStatus } from "@/types/schema"
-import { addToast, Button } from "@heroui/react"
+import { addToast, Button, ButtonProps } from "@heroui/react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { IoMdPersonAdd } from "react-icons/io"
@@ -14,11 +14,14 @@ export default function FollowButton({
   followingId,
   onChangeCallback,
   className,
-}: Readonly<{
-  onChangeCallback?: (followStatus: FollowStatus) => void
-  followingId: string
-  className?: string
-}>) {
+  ...props
+}: Readonly<
+  {
+    onChangeCallback?: (followStatus: FollowStatus) => void
+    followingId: string
+    className?: string
+  } & ButtonProps
+>) {
   const { authUser } = useAuth()
   const [followStatus, setFollowStatus] = useState<FollowStatus>("notFollowing")
   const queryClient = useQueryClient()
@@ -132,6 +135,7 @@ export default function FollowButton({
           <IoMdPersonAdd />
         )
       }
+      {...props}
     >
       {buttonText}
     </Button>

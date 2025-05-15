@@ -1,5 +1,5 @@
 import { RouteProtector } from "@/auth/RouteProtector"
-import Reels from "@/component/reel/Reels"
+import Reels from "@/component/reels/Reels"
 import React from "react"
 
 export default async function page() {

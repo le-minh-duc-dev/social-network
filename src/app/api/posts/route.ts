@@ -12,7 +12,8 @@ export async function GET(request: NextRequest) {
   const limit = parseInt(searchParams.get("limit") ?? "10")
   const cursor = searchParams.get("nextCursor") // last post ID
   const authorId = searchParams.get("authorId") // author ID
-  const isExplore = searchParams.get("isExplore") == "true" // author ID
+  const isExplore = searchParams.get("isExplore") == "true"
+  const isReels = searchParams.get("isReels") == "true"
 
   await RouteProtector.protect()
 
@@ -43,7 +44,8 @@ export async function GET(request: NextRequest) {
     limit,
     authUserObjectId,
     authorObjectId,
-    isExplore
+    isExplore,
+    isReels
   )
 
   //check if there are more posts
