@@ -30,7 +30,7 @@ export default function PostOption({ post }: Readonly<{ post: Post }>) {
   const author = post?.author as User
   const isPostAuthor = authUser?.id == author._id.toString()
 
-  const postUrl = AppRouteManager.POSTS + `/${post._id.toString()}`
+  const postUrl = AppRouteManager.posts(post._id.toString())
   const fullPostUrl = process.env.NEXT_PUBLIC_BASE_URL + postUrl
 
   const {

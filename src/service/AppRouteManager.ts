@@ -8,7 +8,9 @@ export const AppRouteManager = {
   REELS: "/reels",
   NOTIFICATION: "/notification",
   profile: (userId: string) => "/profile?userId=" + userId,
-  saved:(userId: string) =>  AppRouteManager.profile(userId) + "&queryTab="+ "saved",
+  saved: (userId: string) =>
+    AppRouteManager.profile(userId) + "&queryTab=" + "saved",
+  posts: (postId: string) => "/posts/" + postId,
   USER_SETTINGS: "/user-settings",
   EXPLORE: "/explore",
 }
