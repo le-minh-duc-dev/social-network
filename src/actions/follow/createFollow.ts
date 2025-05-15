@@ -42,22 +42,30 @@ export async function createFollow(
   try {
     dbSession.startTransaction()
 
+    const user = await userService.findUserById(followingObjectId)
+    if (!user) {
+      throw new Error("User not found")
+    }
+
     await followService.createfollow(
       followerObjectId,
       followingObjectId,
-      dbSession
+      dbSession,
+      user.isFollowApprovalRequired
     )
 
-    await userService.incrementCount(
-      followerObjectId,
-      "followingCount",
-      dbSession
-    )
-    await userService.incrementCount(
-      followingObjectId,
-      "followersCount",
-      dbSession
-    )
+    if (!user.isFollowApprovalRequired) {
+      await userService.incrementCount(
+        followerObjectId,
+        "followingCount",
+        dbSession
+      )
+      await userService.incrementCount(
+        followingObjectId,
+        "followersCount",
+        dbSession
+      )
+    }
 
     //commit transaction
     await dbSession.commitTransaction()

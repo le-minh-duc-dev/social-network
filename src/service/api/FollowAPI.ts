@@ -1,11 +1,13 @@
+import { FollowStatus } from "@/types/schema"
+
 export class FollowAPI {
   static readonly baseUrl = process.env.NEXT_PUBLIC_BASE_URL + "/api/follows"
 
-  static async checkFollowExists(
+  static async getFollowStatus(
     followingId: string
-  ): Promise<{ exists: boolean }> {
+  ): Promise<{ status:FollowStatus }> {
     const res = await fetch(
-      this.baseUrl + "/exists" + `?followingId=${followingId}`,
+      this.baseUrl + "/status" + `?followingId=${followingId}`,
       {
         credentials: "include",
       }

@@ -6,8 +6,9 @@ import { useQuery } from "@tanstack/react-query"
 import Link from "next/link"
 import React, { ReactNode, useState } from "react"
 import { MdVerified } from "react-icons/md"
-import FollowButton from "./FollowButton"
+import FollowButton from "../FollowButton"
 import { useAuth } from "@/hooks/useAuth"
+import { FollowStatus } from "@/types/schema"
 
 export default function ProfilePreview({
   children,
@@ -21,7 +22,7 @@ export default function ProfilePreview({
     enabled: !!userId,
   })
 
-  const [isFollowing, setIsFollowing] = useState(false)
+  const [followStatus, setFollowStatus] = useState<FollowStatus>("notFollowing")
 
   const user = data?.data
   if (isLoading) {
@@ -57,16 +58,16 @@ export default function ProfilePreview({
           </div>
           {authUser?.id != userId && (
             <div className="flex w-full  mt-4 gap-x-4">
-              {isFollowing ? (
+              {followStatus=="following" || followStatus=="requesting" ? (
                 <Button className="flex-1" color="primary">
                   Message
                 </Button>
               ) : null}
               <FollowButton
                 followingId={userId}
-                onChangeCallback={(isFollowing) => {
-                  console.log("onChangeCallback", isFollowing)
-                  setIsFollowing(isFollowing)
+                onChangeCallback={(flstatus) => {
+                  console.log("onChangeCallback", flstatus)
+                  setFollowStatus(flstatus)
                 }}
                 className="flex-1"
               />

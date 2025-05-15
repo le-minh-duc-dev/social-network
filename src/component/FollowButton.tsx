@@ -4,6 +4,7 @@ import { HttpMessages, HttpStatus } from "@/domain/enums/HttpStatus"
 import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
 import { useAuth } from "@/hooks/useAuth"
 import { FollowAPI } from "@/service/api/FollowAPI"
+import { FollowStatus } from "@/types/schema"
 import { addToast, Button } from "@heroui/react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
@@ -14,40 +15,40 @@ export default function FollowButton({
   onChangeCallback,
   className,
 }: Readonly<{
-  onChangeCallback?: (isFollowing: boolean) => void
+  onChangeCallback?: (followStatus: FollowStatus) => void
   followingId: string
   className?: string
 }>) {
   const { authUser } = useAuth()
-  const [isFollowing, setIsFollowing] = useState(false)
+  const [followStatus, setFollowStatus] = useState<FollowStatus>("notFollowing")
   const queryClient = useQueryClient()
 
   const { data } = useQuery({
-    queryFn: () => FollowAPI.checkFollowExists(followingId),
+    queryFn: () => FollowAPI.getFollowStatus(followingId),
     queryKey: [QueryKey.GET_USER_FOLLOW, followingId, authUser?.id],
     staleTime: QueryStaleTime[QueryKey.GET_USER_FOLLOW],
   })
 
   useEffect(() => {
     if (data) {
-      setIsFollowing(data.exists)
+      setFollowStatus(data.status)
       if (onChangeCallback) {
-        onChangeCallback(data.exists)
+        onChangeCallback(data.status)
       }
     }
   }, [data, onChangeCallback])
 
   const toggleSaved = async () => {
-    if (isFollowing) {
-      setIsFollowing(false)
+    if (followStatus === "following" || followStatus === "requesting") {
+      setFollowStatus("notFollowing")
       if (onChangeCallback) {
-        onChangeCallback(false)
+        onChangeCallback("notFollowing")
       }
       return await deleteFollow(followingId)
     } else {
-      setIsFollowing(true)
+      setFollowStatus("requesting")
       if (onChangeCallback) {
-        onChangeCallback(true)
+        onChangeCallback("requesting")
       }
       return await createFollow(followingId)
     }
@@ -77,7 +78,7 @@ export default function FollowButton({
       })
       if (response.status == HttpStatus.CREATED) {
         addToast({
-          title: "Follow successfully",
+          title: "Request follow successfully",
         })
       }
       if (response.status == HttpStatus.NO_CONTENT) {
@@ -87,9 +88,16 @@ export default function FollowButton({
       }
     },
     onError: () => {
-      setIsFollowing(!isFollowing)
-      if (onChangeCallback) {
-        onChangeCallback(!isFollowing)
+      if (followStatus === "requesting" || followStatus === "following") {
+        setFollowStatus("notFollowing")
+        if (onChangeCallback) {
+          onChangeCallback("notFollowing")
+        }
+      } else {
+        setFollowStatus("requesting")
+        if (onChangeCallback) {
+          onChangeCallback("requesting")
+        }
       }
       addToast({
         title: HttpMessages[HttpStatus.INTERNAL_SERVER_ERROR],
@@ -97,15 +105,31 @@ export default function FollowButton({
     },
   })
 
+  let buttonText = "Follow"
+  if (followStatus == "requesting") {
+    buttonText = "Requesting"
+  } else if (followStatus == "following") {
+    buttonText = "Following"
+  }
+
   return (
     <Button
       className={className}
-      color={isFollowing ? "default" : "primary"}
+      color={
+        followStatus == "following" || followStatus == "requesting"
+          ? "default"
+          : "primary"
+      }
       onPress={() => mutation.mutate()}
       isDisabled={mutation.isPending}
-      startContent={isFollowing ? undefined : <IoMdPersonAdd />}
+      startContent={
+        followStatus == "following" ||
+        followStatus == "requesting" ? undefined : (
+          <IoMdPersonAdd />
+        )
+      }
     >
-      {isFollowing ? "Following" : "Follow"}
+      {buttonText}
     </Button>
   )
 }

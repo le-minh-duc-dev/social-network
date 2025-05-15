@@ -109,6 +109,7 @@ export class UserService {
     )()
   }
 
+
   async countUsers(filter: FilterQuery<UserType> = {}) {
     await connectDB()
     return unstable_cache(

@@ -5,6 +5,7 @@ import { PostUploadType } from "@/domain/zod/PostUploadSchema"
 import { Post as PostType } from "@/types/schema"
 import { ClientSession, Types } from "mongoose"
 import { revalidateTag, unstable_cache } from "next/cache"
+import { FollowService } from "./FollowService"
 
 export class PostService {
   async createPost(
@@ -75,24 +76,52 @@ export class PostService {
   ) {
     return unstable_cache(
       async () => {
+        const followService = new FollowService()
+
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const query: any = {}
         if (cursor) {
           query._id = { $lt: new Types.ObjectId(cursor) }
         }
+
+        // CASE 1: User profile
         if (authorObjectId) {
           query.author = authorObjectId
-          if (allowedPrivacy && allowedPrivacy.length > 0) {
+          if (allowedPrivacy?.length) {
             query.privacy = { $in: allowedPrivacy }
           }
-        } else if (isExplore) {
-          query.$and = [
-            { privacy: { $in: [PostPrivacy.PUBLIC, PostPrivacy.FOLLOWERS] } },
-            { author: { $ne: authUserId } },
-          ]
-        } else {
+        }
+
+        // CASE 2: Explore feed logic
+        else if (isExplore) {
+          const followingList = await followService.getFollowingIdList(
+            authUserId!
+          )
+
           query.$or = [
-            { privacy: { $in: [PostPrivacy.PUBLIC, PostPrivacy.FOLLOWERS] } },
+            { privacy: PostPrivacy.PUBLIC },
+
+            {
+              privacy: PostPrivacy.FOLLOWERS,
+              author: { $in: followingList },
+            },
+          ]
+          // Exclude own posts
+          query.author = { $ne: authUserId }
+        }
+
+        // CASE 3: Home feed logic
+        else {
+          const followingList = await followService.getFollowingIdList(
+            authUserId!
+          )
+
+          query.$or = [
+            { privacy: PostPrivacy.PUBLIC },
+            {
+              privacy: PostPrivacy.FOLLOWERS,
+              author: { $in: followingList },
+            },
             { author: authUserId },
           ]
         }

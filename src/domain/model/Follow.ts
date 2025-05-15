@@ -5,6 +5,7 @@ const FollowSchema = new Schema<Follow>(
   {
     follower: { type: Schema.Types.ObjectId, ref: "User", required: true },
     following: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    isAccepted: { type: Boolean, default: false },
   },
   { timestamps: true }
 )

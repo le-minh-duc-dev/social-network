@@ -21,6 +21,7 @@ const UserSchema = new Schema<User>(
     postsCount: { type: Number, default: 0 },
     followersCount: { type: Number, default: 0 },
     followingCount: { type: Number, default: 0 },
+    isFollowApprovalRequired: { type: Boolean, default: false },
   },
   { timestamps: true }
 )

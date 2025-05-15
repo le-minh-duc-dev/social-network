@@ -2,7 +2,12 @@ import { Types } from "mongoose"
 import { Role } from "@/domain/enums/Role"
 import { PostPrivacy } from "@/domain/enums/PostPrivacy"
 
-export type UserCountableField = "postsCount" | "followersCount" | "followingCount"
+export type UserCountableField =
+  | "postsCount"
+  | "followersCount"
+  | "followingCount"
+
+export type FollowStatus = "requesting" | "following" | "notFollowing"
 
 export interface User {
   _id: string | Types.ObjectId
@@ -18,6 +23,7 @@ export interface User {
   role: Role
   isActive: boolean
   isVerified: boolean
+  isFollowApprovalRequired: boolean
   createdAt: Date
   updatedAt: Date
 }
@@ -51,6 +57,7 @@ export interface Comment {
 export interface Follow {
   follower: string | User
   following: string | User
+  isAccepted: boolean
   createdAt: Date
   updatedAt: Date
 }
@@ -61,7 +68,6 @@ export interface Like {
   updatedAt: Date
 }
 
-
 export interface Saved {
   _id: string | Types.ObjectId
   post: string | Post
@@ -69,4 +75,3 @@ export interface Saved {
   createdAt: Date
   updatedAt: Date
 }
-

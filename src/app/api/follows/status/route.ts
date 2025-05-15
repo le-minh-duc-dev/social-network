@@ -34,12 +34,12 @@ export async function GET(request: NextRequest) {
   const followService = new FollowService()
 
   //get posts
-  const result = await followService.existsFollowByFollowerAndFollowing(
+  const result = await followService.getFollowStateByFollowerAndFollowing(
     followerObjectId,
     followingObjectId
   )
 
   return Response.json({
-    exists: result != null,
+    status: result,
   })
 }

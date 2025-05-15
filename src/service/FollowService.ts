@@ -3,16 +3,19 @@ import Follow from "@/domain/model/Follow"
 
 import { ClientSession, Types } from "mongoose"
 import { revalidateTag, unstable_cache } from "next/cache"
+import { FollowStatus } from "@/types/schema"
 
 export class FollowService {
   async createfollow(
     follower: Types.ObjectId,
     following: Types.ObjectId,
-    dbSession: ClientSession
+    dbSession: ClientSession,
+    isFollowApprovalRequired?: boolean
   ) {
     const newfollow = new Follow({
       follower,
       following,
+      isAccepted: !isFollowApprovalRequired,
     })
     const savedNewfollow = await newfollow.save({ session: dbSession })
 
@@ -66,10 +69,10 @@ export class FollowService {
     )()
   }
 
-  async existsFollowByFollowerAndFollowing(
+  async getFollowStateByFollowerAndFollowing(
     follower: Types.ObjectId,
     following: Types.ObjectId
-  ) {
+  ): Promise<FollowStatus> {
     return unstable_cache(
       async () => {
         const query = {
@@ -77,9 +80,31 @@ export class FollowService {
           following,
         }
 
-        return await Follow.exists(query)
+        const follow = await Follow.findOne(query)
+        if (!follow) {
+          return "notFollowing"
+        }
+        if (follow.isAccepted) {
+          return "following"
+        } else {
+          return "requesting"
+        }
       },
       [UnstableCacheKey.USER_FOLLOW + "EXISTS" + follower + following],
+      {
+        tags: [UnstableCacheKey.USER_FOLLOW + follower],
+      }
+    )()
+  }
+
+  async getFollowingIdList(follower: Types.ObjectId) {
+    return unstable_cache(
+      async () => {
+        return await Follow.find({
+          follower: follower,
+        }).distinct("following")
+      },
+      [UnstableCacheKey.USER_FOLLOW + "FOLLOWING_ID_LIST" + follower],
       {
         tags: [UnstableCacheKey.USER_FOLLOW + follower],
       }
