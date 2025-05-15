@@ -17,6 +17,7 @@ export class PostService {
       author: user,
       caption: post.caption,
       media: post.media,
+      privacy: post.privacy,
     })
     const savedPost = await newPost.save({ session: dbSession })
 

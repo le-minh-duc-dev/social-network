@@ -7,6 +7,7 @@ interface MutatePostContextType {
   deletedFiles: FilePreview[]
   setDeletedFiles: React.Dispatch<React.SetStateAction<FilePreview[]>>
   captionRef: React.RefObject<string>
+  privacyRef: React.RefObject<string>
   handleSubmit: () => void
   isPending: boolean
 }

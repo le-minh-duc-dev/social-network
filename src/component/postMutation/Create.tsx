@@ -9,6 +9,7 @@ import { QueryKey } from "@/domain/enums/QueryKey"
 import { MutatePostContext } from "./MutatePostContext"
 import { HttpMessages, HttpStatus } from "@/domain/enums/HttpStatus"
 import { addToast } from "@heroui/react"
+import { PostPrivacy } from "@/domain/enums/PostPrivacy"
 
 export default function Create({
   isOpen,
@@ -25,6 +26,7 @@ export default function Create({
   const [files, setFiles] = useState<FilePreview[]>([])
   const [deletedFiles, setDeletedFiles] = useState<FilePreview[]>([])
   const captionRef = useRef<string>("")
+  const privacyRef = useRef<PostPrivacy>(PostPrivacy.PUBLIC)
 
   const handleSubmit = async () => {
     const caption = captionRef.current
@@ -45,6 +47,7 @@ export default function Create({
         url: frv.preview,
         type: frv.type,
       })),
+      privacy: privacyRef.current,
     })
   }
 
@@ -70,6 +73,7 @@ export default function Create({
       })
       setFiles([])
       captionRef.current = ""
+      privacyRef.current = PostPrivacy.PUBLIC
       onClose()
     },
     onError: () => {
@@ -83,6 +87,7 @@ export default function Create({
       files,
       setFiles,
       captionRef,
+      privacyRef,
       handleSubmit: mutation.mutate,
       isPending: mutation.isPending,
       deletedFiles,

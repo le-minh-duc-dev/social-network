@@ -12,6 +12,7 @@ import { MediaType } from "@/domain/enums/MediaType"
 import { updatePost } from "@/actions/post/updatePost"
 import { addToast } from "@heroui/react"
 import { HttpMessages, HttpStatus } from "@/domain/enums/HttpStatus"
+import { PostPrivacy } from "@/domain/enums/PostPrivacy"
 
 export default function EditPost({
   isOpen,
@@ -38,6 +39,7 @@ export default function EditPost({
   )
   const [deletedFiles, setDeletedFiles] = useState<FilePreview[]>([])
   const captionRef = useRef<string>(post.caption ?? "")
+  const privacyRef = useRef<PostPrivacy>(post.privacy ?? PostPrivacy.PUBLIC)
 
   useEffect(() => {
     setFiles(
@@ -77,6 +79,7 @@ export default function EditPost({
           url: frv.preview,
           type: frv.type,
         })),
+        privacy: privacyRef.current,
       },
       deletedFiles
         .filter((files) => files.preview.startsWith("http"))
@@ -116,6 +119,7 @@ export default function EditPost({
       files,
       setFiles,
       captionRef,
+      privacyRef,
       handleSubmit: mutation.mutate,
       isPending: mutation.isPending,
       deletedFiles,

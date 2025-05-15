@@ -9,6 +9,7 @@ import {
 import DropZone from "./DropZone"
 import { useAuth } from "@/hooks/useAuth"
 import { useMutatePostContext } from "./MutatePostContext"
+import PrivacySelection from "./PrivacySelection"
 export default function MutatePostModal({
   title,
   submitButtonName,
@@ -81,6 +82,10 @@ export default function MutatePostModal({
                     maxLength={2200}
                     defaultValue={captionRef.current}
                   />
+                </div>
+                <div className="">
+                  <h3 className="text-sm mb-4">Advanced Settings</h3>
+                  <PrivacySelection />
                 </div>
               </div>
             </ModalBody>
