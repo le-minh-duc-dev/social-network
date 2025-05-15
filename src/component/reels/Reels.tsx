@@ -81,8 +81,9 @@ export default function Reels() {
 
   return (
     <div className="flex-1  z-0  overflow-hidden" onWheel={handleScroll}>
-      <div className="flex justify-center items-center max-h-full overflow-hidden">
+      <div className="flex justify-center items-center h-full overflow-hidden relative">
         <ReelVideo post={currentPost} />
+
         {currentPost && (
           <div className="flex flex-col gap-y-8">
             <Button

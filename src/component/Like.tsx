@@ -4,12 +4,15 @@ import { HttpMessages, HttpStatus } from "@/domain/enums/HttpStatus"
 import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
 import { useAuth } from "@/hooks/useAuth"
 import { LikeAPI } from "@/service/api/LikeAPI"
-import { addToast, Button } from "@heroui/react"
+import { addToast, Button, ButtonProps } from "@heroui/react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import React, { useEffect, useState } from "react"
 import { FaHeart, FaRegHeart } from "react-icons/fa"
 
-export default function Like({ postId }: Readonly<{ postId: string }>) {
+export default function Like({
+  postId,
+  ...props
+}: Readonly<{ postId: string } & ButtonProps>) {
   const { authUser } = useAuth()
   const [isLiked, setIsLiked] = useState(false)
   const queryClient = useQueryClient()
@@ -76,6 +79,7 @@ export default function Like({ postId }: Readonly<{ postId: string }>) {
       variant="light"
       onPress={() => mutation.mutate()}
       isDisabled={mutation.isPending}
+      {...props}
     >
       {isLiked ? (
         <FaHeart className="text-2xl text-red-500" />

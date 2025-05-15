@@ -4,9 +4,12 @@ import Video from "../Video"
 import FollowButton from "../FollowButton"
 import { MdVerified } from "react-icons/md"
 import { useAuth } from "@/hooks/useAuth"
-import { Skeleton, User } from "@heroui/react"
+import { Button, Skeleton, User } from "@heroui/react"
 import Link from "next/link"
 import { AppRouteManager } from "@/service/AppRouteManager"
+import Like from "../Like"
+import { FaRegComment } from "react-icons/fa"
+import { PiShareFat } from "react-icons/pi"
 
 export default function ReelVideo({ post }: Readonly<{ post?: Post }>) {
   const { authUser } = useAuth()
@@ -15,6 +18,37 @@ export default function ReelVideo({ post }: Readonly<{ post?: Post }>) {
   const isOwnPost = author?._id.toString() === authUser?.id
   return (
     <div className="aspect-[9/16] h-screen flex items-center justify-center p-6 relative">
+      {post && (
+        <div className=" -right-8 bottom-12 absolute flex flex-col gap-y-2">
+          <div className="flex flex-col items-center">
+            <Like
+              postId={post._id.toString()}
+              className="rounded-full"
+              variant="flat"
+            />
+            <p className="text-sm  text-white mt-1">{post?.likeCount}</p>
+          </div>
+          <div className="flex flex-col items-center">
+            <Button
+              isIconOnly
+              className="rounded-full"
+              variant="flat"
+              onPress={() => {}}
+            >
+              <FaRegComment className="text-2xl -scale-x-100" />
+            </Button>
+            <p className="text-sm  text-white mt-1">{post?.commentCount}</p>
+          </div>
+          <Button
+            isIconOnly
+            className="rounded-full"
+            variant="flat"
+            onPress={() => {}}
+          >
+            <PiShareFat className="text-2xl " />
+          </Button>
+        </div>
+      )}
       {post ? (
         <>
           <Video
