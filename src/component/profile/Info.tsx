@@ -6,15 +6,18 @@ import { MdVerified } from "react-icons/md"
 import { useProfileContext } from "./ProfileContext"
 import { useAuth } from "@/component/provider/auth/AuthContext"
 import FollowButton from "../FollowButton"
+import { AppRouteManager } from "@/service/AppRouteManager"
+import { useRouter } from "next/navigation"
 
 export default function Info() {
   const { authUser } = useAuth()
   const { userId } = useProfileContext()
+  const router = useRouter()
 
   const isSameUser = authUser?.id === userId
 
   const { data, isLoading } = useQuery({
-    queryKey: [QueryKey.GET_USER, userId],
+    queryKey: [QueryKey.GET_USERS,"SINGLE", userId],
     queryFn: async () => await UserAPI.getUserById(userId),
     enabled: !!userId,
   })
@@ -35,7 +38,13 @@ export default function Info() {
             )}
           </div>
           {isSameUser ? (
-            <Button>Edit profile</Button>
+            <Button
+              onPress={() =>
+                router.push(AppRouteManager.USER_SETTINGS_EDIT_PROFILE)
+              }
+            >
+              Edit profile
+            </Button>
           ) : (
             <FollowButton followingId={userId} />
           )}

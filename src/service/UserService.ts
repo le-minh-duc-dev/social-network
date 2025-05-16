@@ -85,8 +85,6 @@ export class UserService {
   ): Promise<UserType | null> {
     await connectDB()
     const savedUser = await UserModel.findByIdAndUpdate(userId, updateData, {
-      new: true,
-      runValidators: true,
       session,
     })
     revalidateTag(UnstableCacheKey.USER_LIST)

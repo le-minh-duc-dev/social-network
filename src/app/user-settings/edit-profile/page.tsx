@@ -1,5 +1,6 @@
+import EditProfile from "@/component/editProfile/EditProfile"
 import React from "react"
 
 export default function page() {
-  return <div>page</div>
+  return <EditProfile/>
 }

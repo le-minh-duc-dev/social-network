@@ -11,4 +11,5 @@ interface AuthUser {
   isActive: boolean
   role: Role
   permissions: Partial<Record<Permission, boolean>>
+  
 }

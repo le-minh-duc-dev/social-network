@@ -53,7 +53,7 @@ export class CloudinaryService implements IMediaService {
     }
   }
   //
-   async deleteImageByURL(url: string) {
+  async deleteImageByURL(url: string) {
     if (!url) return
     const publicId = CloudinaryService.extractPublicId(url)
     v2.config(CloudinaryService.getConfig(url))
@@ -131,5 +131,9 @@ export class CloudinaryService implements IMediaService {
     const parts = cloudinarySecureUrl.split("/")
     if (parts.length < 4) return ""
     return parts[3]
+  }
+
+  static isCloudinaryUrl(url: string) {
+    return url.startsWith("https://res.cloudinary.com/")
   }
 }
