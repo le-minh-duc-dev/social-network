@@ -124,12 +124,22 @@ export class PostService {
           const followingList =
             await followService.getFollowingIdList(authUserId)
 
-          query.$or = [
-            { privacy: PostPrivacy.PUBLIC },
-
+          query.$and = [
             {
-              privacy: PostPrivacy.FOLLOWERS,
-              author: { $in: followingList },
+              $or: [
+                { privacy: PostPrivacy.PUBLIC },
+                {
+                  privacy: PostPrivacy.FOLLOWERS,
+                  author: { $in: [...followingList, authUserId] },
+                },
+                {
+                  privacy: PostPrivacy.PRIVATE,
+                  author: authUserId,
+                },
+              ],
+            },
+            {
+              "media.type": "VIDEO",
             },
           ]
         }
@@ -149,10 +159,15 @@ export class PostService {
           ]
         }
 
-        return await Post.find(query)
+        if (isReels) {
+          console.log("isReels", query)
+        }
+        const posts = await Post.find(query)
           .sort({ _id: -1 }) // newest first
           .limit(limit + 1)
           .populate("author", "_id fullName avatarUrl isVerified")
+
+        return posts
       },
       [
         UnstableCacheKey.POST_LIST +
