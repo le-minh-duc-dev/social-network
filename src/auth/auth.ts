@@ -1,7 +1,7 @@
 import { UserService } from "@/service/UserService"
 import NextAuth, { DefaultSession } from "next-auth"
 import Google from "next-auth/providers/google"
-
+import Credentials from "next-auth/providers/credentials"
 declare module "next-auth" {
   interface User {
     _id: string
@@ -15,6 +15,8 @@ declare module "next-auth" {
 }
 
 import {} from "next-auth/jwt"
+import { LoginSchema } from "@/domain/zod/LoginSchema"
+import { PasswordEncoder } from "@/lib/PasswordEncoder"
 
 declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
@@ -41,10 +43,39 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           avatarUrl,
         })
 
+        return {
+          _id: user._id.toString(),
+        }
+      },
+    }),
+    Credentials({
+      credentials: {
+        email: {},
+        password: {},
+      },
+      authorize: async (credentials) => {
+        const safeFormData = LoginSchema.safeParse(credentials)
+        if (!safeFormData.success) {
+          throw new Error("Invalid credentials.")
+        }
+        const { email, password } = safeFormData.data
+        const userService = new UserService()
+
+        const user = await userService.findUserByEmail(email)
+        if (!user) {
+          throw new Error("Invalid credentials.")
+        }
+
+        const isValidPassword = await PasswordEncoder.comparePassword(
+          password,
+          user.password!
+        )
+        if (!isValidPassword) {
+          throw new Error("Invalid credentials.")
+        }
 
         return {
           _id: user._id.toString(),
-         
         }
       },
     }),

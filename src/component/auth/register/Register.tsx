@@ -118,6 +118,7 @@ export default function Register() {
               type="text"
               value={formData.fullName}
               onChange={handleChange}
+              isInvalid={!!errors.fullName}
             />
             <Input
               isRequired
@@ -129,6 +130,7 @@ export default function Register() {
               type="email"
               value={formData.email}
               onChange={handleChange}
+              isInvalid={!!errors.email}
             />
             <Input
               className="max-w-xs"
@@ -155,6 +157,7 @@ export default function Register() {
               value={formData.password}
               onChange={handleChange}
               errorMessage={errors.password}
+              isInvalid={!!errors.password}
             />
             <Input
               className="max-w-xs"
@@ -181,8 +184,15 @@ export default function Register() {
               value={formData.confirmPassword}
               onChange={handleChange}
               errorMessage={errors.confirmPassword}
+              isInvalid={!!errors.confirmPassword}
             />
-            <Button type="submit" variant="bordered" className="w-full mt-4">
+            <Button
+              type="submit"
+              variant="bordered"
+              className="w-full mt-4"
+              isLoading={mutation.isPending}
+              isDisabled={mutation.isPending}
+            >
               Submit
             </Button>
           </Form>
