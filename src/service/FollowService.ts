@@ -99,11 +99,15 @@ export class FollowService {
     )()
   }
 
-  async getFollowingIdList(follower: Types.ObjectId) {
+  async getFollowingIdList(
+    follower: Types.ObjectId,
+    isAccepted: boolean = true
+  ) {
     return unstable_cache(
       async () => {
         return await Follow.find({
           follower: follower,
+          isAccepted,
         }).distinct("following")
       },
       [UnstableCacheKey.USER_FOLLOW + "FOLLOWING_ID_LIST" + follower],
