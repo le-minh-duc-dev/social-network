@@ -4,7 +4,7 @@ import { PiFilmReel } from "react-icons/pi"
 import { FaRegBookmark } from "react-icons/fa"
 import { useProfileContext } from "./ProfileContext"
 import { TabType } from "./Profile"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/component/provider/auth/AuthContext"
 export default function CategoryTabs() {
   const { setCurrentTab, currentTab, userId } = useProfileContext()
   const { authUser } = useAuth()

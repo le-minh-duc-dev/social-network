@@ -1,5 +1,5 @@
 "use client"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/component/provider/auth/AuthContext"
 import { Post, User } from "@/types/schema"
 import {
   Button,

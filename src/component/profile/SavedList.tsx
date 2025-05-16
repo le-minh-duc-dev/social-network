@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react"
 import { Post as PostType } from "@/types/schema"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/component/provider/auth/AuthContext"
 import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useWindowVirtualizer } from "@tanstack/react-virtual"

@@ -1,5 +1,5 @@
 "use client"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/component/provider/auth/AuthContext"
 import React from "react"
 import { Avatar } from "@heroui/react"
 import { BsPlusCircleFill } from "react-icons/bs"

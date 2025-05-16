@@ -13,7 +13,7 @@ import { PiFilmReel, PiFilmReelFill } from "react-icons/pi"
 import UserIcon from "./UserIcon"
 import { usePathname } from "next/navigation"
 import Create from "../postMutation/Create"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/component/provider/auth/AuthContext"
 import { MdExplore, MdOutlineExplore } from "react-icons/md"
 
 export default function LinkList() {

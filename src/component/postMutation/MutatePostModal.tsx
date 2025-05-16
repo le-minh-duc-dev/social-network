@@ -7,7 +7,7 @@ import {
   User,
 } from "@heroui/react"
 import DropZone from "./DropZone"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/component/provider/auth/AuthContext"
 import { useMutatePostContext } from "./MutatePostContext"
 import PrivacySelection from "./PrivacySelection"
 export default function MutatePostModal({

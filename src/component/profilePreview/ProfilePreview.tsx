@@ -7,7 +7,7 @@ import Link from "next/link"
 import React, { ReactNode, useState } from "react"
 import { MdVerified } from "react-icons/md"
 import FollowButton from "../FollowButton"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/component/provider/auth/AuthContext"
 import { FollowStatus } from "@/types/schema"
 
 export default function ProfilePreview({

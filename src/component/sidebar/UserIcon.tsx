@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/component/provider/auth/AuthContext"
 import { Avatar } from "@heroui/react"
 import React from "react"
 

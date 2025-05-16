@@ -13,7 +13,7 @@ import React from "react"
 import { LuMenu } from "react-icons/lu"
 import { IoSettingsOutline } from "react-icons/io5"
 import { FaRegBookmark } from "react-icons/fa"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/component/provider/auth/AuthContext"
 
 export default function More() {
   const { authUser } = useAuth()

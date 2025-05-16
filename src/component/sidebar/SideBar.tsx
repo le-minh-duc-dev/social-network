@@ -3,7 +3,7 @@ import React from "react"
 import { Pacifico } from "next/font/google"
 import LinkList from "./LinkList"
 import More from "./More"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/component/provider/auth/AuthContext"
 import { usePathname } from "next/navigation"
 const pacifico = Pacifico({
   subsets: ["latin"],

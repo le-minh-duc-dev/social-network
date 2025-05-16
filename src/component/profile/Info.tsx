@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { QueryKey } from "@/domain/enums/QueryKey"
 import { MdVerified } from "react-icons/md"
 import { useProfileContext } from "./ProfileContext"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/component/provider/auth/AuthContext"
 import FollowButton from "../FollowButton"
 
 export default function Info() {
