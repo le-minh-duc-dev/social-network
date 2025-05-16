@@ -130,10 +130,9 @@ export class PostService {
                 { privacy: PostPrivacy.PUBLIC },
                 {
                   privacy: PostPrivacy.FOLLOWERS,
-                  author: { $in: [...followingList, authUserId] },
+                  author: { $in: followingList },
                 },
                 {
-                  privacy: PostPrivacy.PRIVATE,
                   author: authUserId,
                 },
               ],
