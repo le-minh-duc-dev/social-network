@@ -9,7 +9,6 @@ export class RouteProtector {
   static async protect(role?: Role, onlyActiveAccount: boolean = true) {
     const session = await auth()
 
-    console.log("session",session?.user);
     if (!session) {
       redirect(AppRouteManager.LOGIN)
     } else {
@@ -17,7 +16,7 @@ export class RouteProtector {
       if (!user) {
         signOut({ redirectTo: AppRouteManager.LOGIN })
       }
-      if (onlyActiveAccount && user?.isActive) {
+      if (onlyActiveAccount && !user?.isActive) {
         redirect(AppRouteManager.WELCOME_NEW_MEMBER)
       } else if (
         role &&

@@ -5,6 +5,7 @@ import { AuthContext, AuthContextType } from "./AuthContext"
 import { useQuery } from "@tanstack/react-query"
 import { AuthAPI } from "@/service/api/AuthAPI"
 import { useSession } from "next-auth/react"
+import { QueryKey } from "@/domain/enums/QueryKey"
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const session = useSession()
@@ -13,9 +14,11 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     queryFn: async () => {
       return await AuthAPI.getAuthUser(userId!)
     },
-    queryKey: [],
+    queryKey: [QueryKey.GET_USERS, "SINGLE", userId],
 
     enabled: !!userId,
+
+    refetchInterval: 1000 * 60 * 3, // 3 minutes
   })
 
   const contextValue = useMemo<AuthContextType>(
