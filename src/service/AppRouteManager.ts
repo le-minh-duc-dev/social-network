@@ -11,6 +11,7 @@ export const AppRouteManager = {
   saved: (userId: string) =>
     AppRouteManager.profile(userId) + "&queryTab=" + "saved",
   posts: (postId: string) => "/posts/" + postId,
-  USER_SETTINGS: "/user-settings",
+  USER_SETTINGS_EDIT_PROFILE: "/user-settings/edit-profile",
+  USER_SETTINGS_PRIVACY: "/user-settings/privacy",
   EXPLORE: "/explore",
 }

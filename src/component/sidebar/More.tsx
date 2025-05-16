@@ -40,7 +40,7 @@ export default function More() {
             <DropdownItem
               classNames={{ base: "p-3" }}
               key="settings"
-              href={AppRouteManager.USER_SETTINGS}
+              href={AppRouteManager.USER_SETTINGS_EDIT_PROFILE}
               startContent={<IoSettingsOutline className="text-lg" />}
             >
               Settings
