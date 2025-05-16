@@ -28,6 +28,7 @@ export class AuthUserHelper {
       isVerified: user.isVerified,
       isActive: user.isActive,
       role: user.role,
+      isFollowApprovalRequired: user.isFollowApprovalRequired,
       permissions: PermissionService.getPermissions(user.role),
     }
 
