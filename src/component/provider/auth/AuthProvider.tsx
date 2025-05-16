@@ -14,7 +14,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     queryFn: async () => {
       return await AuthAPI.getAuthUser(userId!)
     },
-    queryKey: [QueryKey.GET_USERS, "SINGLE", userId],
+    queryKey: [QueryKey.GET_USERS, "AUTH", userId],
 
     enabled: !!userId,
 

@@ -87,23 +87,22 @@ export class PostService {
 
         // CASE 1: User profile
         if (authorObjectId) {
-          // Check if authUser is following the author
-          const followStatus =
-            await followService.getFollowStateByFollowerAndFollowing(
-              authUserId,
-              authorObjectId
-            )
-
           query.author = authorObjectId
           query.$or = [{ privacy: PostPrivacy.PUBLIC }]
-
-          if (followStatus === "following") {
-            query.$or.push({ privacy: PostPrivacy.FOLLOWERS })
-          }
-
           if (authUserId?.toString() === authorObjectId.toString()) {
             query.$or.push({ privacy: PostPrivacy.PRIVATE })
+            query.$or.push({ privacy: PostPrivacy.FOLLOWERS })
+          } else {
+            const followStatus =
+              await followService.getFollowStateByFollowerAndFollowing(
+                authUserId,
+                authorObjectId
+              )
+            if (followStatus === "following") {
+              query.$or.push({ privacy: PostPrivacy.FOLLOWERS })
+            }
           }
+          // Check if authUser is following the author
         }
 
         // CASE 2: Explore feed logic
