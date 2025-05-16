@@ -62,18 +62,18 @@ export class UserService {
   async existsByEmail(email: string) {
     await connectDB()
     return unstable_cache(
-      async (): Promise<UserType | null> => await UserModel.findOne({ email }),
+      async (): Promise<boolean> => (await UserModel.exists({ email })) != null,
       [UnstableCacheKey.USER_EXISTS_BY_EMAIL + email],
       {
         tags: [UnstableCacheKey.USER_LIST],
       }
-    )
+    )()
   }
 
-  async createUser(data: Partial<UserType>): Promise<UserType> {
+  async createUser(data: Partial<UserType>,session?:ClientSession): Promise<UserType> {
     await connectDB()
     const user = new UserModel(data)
-    const newUser = await user.save()
+    const newUser = await user.save({session})
     revalidateTag(UnstableCacheKey.USER_LIST)
     return newUser
   }
@@ -106,7 +106,6 @@ export class UserService {
       }
     )()
   }
-
 
   async countUsers(filter: FilterQuery<UserType> = {}) {
     await connectDB()

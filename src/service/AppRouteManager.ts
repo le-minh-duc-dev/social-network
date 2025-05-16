@@ -3,6 +3,7 @@ export const AppRouteManager = {
   ADMIN: "/admin",
   ADMIN_MANAGE_USERS: "/admin/manage-users",
   LOGIN: "/login",
+  REGISTER: "/register",
   WELCOME_NEW_MEMBER: "/welcome-new-member",
   SEARCH: "/search",
   REELS: "/reels",

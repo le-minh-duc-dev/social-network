@@ -11,6 +11,7 @@ import {
 } from "@heroui/react"
 import { signIn } from "next-auth/react"
 import LoginForm from "./LoginForm"
+import Link from "next/link"
 
 export default function Login() {
   return (
@@ -76,10 +77,18 @@ export default function Login() {
           </form> */}
           <div className="flex my-8 items-center">
             <Divider className="flex-1" />
-            <span className="mx-4 text-default-400 text-sm">Or with email and password</span>
+            <span className="mx-4 text-default-400 text-sm">
+              Or with email and password
+            </span>
             <Divider className="flex-1" />
           </div>
           <LoginForm />
+          <Link
+            href={AppRouteManager.REGISTER}
+            className="text-default-400 text-sm mt-8 hover:text-default-500 hover:underline"
+          >
+            Don&apos;t have an account?
+          </Link>
         </CardBody>
       </Card>
     </div>
