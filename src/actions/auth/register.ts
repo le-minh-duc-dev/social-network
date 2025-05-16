@@ -8,6 +8,7 @@ import {
 
 import connectDB from "@/lib/connectDB"
 import { HttpHelper } from "@/lib/HttpHelper"
+import { PasswordEncoder } from "@/lib/PasswordEncoder"
 import { UserService } from "@/service/UserService"
 import mongoose from "mongoose"
 export async function register(
@@ -39,10 +40,11 @@ export async function register(
         "Email already exists"
       )
     }
+    const hashedPassword = await PasswordEncoder.encodePassword(password)
     await userService.createUser(
       {
         email,
-        password,
+        password: hashedPassword,
         fullName,
       },
       dbSession
