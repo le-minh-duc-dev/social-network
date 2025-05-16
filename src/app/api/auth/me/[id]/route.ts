@@ -34,6 +34,7 @@ export async function GET(
     isActive: user.isActive,
     role: user.role,
     permissions: PermissionService.getPermissions(user.role),
+    isFollowApprovalRequired: user.isFollowApprovalRequired,
   }
 
   return Response.json(response)
