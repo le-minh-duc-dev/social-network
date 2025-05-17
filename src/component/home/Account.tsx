@@ -9,8 +9,8 @@ import { signOut } from "next-auth/react"
 export default function Account() {
   const { authUser, isLoading } = useAuth()
   return (
-    <div className="w-60">
-      <div className="flex  justify-between">
+    <div className="w-60 ">
+      <div className="flex  justify-between ">
         <User
           avatarProps={{
             src: authUser?.avatarUrl,
@@ -36,7 +36,7 @@ export default function Account() {
           description={authUser?.name}
         />
         <button
-          className="text-blue-400 hover:underline text-xs z-10"
+          className="text-blue-400 hover:underline text-xs z-50"
           onClick={() => {
             signOut({ redirectTo: AppRouteManager.LOGIN })
           }}
@@ -46,6 +46,16 @@ export default function Account() {
       </div>
       <p className="text-sm text-default-500 mt-6">
         © 2025 Social Network Inc.
+      </p>
+      <p className="text-sm mt-1">
+        Built with ❤️ by{" "}
+        <a
+          href="https://ducle.online"
+          target="_blank"
+          className="text-primary hover:underline font-medium "
+        >
+          ducle.online
+        </a>
       </p>
     </div>
   )
