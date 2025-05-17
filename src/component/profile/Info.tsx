@@ -34,6 +34,7 @@ export default function Info() {
             <div className="text-xl font-bold flex  items-center gap-x-2">
               <Skeleton className="w-40 h-8 rounded-xl" />
             </div>
+            <Skeleton className="w-24 h-10 rounded-xl" />
           </div>
           <div className="flex gap-x-4 mt-4">
             <Skeleton className="text-gray-500  w-14 h-4 rounded-xl" />
