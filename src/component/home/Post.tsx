@@ -20,7 +20,30 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
   return (
     <div className=" border-b border-white/25 pb-3 ">
       <div className="flex justify-between items-center">
-        <ProfilePreview userId={author._id.toString()}>
+        <ProfilePreview
+          userId={author._id.toString()}
+          LoadingComponent={
+            <User
+              avatarProps={{
+                src: author.avatarUrl,
+              }}
+              name={
+                <div className="flex items-center gap-x-1">
+                  <p className="font-semibold">
+                    {author.username ?? author.fullName}
+                  </p>
+                  {author.isVerified && (
+                    <MdVerified className="text-blue-500" />
+                  )}
+                  <LuDot className="text-lg text-default-400" />
+                  <p className="text-default-400">
+                    {Formater.formatTimeAgo(post.createdAt)}
+                  </p>
+                </div>
+              }
+            />
+          }
+        >
           <User
             avatarProps={{
               src: author.avatarUrl,

@@ -13,7 +13,8 @@ import { FollowStatus } from "@/types/schema"
 export default function ProfilePreview({
   children,
   userId,
-}: Readonly<{ children: ReactNode; userId: string }>) {
+  LoadingComponent
+}: Readonly<{ children: ReactNode; userId: string, LoadingComponent?: ReactNode }>) {
   const { authUser } = useAuth()
 
   const { data, isLoading } = useQuery({
@@ -26,7 +27,7 @@ export default function ProfilePreview({
 
   const user = data?.data
   if (isLoading) {
-    return <div className="h-full">Loading...</div>
+    return LoadingComponent?? <div className="h-full">Loading...</div>
   }
   return (
     <Tooltip
