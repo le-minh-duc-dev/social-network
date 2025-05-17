@@ -41,8 +41,10 @@ export class UserAPI {
     username: string = "",
     email: string = ""
   ): Promise<{ exists: boolean }> {
+
+    const encodedEmail = encodeURIComponent(email);
     const res = await fetch(
-      this.baseUrl + "/exists" + `?username=${username}&email=${email}`,
+      this.baseUrl + "/exists" + `?username=${username}&email=${encodedEmail}`,
       {
         credentials: "include",
       }

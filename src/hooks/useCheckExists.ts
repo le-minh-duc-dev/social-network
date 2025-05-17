@@ -32,7 +32,7 @@ export function useCheckExists<T>({
     : [queryKeyPrefix, debouncedValue]
 
   const query = useQuery({
-    queryFn: () => checkFn(debouncedValue),
+    queryFn: async () => await checkFn(debouncedValue),
     queryKey,
     enabled: enabled && !!debouncedValue,
   })

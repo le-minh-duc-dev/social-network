@@ -1,11 +1,14 @@
 "use client"
 import { register } from "@/actions/auth/register"
 import { HttpStatus } from "@/domain/enums/HttpStatus"
+import { QueryKey } from "@/domain/enums/QueryKey"
 import {
   RegisterClientSchema,
   RegisterClientType,
   RegisterUploadType,
 } from "@/domain/zod/RegisterSchema"
+import { useCheckExists } from "@/hooks/useCheckExists"
+import { UserAPI } from "@/service/api/UserAPI"
 import { AppRouteManager } from "@/service/AppRouteManager"
 import {
   addToast,
@@ -17,6 +20,7 @@ import {
   Input,
 } from "@heroui/react"
 import { useMutation } from "@tanstack/react-query"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 import { FaEye, FaEyeSlash } from "react-icons/fa"
@@ -95,11 +99,17 @@ export default function Register() {
     }))
   }
 
+  const { data: isEmailExists } = useCheckExists({
+    value: formData.email,
+    checkFn: async (val) => await UserAPI.checkExists(undefined, val),
+    queryKeyPrefix: [QueryKey.GET_USERS, "EMAIL", "EXISTS"],
+  })
+
   return (
     <div className="flex-1 flex justify-center items-center">
       <Card
         classNames={{
-          base: "p-12",
+          base: "p-6",
           // body:"flex flex-col items-center"
         }}
       >
@@ -122,7 +132,10 @@ export default function Register() {
             />
             <Input
               isRequired
-              errorMessage={errors.email}
+              errorMessage={
+                (isEmailExists?.exists && "Email already exists") ||
+                errors.email
+              }
               label="Email"
               labelPlacement="outside"
               name="email"
@@ -130,7 +143,7 @@ export default function Register() {
               type="email"
               value={formData.email}
               onChange={handleChange}
-              isInvalid={!!errors.email}
+              isInvalid={isEmailExists?.exists || !!errors.email}
             />
             <Input
               className="max-w-xs"
@@ -195,6 +208,12 @@ export default function Register() {
             >
               Submit
             </Button>
+            <Link
+              href={AppRouteManager.LOGIN}
+              className="text-default-400 text-sm mt-8 hover:text-default-500 hover:underline"
+            >
+              Already have an account?
+            </Link>
           </Form>
         </CardBody>
       </Card>

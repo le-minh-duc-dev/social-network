@@ -73,8 +73,11 @@ export class UserService {
   async existsBy(field: "username" | "email", value: string) {
     await connectDB()
     return unstable_cache(
-      async (): Promise<boolean> =>
-        (await UserModel.exists({ [field]: value })) != null,
+      async (): Promise<boolean> => {
+        console.log("UserService.existsBy-------", field, value);
+        const result = await UserModel.exists({ [field]: value })
+        return result != null
+      },
       [UnstableCacheKey.USER_EXISTS_BY + field + value],
       {
         tags: [UnstableCacheKey.USER_LIST],
