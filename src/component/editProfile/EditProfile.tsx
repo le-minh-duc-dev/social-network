@@ -32,18 +32,17 @@ export default function EditProfile() {
   const [formData, setFormData] = useState<EditProfileType>({
     bio: authUser?.bio,
     username: authUser?.username,
-    avatarUrl: authUser?.avatarUrl ?? "",
+    avatarUrl: authUser?.avatarUrl,
   })
 
   const queryClient = useQueryClient()
 
   useEffect(() => {
     if (authUser) {
-      console.log(authUser)
       setFormData({
         bio: authUser?.bio,
         username: authUser?.username,
-        avatarUrl: authUser?.avatarUrl ?? "",
+        avatarUrl: authUser?.avatarUrl,
       })
     }
   }, [authUser])
@@ -57,6 +56,7 @@ export default function EditProfile() {
       data: EditProfileType
     }) => {
       const safeFormData = EditProfileSchema.safeParse(data)
+      console.log(data)
       if (!safeFormData.success) {
         console.error("Post upload validation error:", safeFormData.error)
         return

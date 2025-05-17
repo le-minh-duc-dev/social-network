@@ -4,7 +4,7 @@ export class AuthHelper {
     const slug = normalizedFullName
       .trim()
       .toLowerCase()
-      .replace(/\s+/g, "-")
+      .replace(/\s+/g, "")
       .replace(/[^a-z0-9\-]/g, "")
     const randomSuffix = nanoid(4)
     return `${slug}${randomSuffix}`

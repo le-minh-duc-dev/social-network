@@ -48,7 +48,8 @@ export async function register(
       {
         email,
         password: hashedPassword,
-        fullName: normalizedFullName,
+        fullName,
+        normalizedFullName,
         username,
       },
       dbSession

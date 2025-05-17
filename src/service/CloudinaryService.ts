@@ -134,6 +134,7 @@ export class CloudinaryService implements IMediaService {
   }
 
   static isCloudinaryUrl(url: string) {
+    if (!url) return false
     return url.startsWith("https://res.cloudinary.com/")
   }
 }
