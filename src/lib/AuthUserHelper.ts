@@ -30,6 +30,7 @@ export class AuthUserHelper {
       role: user.role,
       isFollowApprovalRequired: user.isFollowApprovalRequired,
       permissions: PermissionService.getPermissions(user.role),
+      username: user.username,
     }
 
     return authUser

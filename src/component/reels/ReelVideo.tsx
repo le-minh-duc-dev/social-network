@@ -105,7 +105,7 @@ export default function ReelVideo({
                     href={AppRouteManager.profile(author._id.toString())}
                     className="font-semibold hover:underline"
                   >
-                    {author?.fullName}
+                    {author?.username ?? author?.fullName}
                   </Link>
                   {author?.isVerified && (
                     <MdVerified className="text-blue-500" />

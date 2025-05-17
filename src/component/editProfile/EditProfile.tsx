@@ -22,6 +22,8 @@ import { useMediaUpload } from "@/context/MediaUploadContext"
 import { updateProfile } from "@/actions/user/updateProfile"
 import { HttpStatus } from "@/domain/enums/HttpStatus"
 import { QueryKey } from "@/domain/enums/QueryKey"
+import { UserAPI } from "@/service/api/UserAPI"
+import { useCheckExists } from "@/hooks/useCheckExists"
 export default function EditProfile() {
   const { authUser } = useAuth()
   const uploadService = useMediaUpload()
@@ -125,6 +127,12 @@ export default function EditProfile() {
     }
   }
 
+  const { data: isUsernameExists } = useCheckExists({
+    value: formData.username,
+    checkFn: UserAPI.checkExists,
+    queryKeyPrefix: [QueryKey.GET_USERS, "USERNAME"],
+  })
+
   return (
     <div className="h-full flex justify-center">
       <Form className=" w-[60%] py-8 gap-y-4" onSubmit={handleSubmit}>
@@ -169,6 +177,8 @@ export default function EditProfile() {
             type="text"
             variant="bordered"
             value={formData.username}
+            errorMessage="Username already exists"
+            isInvalid={isUsernameExists?.exists}
             onValueChange={(value) =>
               setFormData((prev) => ({ ...prev, username: value }))
             }

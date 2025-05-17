@@ -62,7 +62,7 @@ export class FollowService {
         return await Follow.find(query)
           .sort({ _id: -1 }) // newest first
           .limit(limit + 1)
-          .populate("following", "_id fullName avatarUrl isVerified")
+          .populate("following", "_id fullName avatarUrl isVerified username")
       },
       [UnstableCacheKey.USER_FOLLOW + userObjectId + cursor + limit],
       {

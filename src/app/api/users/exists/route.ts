@@ -10,17 +10,23 @@ export async function GET(request: NextRequest) {
 
   const searchParams = request.nextUrl.searchParams
   const username = searchParams.get("username")
+  const email = searchParams.get("email")
 
-  if (!username) {
+
+  if (!username && !email) {
     return new Response(null, { status: HttpStatus.BAD_REQUEST })
   }
 
   const user = await ServerSideAuthService.getAuthUser()
+  console.log("user exists check", username, email, user?.username);
+
   if (username === user?.username) {
     return Response.json({
       exists: false,
     })
   }
+
+
 
   //connect to the database
   await connectDB()
@@ -29,9 +35,13 @@ export async function GET(request: NextRequest) {
   const userService = new UserService()
 
   //get posts
-  const result = await userService.existsByUsername(username)
+  const result = await userService.existsBy(
+    username ? "username" : "email",
+    username ?? email ?? ""
+  )
 
+  console.log("result", result);
   return Response.json({
-    exists: result != null,
+    exists: result ,
   })
 }

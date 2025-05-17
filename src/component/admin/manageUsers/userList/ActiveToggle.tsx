@@ -20,7 +20,7 @@ export default function ActiveToggle({
       if (response.status == HttpStatus.NO_CONTENT) {
         addToast({
           title:
-            user.fullName +
+            (user.username??user.fullName) +
             " is now " +
             (user.isActive ? "inactive" : "active"),
         })

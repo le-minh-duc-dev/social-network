@@ -172,7 +172,7 @@ export class PostService {
         const posts = await Post.find(query)
           .sort({ _id: -1 }) // newest first
           .limit(limit + 1)
-          .populate("author", "_id fullName avatarUrl isVerified")
+          .populate("author", "_id fullName avatarUrl isVerified username")
 
         return posts
       },
@@ -195,7 +195,7 @@ export class PostService {
       async (): Promise<PostType> => {
         return await Post.findById(id).populate(
           "author",
-          "_id fullName avatarUrl"
+          "_id fullName avatarUrl isVerified username"
         )
       },
       [UnstableCacheKey.POST_LIST + id.toString()],

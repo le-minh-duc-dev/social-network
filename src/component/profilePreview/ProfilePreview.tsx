@@ -45,7 +45,7 @@ export default function ProfilePreview({
                   href={AppRouteManager.profile(userId)}
                   className="font-semibold"
                 >
-                  {user!.fullName}
+                  {user!.username??user!.fullName}
                 </Link>
                 {user!.isVerified && <MdVerified className="text-blue-500" />}
               </div>

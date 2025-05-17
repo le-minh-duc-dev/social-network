@@ -70,12 +70,12 @@ export class UserService {
     )()
   }
 
-  async existsByUsername(username: string) {
+  async existsBy(field: "username" | "email", value: string) {
     await connectDB()
     return unstable_cache(
       async (): Promise<boolean> =>
-        (await UserModel.exists({ username })) != null,
-      [UnstableCacheKey.USER_EXISTS_BY_USERNAME + username],
+        (await UserModel.exists({ [field]: value })) != null,
+      [UnstableCacheKey.USER_EXISTS_BY + field + value],
       {
         tags: [UnstableCacheKey.USER_LIST],
       }

@@ -51,7 +51,7 @@ export default function Info() {
       <div className="flex flex-col justify-center">
         <div className="flex items-center gap-x-6">
           <div className="text-xl font-bold flex  items-center gap-x-2">
-            {user?.fullName}{" "}
+            {user?.username ?? user?.fullName}{" "}
             {user?.isVerified && (
               <MdVerified className="text-blue-500 inline-block" />
             )}

@@ -27,7 +27,9 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
             }}
             name={
               <div className="flex items-center gap-x-1">
-                <p className="font-semibold">{author.fullName}</p>
+                <p className="font-semibold">
+                  {author.username ?? author.fullName}
+                </p>
                 {author.isVerified && <MdVerified className="text-blue-500" />}
                 <LuDot className="text-lg text-default-400" />
                 <p className="text-default-400">
@@ -48,7 +50,10 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
       ) : (
         <div className="mt-4">
           <p className="text-sm ">
-            <span className="font-bold">{author.fullName}</span> {post.caption}
+            <span className="font-bold">
+              {author.username ?? author.fullName}
+            </span>{" "}
+            {post.caption}
           </p>
           <Divider className="my-4" />
         </div>
@@ -70,7 +75,10 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
       {post.media.length > 0 && (
         <div className="">
           <p className="text-sm ">
-            <span className="font-bold">{author.fullName}</span> {post.caption}
+            <span className="font-bold">
+              {author.username ?? author.fullName}
+            </span>{" "}
+            {post.caption}
           </p>
         </div>
       )}

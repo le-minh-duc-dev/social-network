@@ -56,7 +56,7 @@ export class LikeService {
         return await Like.find(query)
           .sort({ _id: -1 }) // newest first
           .limit(limit + 1)
-          .populate("user", "_id fullName avatarUrl")
+          .populate("user", "_id fullName avatarUrl username isVerified")
       },
       [UnstableCacheKey.POST_LIKE_LIST + post + cursor + limit],
       {

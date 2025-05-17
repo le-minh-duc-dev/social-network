@@ -38,7 +38,7 @@ export default function FullPost({ post }: Readonly<{ post: Post | null }>) {
             }}
             name={
               <div className="flex items-center">
-                {author.fullName}
+                {author.username ?? author.fullName}
                 {author.isVerified && (
                   <MdVerified className="text-blue-500 inline-block ml-1" />
                 )}
@@ -51,7 +51,7 @@ export default function FullPost({ post }: Readonly<{ post: Post | null }>) {
         <div className="flex flex-col flex-1  overflow-hidden">
           {post.caption && (
             <Comment
-              name={author.fullName}
+              name={author.username ?? author.fullName}
               content={post.caption}
               isComment={false}
               avatarUrl={author.avatarUrl}

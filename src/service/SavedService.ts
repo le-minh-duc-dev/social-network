@@ -61,7 +61,7 @@ export class SavedService {
             populate: {
               path: "author",
               model: "User", 
-              select: "_id fullName avatarUrl isVerified", 
+              select: "_id fullName avatarUrl isVerified username", 
             },
           })
       },
