@@ -47,7 +47,7 @@ export default function Info() {
   }
   return (
     <div className="mt-12 flex gap-x-20 items-start">
-      <Avatar src={user?.avatarUrl} alt="Your avatar" className="w-32 h-32" />
+      <Avatar src={user?.avatarUrl} alt="Your avatar" className="w-36 h-36" />
       <div className="flex flex-col justify-center">
         <div className="flex items-center gap-x-6">
           <div className="text-xl font-bold flex  items-center gap-x-2">
@@ -68,25 +68,29 @@ export default function Info() {
             <FollowButton followingId={userId} />
           )}
         </div>
-        <div className="flex gap-x-4 mt-2">
-          <p className="text-gray-500 text-sm">
+        <div className="flex gap-x-4 mt-6">
+          <p className="text-gray-500 text-base">
             <span className="font-semibold text-foreground">
               {user?.postsCount ?? 0}
             </span>{" "}
             posts
           </p>
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 text-base">
             <span className="font-semibold text-foreground">
               {user?.followersCount}
             </span>{" "}
             followers
           </p>
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 text-base">
             <span className="font-semibold text-foreground">
               {user?.followingCount}
             </span>{" "}
             following
           </p>
+        </div>
+        <div className="mt-6">
+          <div className="font-semibold">{user?.fullName}</div>
+          <div className=" text-sm mt-2 border-b pb-2 w-fit">{user?.bio}</div>
         </div>
       </div>
     </div>
