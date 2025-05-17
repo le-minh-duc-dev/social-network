@@ -27,7 +27,7 @@ export default function SavedList() {
     isLoading,
     error,
   } = useInfiniteQuery({
-    queryKey: [QueryKey.GET_USER_SAVEDS, "USER", authUser?.id],
+    queryKey: [QueryKey.GET_USER_SAVEDS, "PROFILE", "SAVED", authUser?.id],
     queryFn,
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -88,7 +88,13 @@ export default function SavedList() {
     return <div>Error: {error.message}</div>
   }
 
-  console.log("allItems", allItems)
+  if (!rows.length) {
+    return (
+      <div className="  mt-4">
+        <div className="text-center text-gray-500">No posts.</div>
+      </div>
+    )
+  }
   return (
     <div ref={listRef}>
       <div

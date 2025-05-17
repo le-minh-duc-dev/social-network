@@ -24,8 +24,11 @@ function copyToClipboard(text: string): void {
       console.error("Failed to copy:", err)
     })
 }
-
-export default function PostOption({ post }: Readonly<{ post: Post }>) {
+type hiddenItemsType = "edit" | "delete" | "unfollow"
+export default function PostOption({
+  post,
+  hiddenItems = [],
+}: Readonly<{ post: Post; hiddenItems?: hiddenItemsType[] }>) {
   const { authUser } = useAuth()
   const author = post?.author as User
   const isPostAuthor = authUser?.id == author._id.toString()
@@ -47,6 +50,10 @@ export default function PostOption({ post }: Readonly<{ post: Post }>) {
     onClose: onDeletePostClose,
   } = useDisclosure()
 
+  const isHidden = (item: hiddenItemsType) => {
+    if (!hiddenItems) return false
+    return hiddenItems.includes(item)
+  }
   return (
     <>
       <DeletePost
@@ -78,12 +85,12 @@ export default function PostOption({ post }: Readonly<{ post: Post }>) {
           <DropdownItem key="goToPost" href={postUrl}>
             Go to post
           </DropdownItem>
-          {!isPostAuthor ? null : (
+          {isPostAuthor && !isHidden("edit") ? (
             <DropdownItem key="edit" onPress={onEditPostOpen}>
               Edit
             </DropdownItem>
-          )}
-          {isPostAuthor ? null : (
+          ) : null}
+          {!isPostAuthor && !isHidden("unfollow") ? (
             <DropdownItem
               key="unfollow"
               className="text-danger font-bold"
@@ -91,8 +98,8 @@ export default function PostOption({ post }: Readonly<{ post: Post }>) {
             >
               <span className="font-bold">Unfollow</span>
             </DropdownItem>
-          )}
-          {!isPostAuthor ? null : (
+          ) : null}
+          {isPostAuthor && !isHidden("delete") ? (
             <DropdownItem
               key="delete"
               className="text-danger font-bold"
@@ -101,7 +108,7 @@ export default function PostOption({ post }: Readonly<{ post: Post }>) {
             >
               <span className="font-bold">Delete</span>
             </DropdownItem>
-          )}
+          ) : null}
         </DropdownMenu>
       </Dropdown>
     </>

@@ -25,7 +25,14 @@ export default function ReelList() {
   }: {
     pageParam: string
   }): Promise<InfiniteResponse<PostType>> => {
-    return await PostAPI.getPosts(pageParam, FETCH_SIZE, userId,undefined,undefined,MediaType.VIDEO)
+    return await PostAPI.getPosts(
+      pageParam,
+      FETCH_SIZE,
+      userId,
+      undefined,
+      undefined,
+      MediaType.VIDEO
+    )
   }
   const {
     data,
@@ -35,7 +42,7 @@ export default function ReelList() {
     isLoading,
     error,
   } = useInfiniteQuery({
-    queryKey: [QueryKey.GET_POSTS, "USER", userId],
+    queryKey: [QueryKey.GET_POSTS, "PROFILE",'REELS', userId],
     queryFn,
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -110,7 +117,13 @@ export default function ReelList() {
     return <div>Error: {error.message}</div>
   }
 
-  console.log("allItems", allItems)
+  if (!rows.length) {
+    return (
+      <div className="  mt-4">
+        <div className="text-center text-gray-500">No reels.</div>
+      </div>
+    )
+  }
   return (
     <div ref={listRef}>
       <div

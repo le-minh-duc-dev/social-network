@@ -18,7 +18,7 @@ export default function PostList() {
   }: {
     pageParam: string
   }): Promise<InfiniteResponse<PostType>> => {
-    return await PostAPI.getPosts(pageParam,FETCH_SIZE, userId)
+    return await PostAPI.getPosts(pageParam, FETCH_SIZE, userId)
   }
   const {
     data,
@@ -28,7 +28,7 @@ export default function PostList() {
     isLoading,
     error,
   } = useInfiniteQuery({
-    queryKey: [QueryKey.GET_POSTS, "USER", userId],
+    queryKey: [QueryKey.GET_POSTS, "PROFILE", userId],
     queryFn,
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -90,6 +90,13 @@ export default function PostList() {
     return <div>Error: {error.message}</div>
   }
 
+  if (!rows.length) {
+    return (
+      <div className="  mt-4">
+        <div className="text-center text-gray-500">No posts.</div>
+      </div>
+    )
+  }
   return (
     <div ref={listRef}>
       <div

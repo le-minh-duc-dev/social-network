@@ -27,7 +27,7 @@ export default function CommentList({ post }: Readonly<{ post: Post }>) {
             </div>
           }
         />
-        <PostOption post={post} />
+        <PostOption post={post} hiddenItems={["delete","edit"]}/>
       </div>
       <Divider className="my-4" />
       <div className="flex flex-col flex-1  overflow-hidden">
