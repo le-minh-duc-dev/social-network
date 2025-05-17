@@ -17,6 +17,8 @@ declare module "next-auth" {
 import {} from "next-auth/jwt"
 import { LoginSchema } from "@/domain/zod/LoginSchema"
 import { PasswordEncoder } from "@/lib/PasswordEncoder"
+import { Formater } from "@/lib/Formater"
+import { AuthHelper } from "@/lib/AuthHelper"
 
 declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
@@ -34,13 +36,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const userService = new UserService()
         const email = profile.email
         const fullName = profile.name
+        const normalizedFullName = Formater.normalizeVietnamese(fullName)
+        const username = AuthHelper.generateUsername(normalizedFullName)
         const avatarUrl = profile.picture
         let user = await userService.findUserByEmail(email)
 
         user ??= await userService.createUser({
           email,
           fullName,
+          normalizedFullName,
           avatarUrl,
+          username,
         })
 
         return {
