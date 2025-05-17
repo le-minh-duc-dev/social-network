@@ -43,7 +43,7 @@ export default function More() {
               href={AppRouteManager.ADMIN}
               startContent={<FaTools  className="text-lg" />}
             >
-              Administrator
+              Settings
             </DropdownItem>
             <DropdownItem
               classNames={{ base: "p-3" }}

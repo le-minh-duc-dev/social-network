@@ -1,6 +1,6 @@
 "use client"
 import { AppRouteManager } from "@/service/AppRouteManager"
-import { Listbox, ListboxItem, useDisclosure } from "@heroui/react"
+import { Listbox, ListboxItem, Skeleton, useDisclosure } from "@heroui/react"
 import React, { ReactNode } from "react"
 import { GoHome, GoHomeFill } from "react-icons/go"
 import { IoIosHeartEmpty, IoMdHeart } from "react-icons/io"
@@ -18,7 +18,7 @@ import { MdExplore, MdOutlineExplore } from "react-icons/md"
 
 export default function LinkList() {
   const pathname = usePathname()
-  const { authUser } = useAuth()
+  const { authUser, isLoading } = useAuth()
   const items: {
     type: "link" | "action"
     url: string
@@ -72,7 +72,7 @@ export default function LinkList() {
 
     {
       type: "link",
-      url: AppRouteManager.profile(authUser?.id??""),
+      url: AppRouteManager.profile(authUser?.id ?? ""),
       label: "Profile",
       defaultIcon: <UserIcon />,
       activeIcon: <UserIcon />,
@@ -86,8 +86,26 @@ export default function LinkList() {
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
+  if (isLoading)
+    return (
+      <Listbox aria-label="Dynamic Actions" items={items}>
+        {(item) => (
+          <ListboxItem
+            key={item.label}
+            classNames={{
+              title: `text-base ${
+                isPathNameMatched(item.url) ? "font-semibold" : ""
+              }`,
+              base: "mt-4",
+            }}
+          >
+            <Skeleton className="w-[60%] h-8 rounded-xl" />
+          </ListboxItem>
+        )}
+      </Listbox>
+    )
 
-  if(!authUser?.isActive) return <div></div>
+  if (!authUser?.isActive) return <div></div>
   return (
     <div>
       <Create isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} />
