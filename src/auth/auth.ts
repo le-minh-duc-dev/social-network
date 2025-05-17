@@ -19,6 +19,11 @@ import { LoginSchema } from "@/domain/zod/LoginSchema"
 import { PasswordEncoder } from "@/lib/PasswordEncoder"
 import { Formater } from "@/lib/Formater"
 import { AuthHelper } from "@/lib/AuthHelper"
+import { Notification } from "@/types/schema"
+import { NotificationService } from "@/service/NotificationService"
+import { Role } from "@/domain/enums/Role"
+import connectDB from "@/lib/connectDB"
+import mongoose from "mongoose"
 
 declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
@@ -34,6 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
       async profile(profile) {
         const userService = new UserService()
+        const notificationService = new NotificationService()
         const email = profile.email
         const fullName = profile.name
         const normalizedFullName = Formater.normalizeVietnamese(fullName)
@@ -41,13 +47,38 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const avatarUrl = profile.picture
         let user = await userService.findUserByEmail(email)
 
-        user ??= await userService.createUser({
-          email,
-          fullName,
-          normalizedFullName,
-          avatarUrl,
-          username,
-        })
+        if (!user) {
+          await connectDB()
+          const dbSession = await mongoose.startSession()
+          //
+          try {
+            dbSession.startTransaction()
+            user = await userService.createUser({
+              email,
+              fullName,
+              normalizedFullName,
+              avatarUrl,
+              username,
+            })
+            const notification: Notification = {
+              sender: user._id,
+              recipient: "",
+              type: "NEW_USER_JOINED",
+            }
+
+            await notificationService.sendNotificationToRole(
+              Role.ADMIN,
+              notification,
+              dbSession
+            )
+            console.log("Already send notifcations")
+            await dbSession.commitTransaction()
+          } catch (error) {
+            console.error("Error creating user:", error)
+            await dbSession.abortTransaction()
+            throw new Error("Error creating user")
+          }
+        }
 
         return {
           _id: user._id.toString(),

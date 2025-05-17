@@ -49,7 +49,7 @@ export default function SearchResultList({
       )}
       Skeleton={LoadingComponent}
       EmptyComponent={EmptyComponent}
-      staleTime={QueryStaleTime[QueryKey.GET_POST_COMMENTS]}
+      staleTime={QueryStaleTime[QueryKey.GET_USERS]}
     />
   )
 }

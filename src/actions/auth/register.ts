@@ -1,6 +1,7 @@
 "use server"
 
 import { HttpStatus } from "@/domain/enums/HttpStatus"
+import { Role } from "@/domain/enums/Role"
 import {
   RegisterUploadSchema,
   RegisterUploadType,
@@ -11,7 +12,9 @@ import connectDB from "@/lib/connectDB"
 import { Formater } from "@/lib/Formater"
 import { HttpHelper } from "@/lib/HttpHelper"
 import { PasswordEncoder } from "@/lib/PasswordEncoder"
+import { NotificationService } from "@/service/NotificationService"
 import { UserService } from "@/service/UserService"
+import { Notification } from "@/types/schema"
 import mongoose from "mongoose"
 export async function register(
   formData: RegisterUploadType
@@ -26,6 +29,7 @@ export async function register(
   // services
 
   const userService = new UserService()
+  const notificationService = new NotificationService()
 
   ///
 
@@ -44,7 +48,7 @@ export async function register(
       )
     }
     const hashedPassword = await PasswordEncoder.encodePassword(password)
-    await userService.createUser(
+    const newUser = await userService.createUser(
       {
         email,
         password: hashedPassword,
@@ -52,6 +56,18 @@ export async function register(
         normalizedFullName,
         username,
       },
+      dbSession
+    )
+
+    const notification: Notification = {
+      sender: newUser._id,
+      recipient: "",
+      type: "NEW_USER_JOINED",
+    }
+
+    await notificationService.sendNotificationToRole(
+      Role.ADMIN,
+      notification,
       dbSession
     )
 

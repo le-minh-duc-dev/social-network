@@ -5,6 +5,7 @@ import { ClientSession, FilterQuery, Types, UpdateQuery } from "mongoose"
 import { revalidateTag, unstable_cache } from "next/cache"
 
 import { UserCountableField, User as UserType } from "@/types/schema"
+import { MongooseHelper } from "@/lib/MongooseHelper"
 
 export class UserService {
   async getInfiniteUsers(
@@ -100,7 +101,6 @@ export class UserService {
     data: Partial<UserType>,
     session?: ClientSession
   ): Promise<UserType> {
-    await connectDB()
     const user = new UserModel(data)
     const newUser = await user.save({ session })
     revalidateTag(UnstableCacheKey.USER_LIST)
@@ -120,16 +120,17 @@ export class UserService {
     return savedUser
   }
 
-  async findUsers(filter: FilterQuery<UserType> = {}, limit = 10, skip = 0) {
-    await connectDB()
-
+  async findAllUserIds(filter: FilterQuery<UserType> = {}) {
+    const cacheKey = MongooseHelper.buildCacheKey<UserType>(
+      "USER_LIST_",
+      filter
+    )
     return unstable_cache(
-      async (): Promise<UserType[]> =>
-        await UserModel.find(filter)
-          .sort({ createdAt: -1 })
-          .skip(skip)
-          .limit(limit),
-      [UnstableCacheKey.USER_LIST],
+      async (): Promise<Types.ObjectId[]> => {
+        const users = await UserModel.find(filter).select("_id")
+        return users.map((user) => user._id)
+      },
+      [cacheKey],
       {
         tags: [UnstableCacheKey.USER_LIST],
       }

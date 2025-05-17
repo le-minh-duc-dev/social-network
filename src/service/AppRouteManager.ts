@@ -2,6 +2,7 @@ export const AppRouteManager = {
   HOME: "/",
   ADMIN: "/admin",
   ADMIN_MANAGE_USERS: "/admin/manage-users",
+  userDetails: (userId: string) => "/admin/manage-users/" + userId,
   LOGIN: "/login",
   REGISTER: "/register",
   WELCOME_NEW_MEMBER: "/welcome-new-member",

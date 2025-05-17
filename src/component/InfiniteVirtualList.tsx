@@ -11,12 +11,13 @@ type Props<T> = {
   Skeleton?: ComponentType
   ErrorComponent?: (msg: string) => ReactNode
   EmptyComponent?: ComponentType
+  refetchInterval?: number
 }
 
 export function InfiniteVirtualList<T>({
   staleTime = 60000,
   estimateSize = () => 900,
-
+  refetchInterval = 60000,
   queryKey,
   fetchFn,
   renderItem,
@@ -44,6 +45,8 @@ export function InfiniteVirtualList<T>({
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     staleTime,
+    refetchIntervalInBackground: true,
+    refetchInterval,
   })
 
   const allItems = useMemo<T[]>(
@@ -103,7 +106,6 @@ export function InfiniteVirtualList<T>({
       <div>Error: {error.message}</div>
     )
   }
-
 
   return (
     <div

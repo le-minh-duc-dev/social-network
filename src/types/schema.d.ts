@@ -2,6 +2,14 @@ import { Types } from "mongoose"
 import { Role } from "@/domain/enums/Role"
 import { PostPrivacy } from "@/domain/enums/PostPrivacy"
 
+export type NotificationType =
+  | "LIKE"
+  | "COMMENT"
+  | "FOLLOW"
+  | "MENTION"
+  | "REPLY"
+  | "NEW_USER_JOINED"
+
 export type UserCountableField =
   | "postsCount"
   | "followersCount"
@@ -75,4 +83,16 @@ export interface Saved {
   user: string | User
   createdAt: Date
   updatedAt: Date
+}
+
+export interface Notification {
+  _id?: string | Types.ObjectId
+  recipient: string | mongoose.Types.ObjectId
+  sender?: string | mongoose.Types.ObjectId
+  type: NotificationType
+  post?: mongoose.Types.ObjectId
+  comment?: mongoose.Types.ObjectId
+  content?: string
+  isRead?: boolean
+  createdAt?: Date
 }

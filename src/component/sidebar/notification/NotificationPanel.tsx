@@ -3,6 +3,7 @@ import { useState } from "react"
 import { IoMdArrowRoundBack, IoMdArrowRoundForward } from "react-icons/io"
 import FollowRequestList from "./FollowRequestList"
 import { useOutsideClick } from "@/hooks/useOutsideClick"
+import NotificationList from "./NotificationList"
 
 export default function NotificationPanel({
   setIsOpen,
@@ -55,12 +56,9 @@ export default function NotificationPanel({
         </div>
       </Button>
       <Divider className="my-4" />
-      {/* <div className="flex-1 flex mt-8">
-        <SearchResultList
-          searchKey={searchKey}
-          setIsSearchOpen={setIsSearchOpen}
-        />
-      </div> */}
+      <div className="flex-1 flex mt-8">
+        <NotificationList />
+      </div>
     </div>
   )
 }
