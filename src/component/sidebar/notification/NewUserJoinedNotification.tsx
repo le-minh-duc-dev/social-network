@@ -58,7 +58,7 @@ export default function NewUserJoinedNotification({
     },
   })
   return (
-    <Card className="max-w-[340px]">
+    <Card className="max-w-[340px] mt-4">
       <CardHeader className="justify-between">
         <Alert title={`New user joined the platform!`} color="primary" />
       </CardHeader>
