@@ -7,7 +7,7 @@ import { InfiniteVirtualList } from "../InfiniteVirtualList"
 export default function CommentList({ postId }: Readonly<{ postId: string }>) {
   return (
     <InfiniteVirtualList<CommentType>
-      queryKey={[QueryKey.GET_POST_COMMENTS + postId]}
+      queryKey={[QueryKey.GET_POST_COMMENTS,postId]}
       fetchFn={async (pageParam: string) => {
         return await CommentAPI.getComments(postId, pageParam)
       }}
