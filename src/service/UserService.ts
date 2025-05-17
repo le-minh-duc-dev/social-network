@@ -159,6 +159,7 @@ export class UserService {
       { session }
     )
     revalidateTag(UnstableCacheKey.USER_LIST)
+    revalidateTag(UnstableCacheKey.POST_LIST)
 
     return result.modifiedCount > 0
   }

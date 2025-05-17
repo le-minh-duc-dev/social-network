@@ -6,7 +6,7 @@ import Stories from "./Stories"
 export default function Home() {
   return (
     <>
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center mb-8 ">
         <Stories />
       </div>
       <Feeds />
