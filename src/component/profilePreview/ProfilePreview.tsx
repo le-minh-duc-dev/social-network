@@ -50,6 +50,7 @@ export default function ProfilePreview({
                 {user!.isVerified && <MdVerified className="text-blue-500" />}
               </div>
             }
+            description={user?.fullName}
           />
           <div className="flex gap-x-4  w-full justify-around mt-4">
             <ItemCount title="posts" count={user?.postsCount ?? 0} />
