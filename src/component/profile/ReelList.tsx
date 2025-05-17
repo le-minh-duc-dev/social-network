@@ -7,6 +7,7 @@ import { useWindowVirtualizer } from "@tanstack/react-virtual"
 import PostPreview from "./PostPreview"
 import { MediaType } from "@/domain/enums/MediaType"
 import { useProfileContext } from "./ProfileContext"
+import { Skeleton } from "@heroui/react"
 
 interface PostTypeWithKey extends PostType {
   key: string
@@ -89,8 +90,15 @@ export default function ReelList() {
 
   if (!userId || isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center">
-        {<p>Loading...</p>}
+      <div className="grid grid-cols-4 gap-4  mt-4">
+        <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+        <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+        <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+        <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+        <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+        <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+        <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+        <Skeleton className="w-full aspect-[4/5] rounded-lg" />
       </div>
     )
   }
@@ -139,7 +147,12 @@ export default function ReelList() {
                   ))}
                 </div>
               ) : (
-                <div>Loading...</div>
+                <div className="grid grid-cols-4 gap-4  mt-4">
+                  <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+                  <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+                  <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+                  <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+                </div>
               )}
             </div>
           )
