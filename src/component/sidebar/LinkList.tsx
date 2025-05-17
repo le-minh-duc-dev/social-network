@@ -87,7 +87,7 @@ export default function LinkList() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
 
-  if(authUser && !authUser?.isActive) return <div></div>
+  if(!authUser?.isActive) return <div></div>
   return (
     <div>
       <Create isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} />
