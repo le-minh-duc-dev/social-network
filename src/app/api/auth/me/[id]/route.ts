@@ -26,6 +26,7 @@ export async function GET(
   const response: AuthUser = {
     id: user._id.toString(),
     name: user.fullName,
+    username: user.username,
     email: user.email,
     avatarUrl: user.avatarUrl,
     bio: user.bio,

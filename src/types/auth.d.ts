@@ -4,6 +4,7 @@ import { Role } from "@/domain/enums/Role"
 interface AuthUser {
   id: string
   name: string
+  username: string
   email: string
   bio?: string
   avatarUrl?: string
@@ -12,5 +13,4 @@ interface AuthUser {
   role: Role
   permissions: Partial<Record<Permission, boolean>>
   isFollowApprovalRequired: boolean
-
 }

@@ -15,6 +15,7 @@ export interface User {
   email: string
   password?: string
   fullName: string
+  normalizedFullName: string
   bio?: string
   avatarUrl?: string
   postsCount: number

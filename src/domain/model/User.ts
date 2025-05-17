@@ -7,7 +7,9 @@ const UserSchema = new Schema<User>(
   {
     email: { type: String, required: true, unique: true, index: true },
     password: { type: String },
-    fullName: { type: String, required: true },
+    fullName: { type: String, required: true ,index: true},
+    normalizedFullName: { type: String, required: true, index: true },
+    username: { type: String, required: true, unique: true, index: true },
     bio: { type: String },
     avatarUrl: { type: String },
     role: {

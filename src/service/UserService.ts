@@ -70,10 +70,25 @@ export class UserService {
     )()
   }
 
-  async createUser(data: Partial<UserType>,session?:ClientSession): Promise<UserType> {
+  async existsByUsername(username: string) {
+    await connectDB()
+    return unstable_cache(
+      async (): Promise<boolean> =>
+        (await UserModel.exists({ username })) != null,
+      [UnstableCacheKey.USER_EXISTS_BY_USERNAME + username],
+      {
+        tags: [UnstableCacheKey.USER_LIST],
+      }
+    )()
+  }
+
+  async createUser(
+    data: Partial<UserType>,
+    session?: ClientSession
+  ): Promise<UserType> {
     await connectDB()
     const user = new UserModel(data)
-    const newUser = await user.save({session})
+    const newUser = await user.save({ session })
     revalidateTag(UnstableCacheKey.USER_LIST)
     return newUser
   }

@@ -5,6 +5,7 @@ import {
   Card,
   CardBody,
   Form,
+  Input,
   Textarea,
   User,
 } from "@heroui/react"
@@ -28,6 +29,7 @@ export default function EditProfile() {
 
   const [formData, setFormData] = useState<EditProfileType>({
     bio: authUser?.bio,
+    username: authUser?.username,
     avatarUrl: authUser?.avatarUrl ?? "",
   })
 
@@ -38,6 +40,7 @@ export default function EditProfile() {
       console.log(authUser)
       setFormData({
         bio: authUser?.bio,
+        username: authUser?.username,
         avatarUrl: authUser?.avatarUrl ?? "",
       })
     }
@@ -124,7 +127,7 @@ export default function EditProfile() {
 
   return (
     <div className="h-full flex justify-center">
-      <Form className=" w-[60%] py-8" onSubmit={handleSubmit}>
+      <Form className=" w-[60%] py-8 gap-y-4" onSubmit={handleSubmit}>
         <h1 className="text-2xl font-semibold mt-4">Edit profile</h1>
         <Card
           classNames={{
@@ -158,8 +161,21 @@ export default function EditProfile() {
             />
           </CardBody>
         </Card>
+        <div className="max-w-xs mt-8">
+          <Input
+            label="Username"
+            labelPlacement="outside"
+            placeholder="Username"
+            type="text"
+            variant="bordered"
+            value={formData.username}
+            onValueChange={(value) =>
+              setFormData((prev) => ({ ...prev, username: value }))
+            }
+          />
+        </div>
         <Textarea
-          className=" mt-8  w-full"
+          className=" w-full"
           label="Bio"
           placeholder="Enter your bio"
           labelPlacement="outside"

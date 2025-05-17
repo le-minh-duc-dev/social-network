@@ -5,8 +5,10 @@ import {
   RegisterUploadSchema,
   RegisterUploadType,
 } from "@/domain/zod/RegisterSchema"
+import { AuthHelper } from "@/lib/AuthHelper"
 
 import connectDB from "@/lib/connectDB"
+import { Formater } from "@/lib/Formater"
 import { HttpHelper } from "@/lib/HttpHelper"
 import { PasswordEncoder } from "@/lib/PasswordEncoder"
 import { UserService } from "@/service/UserService"
@@ -19,7 +21,8 @@ export async function register(
     return HttpHelper.buildHttpErrorResponseData(HttpStatus.BAD_REQUEST)
   }
   const { email, password, fullName } = safeFormData.data
-
+  const normalizedFullName = Formater.normalizeVietnamese(fullName)
+  const username = AuthHelper.generateUsername(normalizedFullName)
   // services
 
   const userService = new UserService()
@@ -45,7 +48,8 @@ export async function register(
       {
         email,
         password: hashedPassword,
-        fullName,
+        fullName: normalizedFullName,
+        username,
       },
       dbSession
     )

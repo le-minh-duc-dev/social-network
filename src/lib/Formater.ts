@@ -75,4 +75,13 @@ export class Formater {
 
     return "just now"
   }
+
+  static normalizeVietnamese(text: string): string {
+    return text
+      .normalize("NFD") // Decompose accents
+      .replace(/[\u0300-\u036f]/g, "") // Remove accents
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D")
+      .toLowerCase()
+  }
 }
