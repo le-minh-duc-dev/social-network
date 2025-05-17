@@ -17,4 +17,11 @@ export class NotificationAPI {
     )
     return await res.json()
   }
+
+  static async getNewNotificationCount(): Promise<{ count: number }> {
+    const res = await fetch(NotificationAPI.baseUrl + `/count?isRead=false`, {
+      credentials: "include",
+    })
+    return await res.json()
+  }
 }

@@ -15,6 +15,7 @@ import { usePathname } from "next/navigation"
 import Create from "../postMutation/Create"
 import { useAuth } from "@/component/provider/auth/AuthContext"
 import { MdExplore, MdOutlineExplore } from "react-icons/md"
+import NotificationIcon from "./NotificationIcon"
 
 interface ItemType {
   type: "link" | "action"
@@ -69,8 +70,16 @@ export default function LinkList({
       type: "action",
       url: "",
       label: "Notifications",
-      defaultIcon: <IoIosHeartEmpty className="text-2xl" />,
-      activeIcon: <IoMdHeart className="text-2xl" />,
+      defaultIcon: (
+        <NotificationIcon>
+          <IoIosHeartEmpty className="text-2xl" />
+        </NotificationIcon>
+      ),
+      activeIcon: (
+        <NotificationIcon>
+          <IoMdHeart className="text-2xl" />
+        </NotificationIcon>
+      ),
     },
 
     {

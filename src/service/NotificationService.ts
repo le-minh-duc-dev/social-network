@@ -1,10 +1,11 @@
 import { UnstableCacheKey } from "@/domain/enums/UnstableCacheKey"
 import Notification from "@/domain/model/Notification"
 import { Notification as NotificationType } from "@/types/schema"
-import { ClientSession, Types } from "mongoose"
+import { ClientSession, FilterQuery, Types } from "mongoose"
 import { revalidateTag, unstable_cache } from "next/cache"
 import { UserService } from "./UserService"
 import { Role } from "@/domain/enums/Role"
+import { MongooseHelper } from "@/lib/MongooseHelper"
 
 export class NotificationService {
   async createNotification(
@@ -94,5 +95,24 @@ export class NotificationService {
     userIds.forEach((userId) => {
       revalidateTag(UnstableCacheKey.NOTIFICATION_LIST + userId)
     })
+  }
+
+  async getNotificationCount(filter: FilterQuery<NotificationType> = {}) {
+    const cacheKey = MongooseHelper.buildCacheKey<NotificationType>(
+      UnstableCacheKey.NOTIFICATION_LIST + "_",
+      filter
+    )
+    return unstable_cache(
+      async () => {
+        return await Notification.countDocuments(filter)
+      },
+      [cacheKey],
+      {
+        tags: [
+          UnstableCacheKey.NOTIFICATION_LIST + filter.recipient,
+          UnstableCacheKey.USER_LIST,
+        ],
+      }
+    )()
   }
 }
