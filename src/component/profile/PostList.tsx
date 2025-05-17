@@ -7,6 +7,7 @@ import { useWindowVirtualizer } from "@tanstack/react-virtual"
 import PostPreview from "./PostPreview"
 import { useProfileContext } from "./ProfileContext"
 import { Skeleton } from "@heroui/react"
+const FETCH_SIZE = 10
 export default function PostList() {
   const ITEMS_PER_ROW = 3
 
@@ -17,7 +18,7 @@ export default function PostList() {
   }: {
     pageParam: string
   }): Promise<InfiniteResponse<PostType>> => {
-    return await PostAPI.getPosts(pageParam, 2, userId)
+    return await PostAPI.getPosts(pageParam,FETCH_SIZE, userId)
   }
   const {
     data,

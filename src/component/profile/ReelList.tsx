@@ -9,6 +9,8 @@ import { MediaType } from "@/domain/enums/MediaType"
 import { useProfileContext } from "./ProfileContext"
 import { Skeleton } from "@heroui/react"
 
+const FETCH_SIZE = 10
+
 interface PostTypeWithKey extends PostType {
   key: string
 }
@@ -23,7 +25,7 @@ export default function ReelList() {
   }: {
     pageParam: string
   }): Promise<InfiniteResponse<PostType>> => {
-    return await PostAPI.getPosts(pageParam, 2, userId,undefined,undefined,MediaType.VIDEO)
+    return await PostAPI.getPosts(pageParam, FETCH_SIZE, userId,undefined,undefined,MediaType.VIDEO)
   }
   const {
     data,

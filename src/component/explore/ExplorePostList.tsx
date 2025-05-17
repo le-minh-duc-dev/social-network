@@ -5,6 +5,8 @@ import { QueryKey, QueryStaleTime } from "@/domain/enums/QueryKey"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useWindowVirtualizer } from "@tanstack/react-virtual"
 import PostPreview from "../profile/PostPreview"
+
+const FETCH_SIZE = 10
 export default function ExplorePostList() {
   const ITEMS_PER_ROW = 3
 
@@ -13,7 +15,7 @@ export default function ExplorePostList() {
   }: {
     pageParam: string
   }): Promise<InfiniteResponse<PostType>> => {
-    return await PostAPI.getPosts(pageParam, 2, "", true)
+    return await PostAPI.getPosts(pageParam, FETCH_SIZE, "", true)
   }
   const {
     data,
