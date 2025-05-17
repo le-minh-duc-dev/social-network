@@ -14,10 +14,16 @@ import { LuMenu } from "react-icons/lu"
 import { IoSettingsOutline } from "react-icons/io5"
 import { FaRegBookmark, FaTools } from "react-icons/fa"
 import { useAuth } from "@/component/provider/auth/AuthContext"
+import { PermissionService } from "@/service/PermissionService"
+import { Permission } from "@/domain/enums/Permission"
 
 export default function More() {
   const { authUser } = useAuth()
 
+  const canViewDashboard = PermissionService.hasPermission(
+    authUser?.permissions,
+    Permission.VIEW_DASHBOARD
+  )
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -37,14 +43,16 @@ export default function More() {
       >
         {authUser?.isActive ? (
           <DropdownSection showDivider>
-            <DropdownItem
-              classNames={{ base: "p-3" }}
-              key="admin"
-              href={AppRouteManager.ADMIN}
-              startContent={<FaTools  className="text-lg" />}
-            >
-              Settings
-            </DropdownItem>
+            {canViewDashboard ? (
+              <DropdownItem
+                classNames={{ base: "p-3" }}
+                key="admin"
+                href={AppRouteManager.ADMIN}
+                startContent={<FaTools className="text-lg" />}
+              >
+                Administrator
+              </DropdownItem>
+            ) : null}
             <DropdownItem
               classNames={{ base: "p-3" }}
               key="settings"
