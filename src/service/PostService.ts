@@ -6,6 +6,7 @@ import { Post as PostType } from "@/types/schema"
 import { ClientSession, Types } from "mongoose"
 import { revalidateTag, unstable_cache } from "next/cache"
 import { FollowService } from "./FollowService"
+import { MediaType } from "@/domain/enums/MediaType"
 
 export class PostService {
   async createPost(
@@ -73,7 +74,8 @@ export class PostService {
     authUserId: Types.ObjectId,
     authorObjectId?: Types.ObjectId,
     isExplore: boolean = false,
-    isReels: boolean = false
+    isReels: boolean = false,
+    mediaType: string = ""
   ) {
     return unstable_cache(
       async () => {
@@ -101,6 +103,12 @@ export class PostService {
             if (followStatus === "following") {
               query.$or.push({ privacy: PostPrivacy.FOLLOWERS })
             }
+          }
+          if (
+            mediaType &&
+            (mediaType == MediaType.VIDEO || mediaType == MediaType.IMAGE)
+          ) {
+            query["media.type"] = mediaType
           }
           // Check if authUser is following the author
         }

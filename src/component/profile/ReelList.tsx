@@ -23,7 +23,7 @@ export default function ReelList() {
   }: {
     pageParam: string
   }): Promise<InfiniteResponse<PostType>> => {
-    return await PostAPI.getPosts(pageParam, 2, userId)
+    return await PostAPI.getPosts(pageParam, 2, userId,undefined,undefined,MediaType.VIDEO)
   }
   const {
     data,

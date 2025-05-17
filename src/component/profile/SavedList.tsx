@@ -6,11 +6,11 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { useWindowVirtualizer } from "@tanstack/react-virtual"
 import PostPreview from "./PostPreview"
 import { SavedAPI } from "@/service/api/SavedAPI"
+import { Skeleton } from "@heroui/react"
 
 const ITEMS_PER_ROW = 3
 
 export default function SavedList() {
-
   const { authUser } = useAuth()
   const queryFn = async ({
     pageParam = "",
@@ -72,8 +72,13 @@ export default function SavedList() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center">
-        {<p>Loading...</p>}
+      <div className="grid grid-cols-3 gap-4  mt-4">
+        <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+        <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+        <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+        <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+        <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+        <Skeleton className="w-full aspect-[4/5] rounded-lg" />
       </div>
     )
   }
@@ -114,11 +119,19 @@ export default function SavedList() {
               {row ? (
                 <div className="grid grid-cols-3 gap-4 ">
                   {row.map((post) => (
-                    <PostPreview key={post._id.toString()} post={post} height="aspect-[4/5]"/>
+                    <PostPreview
+                      key={post._id.toString()}
+                      post={post}
+                      height="aspect-[4/5]"
+                    />
                   ))}
                 </div>
               ) : (
-                <div>Loading...</div>
+                <div className="grid grid-cols-3 gap-4  mt-4">
+                  <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+                  <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+                  <Skeleton className="w-full aspect-[4/5] rounded-lg" />
+                </div>
               )}
             </div>
           )

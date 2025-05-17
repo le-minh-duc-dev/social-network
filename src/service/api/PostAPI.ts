@@ -1,3 +1,4 @@
+import { MediaType } from "@/domain/enums/MediaType"
 import { Post } from "@/types/schema"
 
 export class PostAPI {
@@ -8,11 +9,12 @@ export class PostAPI {
     limit: number = 2,
     authorId: string = "",
     isExplore: boolean = false,
-    isReels: boolean = false
+    isReels: boolean = false,
+    mediaType: string=""
   ): Promise<InfiniteResponse<Post>> {
     const res = await fetch(
       PostAPI.baseUrl +
-        `?nextCursor=${nextCursor}&limit=${limit}&authorId=${authorId}&isExplore=${isExplore}&isReels=${isReels}`,
+        `?nextCursor=${nextCursor}&limit=${limit}&authorId=${authorId}&isExplore=${isExplore}&isReels=${isReels}&mediaType=${mediaType}`,
       {
         credentials: "include",
       }

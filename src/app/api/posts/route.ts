@@ -14,6 +14,7 @@ export async function GET(request: NextRequest) {
   const authorId = searchParams.get("authorId") // author ID
   const isExplore = searchParams.get("isExplore") == "true"
   const isReels = searchParams.get("isReels") == "true"
+  const mediaType = searchParams.get("mediaType") ?? ""
 
   await RouteProtector.protect()
 
@@ -45,7 +46,8 @@ export async function GET(request: NextRequest) {
     authUserObjectId,
     authorObjectId,
     isExplore,
-    isReels
+    isReels,
+    mediaType
   )
 
   //check if there are more posts
