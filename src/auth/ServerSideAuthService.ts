@@ -9,4 +9,9 @@ export class ServerSideAuthService {
     }
     return AuthUserHelper.getAuthUser(authSession?.user.id)
   }
+
+  static async isAuthenticated() {
+    const authSession = await auth()
+    return !!authSession
+  }
 }

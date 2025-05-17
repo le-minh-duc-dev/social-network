@@ -12,7 +12,7 @@ import {
 import React from "react"
 import { LuMenu } from "react-icons/lu"
 import { IoSettingsOutline } from "react-icons/io5"
-import { FaRegBookmark } from "react-icons/fa"
+import { FaRegBookmark, FaTools } from "react-icons/fa"
 import { useAuth } from "@/component/provider/auth/AuthContext"
 
 export default function More() {
@@ -39,6 +39,14 @@ export default function More() {
           <DropdownSection showDivider>
             <DropdownItem
               classNames={{ base: "p-3" }}
+              key="admin"
+              href={AppRouteManager.ADMIN}
+              startContent={<FaTools  className="text-lg" />}
+            >
+              Administrator
+            </DropdownItem>
+            <DropdownItem
+              classNames={{ base: "p-3" }}
               key="settings"
               href={AppRouteManager.USER_SETTINGS_EDIT_PROFILE}
               startContent={<IoSettingsOutline className="text-lg" />}
@@ -48,7 +56,7 @@ export default function More() {
             <DropdownItem
               classNames={{ base: "p-3" }}
               key="saved"
-              href={AppRouteManager.saved(authUser.id)}
+              href={AppRouteManager.saved(authUser?.id)}
               startContent={<FaRegBookmark className="text-lg" />}
             >
               Saved

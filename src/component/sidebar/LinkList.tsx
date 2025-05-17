@@ -72,7 +72,7 @@ export default function LinkList() {
 
     {
       type: "link",
-      url: AppRouteManager.profile(authUser!.id),
+      url: AppRouteManager.profile(authUser?.id??""),
       label: "Profile",
       defaultIcon: <UserIcon />,
       activeIcon: <UserIcon />,
@@ -86,7 +86,8 @@ export default function LinkList() {
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
-  if (!authUser?.isActive) return <div></div>
+
+  if(authUser && !authUser?.isActive) return <div></div>
   return (
     <div>
       <Create isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} />
