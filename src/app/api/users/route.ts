@@ -8,6 +8,7 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const limit = parseInt(searchParams.get("limit") ?? "10")
   const cursor = searchParams.get("nextCursor") // last post ID
+  const searchKey = searchParams.get("searchKey") // search key
 
   await RouteProtector.protect()
   //connect to the database
@@ -17,7 +18,7 @@ export async function GET(request: NextRequest) {
   const userService = new UserService()
 
   //get posts
-  const result = await userService.getInfiniteUsers(cursor, limit)
+  const result = await userService.getInfiniteUsers(cursor, limit, searchKey)
 
   //check if there are more posts
   const hasMore = result.length > limit

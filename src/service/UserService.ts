@@ -7,7 +7,11 @@ import { revalidateTag, unstable_cache } from "next/cache"
 import { UserCountableField, User as UserType } from "@/types/schema"
 
 export class UserService {
-  async getInfiniteUsers(cursor: string | null, limit: number) {
+  async getInfiniteUsers(
+    cursor: string | null,
+    limit: number,
+    searchKey: string | null
+  ) {
     return unstable_cache(
       async () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -16,11 +20,18 @@ export class UserService {
           query._id = { $lt: new Types.ObjectId(cursor) }
         }
 
+        if (searchKey) {
+          query.$or = [
+            { username: { $regex: searchKey, $options: "i" } },
+            { normalizedFullName: { $regex: searchKey, $options: "i" } },
+          ]
+        }
+
         return await UserModel.find(query)
           .sort({ _id: -1 }) // newest first
           .limit(limit + 1)
       },
-      [UnstableCacheKey.USER_LIST + cursor + limit],
+      [UnstableCacheKey.USER_LIST + cursor + limit, "SEARCH", searchKey ?? ""],
       {
         tags: [UnstableCacheKey.USER_LIST],
       }
@@ -74,7 +85,7 @@ export class UserService {
     await connectDB()
     return unstable_cache(
       async (): Promise<boolean> => {
-        console.log("UserService.existsBy-------", field, value);
+        console.log("UserService.existsBy-------", field, value)
         const result = await UserModel.exists({ [field]: value })
         return result != null
       },

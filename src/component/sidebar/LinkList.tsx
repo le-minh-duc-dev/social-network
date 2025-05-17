@@ -16,7 +16,11 @@ import Create from "../postMutation/Create"
 import { useAuth } from "@/component/provider/auth/AuthContext"
 import { MdExplore, MdOutlineExplore } from "react-icons/md"
 
-export default function LinkList() {
+export default function LinkList({
+  setIsSearchOpen,
+}: Readonly<{
+  setIsSearchOpen: React.Dispatch<React.SetStateAction<boolean>>
+}>) {
   const pathname = usePathname()
   const { authUser, isLoading } = useAuth()
   const items: {
@@ -34,8 +38,8 @@ export default function LinkList() {
       activeIcon: <GoHomeFill className="text-2xl" />,
     },
     {
-      type: "link",
-      url: AppRouteManager.SEARCH,
+      type: "action",
+      url: "",
       label: "Search",
       defaultIcon: <IoSearchOutline className="text-2xl" />,
       activeIcon: <IoSearchSharp className="text-2xl" />,
@@ -116,6 +120,9 @@ export default function LinkList() {
           const item = items.find((item) => item.label == key)
           if (item?.type == "action" && item.label == "Create") {
             onOpen()
+          }
+          if (item?.type == "action" && item.label == "Search") {
+            setIsSearchOpen((prev) => !prev)
           }
         }}
       >

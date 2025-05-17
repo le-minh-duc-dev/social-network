@@ -12,10 +12,11 @@ export class UserAPI {
 
   static async getUsers(
     nextCursor: string,
-    limit: number = 2
+    limit: number = 2,
+    searchKey: string = ""
   ): Promise<InfiniteResponse<User>> {
     const res = await fetch(
-      UserAPI.baseUrl + `?nextCursor=${nextCursor}&limit=${limit}`,
+      UserAPI.baseUrl + `?nextCursor=${nextCursor}&limit=${limit}&searchKey=${searchKey}`,
       {
         credentials: "include",
       }

@@ -10,17 +10,19 @@ type Props<T> = {
   renderItem: (item: T, index: number) => ReactNode
   Skeleton?: ComponentType
   ErrorComponent?: (msg: string) => ReactNode
+  EmptyComponent?: ComponentType
 }
 
 export function InfiniteVirtualList<T>({
   staleTime = 60000,
   estimateSize = () => 900,
- 
+
   queryKey,
   fetchFn,
   renderItem,
   Skeleton,
   ErrorComponent,
+  EmptyComponent,
 }: Readonly<Props<T>>) {
   const queryFn = async ({
     pageParam = "",
@@ -79,8 +81,16 @@ export function InfiniteVirtualList<T>({
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col w-full items-center justify-center">
         {Skeleton ? <Skeleton /> : <p>Loading...</p>}
+      </div>
+    )
+  }
+
+  if (allItems.length === 0) {
+    return (
+      <div className="flex flex-col w-full items-center justify-center">
+        {EmptyComponent ? <EmptyComponent /> : <p>No items.</p>}
       </div>
     )
   }
@@ -93,6 +103,7 @@ export function InfiniteVirtualList<T>({
       <div>Error: {error.message}</div>
     )
   }
+
 
   return (
     <div
