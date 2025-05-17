@@ -1,4 +1,3 @@
-import { MediaType } from "@/domain/enums/MediaType"
 import { Post } from "@/types/schema"
 
 export class PostAPI {
