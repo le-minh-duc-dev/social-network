@@ -15,7 +15,7 @@ import Link from "next/link"
 
 export default function Login() {
   return (
-    <div className="flex-1 flex justify-center items-center">
+    <div className="flex-1 flex-col flex justify-center items-center gap-y-8">
       <Card
         classNames={{
           base: "p-12",
@@ -91,6 +91,21 @@ export default function Login() {
           </Link>
         </CardBody>
       </Card>
+      <div className="">
+        <p className="text-sm text-default-500 mt-6">
+          © 2025 Social Network Inc.
+        </p>
+        <p className="text-sm mt-1">
+          Built with ❤️ by{" "}
+          <a
+            href="https://ducle.online"
+            target="_blank"
+            className="text-primary hover:underline font-medium "
+          >
+            ducle.online
+          </a>
+        </p>
+      </div>
     </div>
   )
 }
