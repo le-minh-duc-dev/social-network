@@ -47,6 +47,8 @@ export function InfiniteWindowVirtualList<T>({
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     staleTime,
+    refetchIntervalInBackground: true,
+    refetchInterval: staleTime,
   })
 
   const allItems = useMemo<T[]>(

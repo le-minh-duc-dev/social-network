@@ -72,7 +72,7 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
           {post.likeCount} {post.likeCount > 1 ? "likes" : "like"}
         </p>
       </div>
-      {post.media.length > 0 && (
+      {post.media.length > 0 && post.caption && (
         <div className="">
           <p className="text-sm ">
             <span className="font-bold">

@@ -10,12 +10,12 @@ export enum QueryKey {
 }
 
 export const QueryStaleTime: Record<QueryKey, number> = {
-  [QueryKey.GET_POSTS]: 90000,
-  [QueryKey.GET_POST]: 90000,
-  [QueryKey.GET_USER]: 300000,
-  [QueryKey.GET_POST_COMMENTS]: 90000,
-  [QueryKey.GET_POST_LIKES]: 180000,
-  [QueryKey.GET_USERS]: 300000,
-  [QueryKey.GET_USER_SAVEDS]: 180000,
-  [QueryKey.GET_USER_FOLLOW]: 180000,
+  [QueryKey.GET_POSTS]: 60000,
+  [QueryKey.GET_POST]: 60000,
+  [QueryKey.GET_USER]: 180000,
+  [QueryKey.GET_POST_COMMENTS]: 60000,
+  [QueryKey.GET_POST_LIKES]: 120000,
+  [QueryKey.GET_USERS]: 180000,
+  [QueryKey.GET_USER_SAVEDS]: 120000,
+  [QueryKey.GET_USER_FOLLOW]: 120000,
 }
