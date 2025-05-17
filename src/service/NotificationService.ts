@@ -115,4 +115,20 @@ export class NotificationService {
       }
     )()
   }
+
+  async toggleField(
+    authUserObjectId: Types.ObjectId,
+    notificationObjectId: Types.ObjectId,
+    field: keyof Pick<NotificationType, "isRead">,
+    status: boolean,
+    session?: ClientSession
+  ) {
+    const result = await Notification.updateOne(
+      { _id: notificationObjectId },
+      { $set: { [field]: status } },
+      { session }
+    )
+    revalidateTag(UnstableCacheKey.NOTIFICATION_LIST + authUserObjectId)
+    return result.modifiedCount > 0
+  }
 }

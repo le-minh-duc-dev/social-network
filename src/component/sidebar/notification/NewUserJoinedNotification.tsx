@@ -1,3 +1,4 @@
+import { toggleIsRead } from "@/actions/notification/toggleIsRead"
 import { toggleField } from "@/actions/user/toggleField"
 import { HttpStatus } from "@/domain/enums/HttpStatus"
 import { QueryKey } from "@/domain/enums/QueryKey"
@@ -28,9 +29,12 @@ export default function NewUserJoinedNotification({
   const queryClient = useQueryClient()
   const mutation = useMutation({
     mutationFn: async () =>
-      await toggleField(sender._id.toString(), "isActive", true),
+      await Promise.all([
+        toggleIsRead(notification._id!.toString(), true),
+        toggleField(sender._id.toString(), "isActive", true),
+      ]),
     onSuccess: (response) => {
-      if (response.status == HttpStatus.NO_CONTENT) {
+      if (response[1].status == HttpStatus.NO_CONTENT) {
         addToast({
           title:
             (sender.username ?? sender.fullName) +
