@@ -11,6 +11,15 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const limit = parseInt(searchParams.get("limit") ?? "10")
   const cursor = searchParams.get("nextCursor") // last post ID
+  const type = searchParams.get("type")
+  //
+  const isAcceptedParam = searchParams.get("isAccepted")
+  const isAccepted =
+    isAcceptedParam == null ? undefined : isAcceptedParam === "true"
+
+  if (!type || !["followers", "following"].includes(type)) {
+    return new Response("Invalid type", { status: HttpStatus.BAD_REQUEST })
+  }
 
   await RouteProtector.protect()
 
@@ -30,19 +39,23 @@ export async function GET(request: NextRequest) {
   //post service
   const followService = new FollowService()
 
-  //get posts
+  //get follow list
   const result = await followService.getInfiniteFollows(
     userObjectId,
     cursor,
-    limit
+    limit,
+    type as "followers" | "following",
+    isAccepted
   )
 
   //check if there are more posts
   const hasMore = result.length > limit
   const followList = hasMore ? result.slice(0, limit) : result
 
-  const followingList = followList.map((follow) => {
-    return follow.following as User
+  const list = followList.map((follow) => {
+    return type == "followers"
+      ? (follow.follower as User)
+      : (follow.following as User)
   })
 
   //next cursor
@@ -51,7 +64,7 @@ export async function GET(request: NextRequest) {
     : null
 
   return Response.json({
-    list: followingList,
+    list: list,
     nextCursor,
     hasMore,
   })

@@ -16,20 +16,27 @@ import Create from "../postMutation/Create"
 import { useAuth } from "@/component/provider/auth/AuthContext"
 import { MdExplore, MdOutlineExplore } from "react-icons/md"
 
+interface ItemType {
+  type: "link" | "action"
+  url: string
+  label: string
+  defaultIcon: ReactNode
+  activeIcon: ReactNode
+}
 export default function LinkList({
+  isSearchOpen,
   setIsSearchOpen,
+  isNotificationPanelOpen,
+  setIsNotificationPanelOpen,
 }: Readonly<{
+  isSearchOpen: boolean
+  isNotificationPanelOpen: boolean
   setIsSearchOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setIsNotificationPanelOpen: React.Dispatch<React.SetStateAction<boolean>>
 }>) {
   const pathname = usePathname()
   const { authUser, isLoading } = useAuth()
-  const items: {
-    type: "link" | "action"
-    url: string
-    label: string
-    defaultIcon: ReactNode
-    activeIcon: ReactNode
-  }[] = [
+  const items: ItemType[] = [
     {
       type: "link",
       url: AppRouteManager.HOME,
@@ -59,8 +66,8 @@ export default function LinkList({
       activeIcon: <PiFilmReelFill className="text-2xl" />,
     },
     {
-      type: "link",
-      url: AppRouteManager.NOTIFICATION,
+      type: "action",
+      url: "",
       label: "Notifications",
       defaultIcon: <IoIosHeartEmpty className="text-2xl" />,
       activeIcon: <IoMdHeart className="text-2xl" />,
@@ -86,6 +93,14 @@ export default function LinkList({
   const isPathNameMatched = (url: string): boolean => {
     if (url == "/") return pathname == url
     return pathname.startsWith(url)
+  }
+
+  const isActionActive = (item: ItemType): boolean => {
+    if (item.type == "action") {
+      if (item.label == "Search") return isSearchOpen
+      if (item.label == "Notifications") return isNotificationPanelOpen
+    }
+    return false
   }
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
@@ -118,11 +133,18 @@ export default function LinkList({
         items={items}
         onAction={(key) => {
           const item = items.find((item) => item.label == key)
-          if (item?.type == "action" && item.label == "Create") {
-            onOpen()
-          }
-          if (item?.type == "action" && item.label == "Search") {
-            setIsSearchOpen((prev) => !prev)
+          if (item?.type == "action") {
+            switch (item.label) {
+              case "Create":
+                onOpen()
+                break
+              case "Search":
+                setIsSearchOpen((prev) => !prev)
+                break
+              case "Notifications":
+                setIsNotificationPanelOpen((prev) => !prev)
+                break
+            }
           }
         }}
       >
@@ -131,7 +153,10 @@ export default function LinkList({
             key={item.label}
             href={item.type == "link" ? item.url : undefined}
             startContent={
-              isPathNameMatched(item.url) ? item.activeIcon : item.defaultIcon
+              (item.type == "link" && isPathNameMatched(item.url)) ||
+              isActionActive(item)
+                ? item.activeIcon
+                : item.defaultIcon
             }
             classNames={{
               title: `text-base ${

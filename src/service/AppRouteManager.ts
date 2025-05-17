@@ -5,9 +5,7 @@ export const AppRouteManager = {
   LOGIN: "/login",
   REGISTER: "/register",
   WELCOME_NEW_MEMBER: "/welcome-new-member",
-  SEARCH: "/search",
   REELS: "/reels",
-  NOTIFICATION: "/notification",
   profile: (userId: string) => "/profile?userId=" + userId,
   saved: (userId: string) =>
     AppRouteManager.profile(userId) + "&queryTab=" + "saved",

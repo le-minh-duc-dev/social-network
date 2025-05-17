@@ -1,6 +1,7 @@
 import { Input } from "@heroui/react"
 import React, { useRef, useState } from "react"
 import SearchResultList from "./SearchResultList"
+import { useOutsideClick } from "@/hooks/useOutsideClick"
 
 export default function Search({
   setIsSearchOpen,
@@ -9,6 +10,8 @@ export default function Search({
 }>) {
   const timeOutRef = useRef<NodeJS.Timeout | null>(null)
   const [searchKey, setSearchKey] = useState<string>("")
+
+  const ref = useOutsideClick<HTMLDivElement>(() => setIsSearchOpen(false))
 
   const handleSearch = (value: string) => {
     console.log(value)
@@ -20,7 +23,10 @@ export default function Search({
     }, 1000)
   }
   return (
-    <div className="absolute ml-[99%] h-full flex flex-col w-96 pr-4 top-0 rounded-tr-xl rounded-br-xl border-r bg-black border-r-white/15">
+    <div
+      ref={ref}
+      className="absolute ml-[99%] h-full flex flex-col w-96 pr-4 top-0 rounded-tr-xl rounded-br-xl border-r bg-black border-r-white/15"
+    >
       <h2 className="mt-12 text-xl font-semibold">Search</h2>
       <Input
         isClearable
