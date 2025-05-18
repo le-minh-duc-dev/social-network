@@ -21,11 +21,13 @@ import ActiveToggle from "./ActiveToggle"
 import VerifiedToggle from "./VerifiedToggle"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { QueryKey } from "@/domain/enums/QueryKey"
+import { Formater } from "@/lib/Formater"
 export const columns = [
   { name: "NAME", uid: "fullName" },
   { name: "ROLE", uid: "role" },
   { name: "STATUS", uid: "isActive" },
   { name: "VERIFICATION", uid: "isVerified" },
+  { name: "JOIN AT", uid: "join_date" },
   { name: "ACTIONS", uid: "actions" },
 ]
 
@@ -82,6 +84,8 @@ export default function UserList() {
         return <ActiveToggle user={user} />
       case "isVerified":
         return <VerifiedToggle user={user} />
+      case "join_date":
+        return <div>{Formater.formatDate(user.createdAt)}</div>
       case "actions":
         return (
           <div className="relative flex justify-center items-center gap-2">
@@ -117,8 +121,7 @@ export default function UserList() {
         ) : null
       }
       classNames={{
-        base: "max-h-[600px] overflow-y-scroll",
-        table: "min-h-[500px]",
+        base: "max-h-[600px]",
       }}
       selectionMode="multiple"
     >
@@ -138,7 +141,7 @@ export default function UserList() {
         loadingContent={<Spinner color="white" />}
       >
         {(item: UserType) => (
-          <TableRow key={item._id.toString()} >
+          <TableRow key={item._id.toString()}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey.toString())}</TableCell>
             )}
