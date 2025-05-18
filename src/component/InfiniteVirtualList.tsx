@@ -61,6 +61,7 @@ export function InfiniteVirtualList<T>({
     getScrollElement: () => parentRef.current,
     estimateSize,
     overscan: 3,
+    paddingEnd:200
   })
 
   const virtualItems = virtualizer.getVirtualItems()
