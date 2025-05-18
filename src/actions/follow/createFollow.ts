@@ -3,13 +3,16 @@
 import { RouteProtector } from "@/auth/RouteProtector"
 import { ServerSideAuthService } from "@/auth/ServerSideAuthService"
 import { HttpStatus } from "@/domain/enums/HttpStatus"
+import { NotificationType } from "@/domain/enums/NotificationType"
 
 import connectDB from "@/lib/connectDB"
 import { HttpHelper } from "@/lib/HttpHelper"
 import { MongooseHelper } from "@/lib/MongooseHelper"
 import { FollowService } from "@/service/FollowService"
+import { NotificationService } from "@/service/NotificationService"
 import { UserService } from "@/service/UserService"
-import mongoose from "mongoose"
+import { Follow, Notification } from "@/types/schema"
+import mongoose, { Types } from "mongoose"
 export async function createFollow(
   followingId: string
 ): Promise<IResponse<string>> {
@@ -47,7 +50,7 @@ export async function createFollow(
       throw new Error("User not found")
     }
 
-    await followService.createfollow(
+    const newFollow: Follow = await followService.createfollow(
       followerObjectId,
       followingObjectId,
       dbSession,
@@ -65,6 +68,21 @@ export async function createFollow(
         "followersCount",
         dbSession
       )
+      await createFollowNotification(
+        followerObjectId,
+        followingObjectId,
+        NotificationType.FOLLOW,
+        newFollow._id as Types.ObjectId,
+        dbSession
+      )
+    } else {
+      await createFollowNotification(
+        followerObjectId,
+        followingObjectId,
+        NotificationType.FOLLOW_REQUEST,
+        newFollow._id as Types.ObjectId,
+        dbSession
+      )
     }
 
     //commit transaction
@@ -77,4 +95,23 @@ export async function createFollow(
     console.error("Error creating Saved:", error)
   }
   return HttpHelper.buildHttpErrorResponseData(HttpStatus.INTERNAL_SERVER_ERROR)
+}
+
+async function createFollowNotification(
+  senderObjectId: Types.ObjectId,
+  recipientObjectId: Types.ObjectId,
+  type: NotificationType.FOLLOW | NotificationType.FOLLOW_REQUEST,
+  followObjectId: Types.ObjectId,
+  dbSession: mongoose.ClientSession
+) {
+  const notificationService = new NotificationService()
+
+  const notification: Notification = {
+    sender: senderObjectId,
+    recipient: recipientObjectId,
+    type,
+    follow: followObjectId,
+  }
+
+  await notificationService.createNotification(notification, dbSession)
 }

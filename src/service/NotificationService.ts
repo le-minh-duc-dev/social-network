@@ -64,6 +64,9 @@ export class NotificationService {
             "sender",
             "_id fullName avatarUrl isVerified username isActive"
           )
+          .populate("like")
+          .populate("follow")
+          .populate("comment")
       },
       [UnstableCacheKey.NOTIFICATION_LIST + userObjectId + cursor + limit],
       {

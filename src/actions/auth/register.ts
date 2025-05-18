@@ -1,6 +1,7 @@
 "use server"
 
 import { HttpStatus } from "@/domain/enums/HttpStatus"
+import { NotificationType } from "@/domain/enums/NotificationType"
 import { Role } from "@/domain/enums/Role"
 import {
   RegisterUploadSchema,
@@ -62,7 +63,7 @@ export async function register(
     const notification: Notification = {
       sender: newUser._id,
       recipient: "",
-      type: "NEW_USER_JOINED",
+      type: NotificationType.NEW_USER_JOINED,
     }
 
     await notificationService.sendNotificationToRole(

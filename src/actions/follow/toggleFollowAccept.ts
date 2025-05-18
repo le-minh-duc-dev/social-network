@@ -12,6 +12,9 @@ import mongoose, { Types } from "mongoose"
 import { ServerSideAuthService } from "@/auth/ServerSideAuthService"
 import { FollowService } from "@/service/FollowService"
 import { UserService } from "@/service/UserService"
+import { Notification } from "@/types/schema"
+import { NotificationService } from "@/service/NotificationService"
+import { NotificationType } from "@/domain/enums/NotificationType"
 export async function toggleFollowAccept(
   userId: string,
   status: boolean
@@ -64,6 +67,11 @@ export async function toggleFollowAccept(
         "followersCount",
         dbSession
       )
+      await createFollowAcceptedNotification(
+        new Types.ObjectId(authUser!.id),
+        userObjectId,
+        dbSession
+      )
     } else {
       await userService.decrementCount(
         userObjectId,
@@ -88,4 +96,20 @@ export async function toggleFollowAccept(
     console.error("Error toggle follow isAccepted :", error)
   }
   return HttpHelper.buildHttpErrorResponseData(HttpStatus.INTERNAL_SERVER_ERROR)
+}
+
+async function createFollowAcceptedNotification(
+  senderObjectId: Types.ObjectId,
+  recipientObjectId: Types.ObjectId,
+  dbSession: mongoose.ClientSession
+) {
+  const notificationService = new NotificationService()
+
+  const notification: Notification = {
+    sender: senderObjectId,
+    recipient: recipientObjectId,
+    type: NotificationType.FOLLOW_ACCEPTED,
+  }
+
+  await notificationService.createNotification(notification, dbSession)
 }

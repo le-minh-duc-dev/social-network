@@ -1,6 +1,7 @@
 // src/models/User.ts
 import { Notification } from "@/types/schema"
 import mongoose, { Schema } from "mongoose"
+import { NotificationType } from "../enums/NotificationType"
 
 const NotificationSchema = new Schema<Notification>(
   {
@@ -15,14 +16,7 @@ const NotificationSchema = new Schema<Notification>(
     },
     type: {
       type: String,
-      enum: [
-        "LIKE",
-        "COMMENT",
-        "FOLLOW",
-        "MENTION",
-        "REPLY",
-        "NEW_USER_JOINED",
-      ],
+      enum: Object.values(NotificationType),
       required: true,
     },
     post: {
@@ -32,6 +26,14 @@ const NotificationSchema = new Schema<Notification>(
     comment: {
       type: Schema.Types.ObjectId,
       ref: "Comment",
+    },
+    like: {
+      type: Schema.Types.ObjectId,
+      ref: "Like",
+    },
+    follow: {
+      type: Schema.Types.ObjectId,
+      ref: "Follow",
     },
     content: {
       type: String,

@@ -9,7 +9,7 @@ export default function NotificationIcon({
 }: Readonly<{
   children: ReactNode
 }>) {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading,  } = useQuery({
     queryFn: async () => await NotificationAPI.getNewNotificationCount(),
     queryKey: [QueryKey.GET_USERS, "NOTIFICATION", "COUNT"],
     refetchInterval: 30000,

@@ -56,7 +56,7 @@ export default function NotificationPanel({
         </div>
       </Button>
       <Divider className="my-4" />
-      <div className="flex-1 flex mt-8">
+      <div className="flex-1 flex mt-8 overflow-hidden pb-6">
         <NotificationList />
       </div>
     </div>
