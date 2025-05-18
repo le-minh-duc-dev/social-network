@@ -1,9 +1,5 @@
 import { AppRouteManager } from "@/service/AppRouteManager"
-import {
-  Listbox,
-  ListboxItem,
-  ListboxSection,
-} from "@heroui/react"
+import { Listbox, ListboxItem, ListboxSection } from "@heroui/react"
 import { usePathname } from "next/navigation"
 import { FaUsers } from "react-icons/fa"
 import { RxDashboard } from "react-icons/rx"
@@ -11,8 +7,7 @@ export default function ActionList() {
   const pathname = usePathname()
 
   const isPathNameMatched = (url: string): boolean => {
-    if (url == "/") return pathname == url
-    return pathname.startsWith(url)
+    return pathname=== url
   }
 
   return (
@@ -24,21 +19,21 @@ export default function ActionList() {
         //     const item = items.find((item) => item.label == key)
         //   }}
       >
-        <ListboxSection  title="Home">
+        <ListboxSection title="Home">
           <ListboxItem
             href={AppRouteManager.ADMIN}
             startContent={<RxDashboard className="text-2xl" />}
             classNames={{
               title: `text-base ${
-                isPathNameMatched(AppRouteManager.ADMIN) ? "font-semibold" : ""
+                isPathNameMatched(AppRouteManager.ADMIN) ? "font-bold" : ""
               }`,
-              base: "mt-4",
+              base: `mt-4 ${isPathNameMatched(AppRouteManager.ADMIN) ? "bg-white/15" : ""}`,
             }}
           >
             Dashboard
           </ListboxItem>
         </ListboxSection>
-        <ListboxSection  title="Users">
+        <ListboxSection title="Users">
           <ListboxItem
             href={AppRouteManager.ADMIN_MANAGE_USERS}
             startContent={<FaUsers className="text-2xl" />}
@@ -48,7 +43,7 @@ export default function ActionList() {
                   ? "font-semibold"
                   : ""
               }`,
-              base: "mt-4",
+              base: `mt-4 ${isPathNameMatched(AppRouteManager.ADMIN_MANAGE_USERS) ? "bg-white/15" : ""}`,
             }}
           >
             Manage Users

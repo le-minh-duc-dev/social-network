@@ -97,6 +97,7 @@ export class FollowService {
         tags: [
           UnstableCacheKey.USER_FOLLOW + userObjectId,
           UnstableCacheKey.USER_LIST,
+          UnstableCacheKey.USER_FOLLOW
         ],
       }
     )()
@@ -128,6 +129,7 @@ export class FollowService {
         tags: [
           UnstableCacheKey.USER_FOLLOW + follower,
           UnstableCacheKey.USER_LIST,
+          UnstableCacheKey.USER_FOLLOW,
         ],
       }
     )()
@@ -148,6 +150,7 @@ export class FollowService {
       {
         tags: [
           UnstableCacheKey.USER_FOLLOW + follower,
+          UnstableCacheKey.USER_FOLLOW ,
           UnstableCacheKey.USER_LIST,
         ],
       }

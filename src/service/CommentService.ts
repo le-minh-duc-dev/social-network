@@ -45,7 +45,7 @@ export class CommentService {
       },
       [UnstableCacheKey.POST_COMMENT_LIST + post + cursor + limit],
       {
-        tags: [UnstableCacheKey.POST_COMMENT_LIST + post],
+        tags: [UnstableCacheKey.POST_COMMENT_LIST + post, UnstableCacheKey.POST_COMMENT_LIST],
       }
     )()
   }

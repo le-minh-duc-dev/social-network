@@ -60,30 +60,30 @@ export class LikeService {
       },
       [UnstableCacheKey.POST_LIKE_LIST + post + cursor + limit],
       {
-        tags: [UnstableCacheKey.POST_LIKE_LIST + post],
+        tags: [
+          UnstableCacheKey.POST_LIKE_LIST + post,
+          UnstableCacheKey.POST_LIKE_LIST,
+        ],
       }
     )()
   }
 
-  async existsLikeByUserAndPostId(
-    user: Types.ObjectId,
-    post: Types.ObjectId,
-    
-  ) {
+  async existsLikeByUserAndPostId(user: Types.ObjectId, post: Types.ObjectId) {
     return unstable_cache(
       async () => {
         const query = {
           post: post,
           user: user,
         }
-       
 
         return await Like.exists(query)
-          
       },
       [UnstableCacheKey.POST_LIKE_EXISTS + user + post],
       {
-        tags: [UnstableCacheKey.POST_LIKE_LIST + post],
+        tags: [
+          UnstableCacheKey.POST_LIKE_LIST + post,
+          UnstableCacheKey.POST_LIKE_LIST,
+        ],
       }
     )()
   }
