@@ -10,7 +10,8 @@ export const AppRouteManager = {
   profile: (userId: string) => "/profile?userId=" + userId,
   saved: (userId: string) =>
     AppRouteManager.profile(userId) + "&queryTab=" + "saved",
-  posts: (postId: string) => "/posts/" + postId,
+  posts: (postId: string, commentId?: string) =>
+    "/posts/" + postId + (commentId ? "?commentId=" + commentId : ""),
   USER_SETTINGS_EDIT_PROFILE: "/user-settings/edit-profile",
   USER_SETTINGS_PRIVACY: "/user-settings/privacy",
   EXPLORE: "/explore",

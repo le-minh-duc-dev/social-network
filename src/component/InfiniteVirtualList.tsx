@@ -61,7 +61,7 @@ export function InfiniteVirtualList<T>({
     getScrollElement: () => parentRef.current,
     estimateSize,
     overscan: 3,
-    paddingEnd:200
+    paddingEnd: 200,
   })
 
   const virtualItems = virtualizer.getVirtualItems()
@@ -85,7 +85,7 @@ export function InfiniteVirtualList<T>({
 
   if (isLoading) {
     return (
-      <div className="flex flex-col w-full items-center justify-center">
+      <div className="flex flex-col h-full w-full ">
         {Skeleton ? <Skeleton /> : <p>Loading...</p>}
       </div>
     )

@@ -11,15 +11,16 @@ import connectDB from "@/lib/connectDB"
 import { HttpHelper } from "@/lib/HttpHelper"
 import { MongooseHelper } from "@/lib/MongooseHelper"
 import { CommentService } from "@/service/CommentService"
+import { NotificationService } from "@/service/NotificationService"
 import { PostService } from "@/service/PostService"
 import mongoose from "mongoose"
+import { after } from "next/server"
 export async function createComment(
   postId: string,
   comment: CommentUploadType
 ): Promise<IResponse<string>> {
   await RouteProtector.protect()
 
-  console.log("comment upload", comment)
 
   // services
   const commentService = new CommentService()
@@ -45,7 +46,7 @@ export async function createComment(
     dbSession.startTransaction()
     const userObjectId = MongooseHelper.toObjectId(user!.id)
     const postObjectId = MongooseHelper.toObjectId(postId)
-    await commentService.createComment(
+    const comment = await commentService.createComment(
       userObjectId,
       postObjectId,
       safeComment,
@@ -56,6 +57,15 @@ export async function createComment(
     await postService.incrementCommentCount(postObjectId, dbSession)
     //commit transaction
     await dbSession.commitTransaction()
+
+    after(async () => {
+      const notificationService = new NotificationService()
+      await notificationService.createCommentNotification(
+        postObjectId,
+        comment._id,
+        userObjectId
+      )
+    })
     return {
       status: HttpStatus.CREATED,
     }

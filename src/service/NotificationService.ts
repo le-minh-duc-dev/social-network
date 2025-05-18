@@ -67,9 +67,7 @@ export class NotificationService {
             "sender",
             "_id fullName avatarUrl isVerified username isActive"
           )
-          .populate("like")
           .populate("follow")
-          .populate("comment")
       },
       [UnstableCacheKey.NOTIFICATION_LIST + userObjectId + cursor + limit],
       {
@@ -157,6 +155,32 @@ export class NotificationService {
       recipient: post.author,
       type: NotificationTypeEnum.LIKE,
       post: postObjectId,
+    })
+    await notification.save()
+    revalidateTag(UnstableCacheKey.NOTIFICATION_LIST + post.author)
+  }
+
+  async createCommentNotification(
+    postObjectId: Types.ObjectId,
+    commentObjectId: Types.ObjectId,
+    senderObjectId: Types.ObjectId
+  ) {
+    await connectDB()
+    const post = await Post.findById(postObjectId)
+    if (!post) {
+      throw new Error("Post not found")
+    }
+
+    if (post.author.equals(senderObjectId)) {
+      return
+    }
+
+    const notification = new Notification({
+      sender: senderObjectId,
+      recipient: post.author,
+      type: NotificationTypeEnum.COMMENT,
+      post: postObjectId,
+      comment: commentObjectId,
     })
     await notification.save()
     revalidateTag(UnstableCacheKey.NOTIFICATION_LIST + post.author)

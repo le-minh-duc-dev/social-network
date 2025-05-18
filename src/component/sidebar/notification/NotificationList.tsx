@@ -10,6 +10,7 @@ import FollowRequestNotification from "./notificationTypes/FollowRequestNotifica
 import FollowAcceptedNotification from "./notificationTypes/FollowAcceptedNotification"
 import NotificationTypeWrapper from "./notificationTypes/NotificationTypeWrapper"
 import LikeNotification from "./notificationTypes/LikeNotification"
+import CommentNotification from "./notificationTypes/CommentNotification"
 
 const FETCH_SIZE = 10
 const REFETCH_INTERVAL = 15 * 1000 // 15 seconds
@@ -24,6 +25,7 @@ const NotificationRendererMap: Partial<
   [NotificationType.FOLLOW_REQUEST]: FollowRequestNotification,
   [NotificationType.FOLLOW_ACCEPTED]: FollowAcceptedNotification,
   [NotificationType.LIKE]: LikeNotification,
+  [NotificationType.COMMENT]: CommentNotification,
 }
 
 const NotificationTitleMap: Partial<
@@ -44,6 +46,10 @@ const NotificationTitleMap: Partial<
   [NotificationType.LIKE]: (notification) => {
     const sender = notification.sender as User
     return `${sender.fullName} has liked your post`
+  },
+  [NotificationType.COMMENT]: (notification) => {
+    const sender = notification.sender as User
+    return `${sender.fullName} has commented on your post`
   },
 }
 export default function NotificationList() {
@@ -78,7 +84,7 @@ export default function NotificationList() {
 }
 
 function LoadingComponent() {
-  return <Spinner />
+  return <div className="flex-1 flex items-center justify-center"><Spinner /></div>
 }
 
 function EmptyComponent() {

@@ -3,6 +3,7 @@ import { CommentAPI } from "@/service/CommentAPI"
 import { Comment as CommentType, User } from "@/types/schema"
 import Comment from "./Comment"
 import { InfiniteVirtualList } from "../InfiniteVirtualList"
+import { Skeleton } from "@heroui/react"
 
 export default function CommentList({ postId }: Readonly<{ postId: string }>) {
   return (
@@ -26,7 +27,28 @@ export default function CommentList({ postId }: Readonly<{ postId: string }>) {
           />
         </div>
       )}
-      Skeleton={() => <div>seleton</div>}
+      Skeleton={() => (
+        <div className="w-full flex flex-col gap-y-3 ">
+          <div className="flex gap-x-2 w-full items-center">
+            <Skeleton className="h-8 w-8 rounded-full" />
+            <div className="flex-1 mt-1">
+              <Skeleton className="h-4 w-48 rounded-lg" />
+            </div>
+          </div>
+          <div className="flex gap-x-2 w-full items-center">
+            <Skeleton className="h-8 w-8 rounded-full" />
+            <div className="flex-1 mt-1">
+              <Skeleton className="h-4 w-72 rounded-lg" />
+            </div>
+          </div>
+          <div className="flex gap-x-2 w-full items-center">
+            <Skeleton className="h-8 w-8 rounded-full" />
+            <div className="flex-1 mt-1">
+              <Skeleton className="h-4 w-60 rounded-lg" />
+            </div>
+          </div>
+        </div>
+      )}
       staleTime={QueryStaleTime[QueryKey.GET_POST_COMMENTS]}
     />
   )
