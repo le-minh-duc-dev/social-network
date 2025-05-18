@@ -121,7 +121,8 @@ export default function UserList() {
         ) : null
       }
       classNames={{
-        base: "max-h-[600px]",
+        base: "max-h-[600px] overflow-x-auto",
+        wrapper: "  min-w-[1000px]",
       }}
       selectionMode="multiple"
     >
