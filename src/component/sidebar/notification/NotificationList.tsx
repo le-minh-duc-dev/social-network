@@ -11,6 +11,7 @@ import FollowAcceptedNotification from "./notificationTypes/FollowAcceptedNotifi
 import NotificationTypeWrapper from "./notificationTypes/NotificationTypeWrapper"
 
 const FETCH_SIZE = 10
+const REFETCH_INTERVAL = 15*1000 // 15 seconds
 
 const NotificationRendererMap: Partial<
   Record<
@@ -65,7 +66,7 @@ export default function NotificationList() {
       Skeleton={LoadingComponent}
       EmptyComponent={EmptyComponent}
       staleTime={QueryStaleTime[QueryKey.GET_USERS]}
-      refetchInterval={30000}
+      refetchInterval={REFETCH_INTERVAL}
     />
   )
 }

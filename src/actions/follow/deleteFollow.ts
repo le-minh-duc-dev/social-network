@@ -42,6 +42,12 @@ export async function deleteFollow(
   try {
     dbSession.startTransaction()
 
+    const followStatus =
+      await followService.getFollowStateByFollowerAndFollowing(
+        followerObjectId,
+        followingObjectId
+      )
+
     const isDeleted = await followService.deletefollow(
       followerObjectId,
       followingObjectId,
@@ -52,16 +58,19 @@ export async function deleteFollow(
       return HttpHelper.buildHttpErrorResponseData(HttpStatus.BAD_REQUEST)
     }
 
-    await userService.decrementCount(
-      followerObjectId,
-      "followingCount",
-      dbSession
-    )
-    await userService.decrementCount(
-      followingObjectId,
-      "followersCount",
-      dbSession
-    )
+    if (followStatus === "following") {
+      //decrement user count
+      await userService.decrementCount(
+        followerObjectId,
+        "followingCount",
+        dbSession
+      )
+      await userService.decrementCount(
+        followingObjectId,
+        "followersCount",
+        dbSession
+      )
+    }
 
     //commit transaction
     await dbSession.commitTransaction()

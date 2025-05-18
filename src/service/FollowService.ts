@@ -20,7 +20,10 @@ export class FollowService {
     const savedNewfollow = await newfollow.save({ session: dbSession })
 
     revalidateTag(UnstableCacheKey.USER_FOLLOW + follower)
+    revalidateTag(UnstableCacheKey.USER_FOLLOW + following)
     revalidateTag(UnstableCacheKey.POST_LIST)
+    revalidateTag(UnstableCacheKey.NOTIFICATION_LIST + follower)
+    revalidateTag(UnstableCacheKey.NOTIFICATION_LIST + following)
 
     return savedNewfollow
   }
@@ -39,6 +42,9 @@ export class FollowService {
     )
 
     revalidateTag(UnstableCacheKey.USER_FOLLOW + follower)
+    revalidateTag(UnstableCacheKey.USER_FOLLOW + following)
+    revalidateTag(UnstableCacheKey.NOTIFICATION_LIST + follower)
+    revalidateTag(UnstableCacheKey.NOTIFICATION_LIST + following)
     revalidateTag(UnstableCacheKey.POST_LIST)
 
     return result.deletedCount > 0
@@ -162,6 +168,8 @@ export class FollowService {
     )
     revalidateTag(UnstableCacheKey.USER_LIST)
     revalidateTag(UnstableCacheKey.POST_LIST)
+    revalidateTag(UnstableCacheKey.NOTIFICATION_LIST + userObjectId)
+    revalidateTag(UnstableCacheKey.NOTIFICATION_LIST + authUserObjectId)
 
     return result.modifiedCount > 0
   }
