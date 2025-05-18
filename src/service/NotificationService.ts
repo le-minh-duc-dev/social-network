@@ -6,6 +6,9 @@ import { revalidateTag, unstable_cache } from "next/cache"
 import { UserService } from "./UserService"
 import { Role } from "@/domain/enums/Role"
 import { MongooseHelper } from "@/lib/MongooseHelper"
+import { NotificationType as NotificationTypeEnum } from "@/domain/enums/NotificationType"
+import connectDB from "@/lib/connectDB"
+import Post from "@/domain/model/Post"
 
 export class NotificationService {
   async createNotification(
@@ -133,5 +136,29 @@ export class NotificationService {
     )
     revalidateTag(UnstableCacheKey.NOTIFICATION_LIST + authUserObjectId)
     return result.modifiedCount > 0
+  }
+
+  async createLikeNotification(
+    postObjectId: Types.ObjectId,
+    senderObjectId: Types.ObjectId
+  ) {
+    await connectDB()
+    const post = await Post.findById(postObjectId)
+    if (!post) {
+      throw new Error("Post not found")
+    }
+
+    if (post.author.equals(senderObjectId)) {
+      return
+    }
+
+    const notification = new Notification({
+      sender: senderObjectId,
+      recipient: post.author,
+      type: NotificationTypeEnum.LIKE,
+      post: postObjectId,
+    })
+    await notification.save()
+    revalidateTag(UnstableCacheKey.NOTIFICATION_LIST + post.author)
   }
 }

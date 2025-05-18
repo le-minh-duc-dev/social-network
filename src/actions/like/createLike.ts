@@ -8,14 +8,17 @@ import connectDB from "@/lib/connectDB"
 import { HttpHelper } from "@/lib/HttpHelper"
 import { MongooseHelper } from "@/lib/MongooseHelper"
 import { LikeService } from "@/service/LikeService"
+import { NotificationService } from "@/service/NotificationService"
 import { PostService } from "@/service/PostService"
 import mongoose from "mongoose"
+import { after } from "next/server"
 export async function createLike(postId: string): Promise<IResponse<string>> {
   await RouteProtector.protect()
 
   // services
   const likeService = new LikeService()
   const postService = new PostService()
+  const notificationService = new NotificationService()
   ///
 
   //get user
@@ -33,8 +36,17 @@ export async function createLike(postId: string): Promise<IResponse<string>> {
 
     //increment Like count
     await postService.incrementLikeCount(postObjectId, dbSession)
-    //commit transaction
+
     await dbSession.commitTransaction()
+    //notify post owner
+    after(async () => {
+      await notificationService.createLikeNotification(
+        postObjectId,
+        userObjectId
+      )
+    })
+    //commit transaction
+
     return {
       status: HttpStatus.CREATED,
     }
