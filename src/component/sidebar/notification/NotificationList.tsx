@@ -9,9 +9,10 @@ import { NotificationType } from "@/domain/enums/NotificationType"
 import FollowRequestNotification from "./notificationTypes/FollowRequestNotification"
 import FollowAcceptedNotification from "./notificationTypes/FollowAcceptedNotification"
 import NotificationTypeWrapper from "./notificationTypes/NotificationTypeWrapper"
+import LikeNotification from "./notificationTypes/LikeNotification"
 
 const FETCH_SIZE = 10
-const REFETCH_INTERVAL = 15*1000 // 15 seconds
+const REFETCH_INTERVAL = 15 * 1000 // 15 seconds
 
 const NotificationRendererMap: Partial<
   Record<
@@ -22,6 +23,7 @@ const NotificationRendererMap: Partial<
   [NotificationType.NEW_USER_JOINED]: NewUserJoinedNotification,
   [NotificationType.FOLLOW_REQUEST]: FollowRequestNotification,
   [NotificationType.FOLLOW_ACCEPTED]: FollowAcceptedNotification,
+  [NotificationType.LIKE]: LikeNotification,
 }
 
 const NotificationTitleMap: Partial<
@@ -38,6 +40,10 @@ const NotificationTitleMap: Partial<
   [NotificationType.FOLLOW_ACCEPTED]: (notification) => {
     const sender = notification.sender as User
     return `${sender.fullName} has accepted your follow request`
+  },
+  [NotificationType.LIKE]: (notification) => {
+    const sender = notification.sender as User
+    return `${sender.fullName} has liked your post`
   },
 }
 export default function NotificationList() {
