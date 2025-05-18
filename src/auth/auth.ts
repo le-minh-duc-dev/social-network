@@ -24,6 +24,7 @@ import { NotificationService } from "@/service/NotificationService"
 import { Role } from "@/domain/enums/Role"
 import connectDB from "@/lib/connectDB"
 import mongoose from "mongoose"
+import { NotificationType } from "@/domain/enums/NotificationType"
 
 declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
@@ -63,7 +64,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             const notification: Notification = {
               sender: user._id,
               recipient: "",
-              type: "NEW_USER_JOINED",
+              type: NotificationType.NEW_USER_JOINED,
             }
 
             await notificationService.sendNotificationToRole(
