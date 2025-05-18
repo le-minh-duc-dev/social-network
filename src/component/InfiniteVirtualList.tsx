@@ -12,6 +12,7 @@ type Props<T> = {
   ErrorComponent?: (msg: string) => ReactNode
   EmptyComponent?: ComponentType
   refetchInterval?: number
+  paddingEnd?: number
 }
 
 export function InfiniteVirtualList<T>({
@@ -24,6 +25,7 @@ export function InfiniteVirtualList<T>({
   Skeleton,
   ErrorComponent,
   EmptyComponent,
+  paddingEnd = 200,
 }: Readonly<Props<T>>) {
   const queryFn = async ({
     pageParam = "",
@@ -61,7 +63,7 @@ export function InfiniteVirtualList<T>({
     getScrollElement: () => parentRef.current,
     estimateSize,
     overscan: 3,
-    paddingEnd: 200,
+    paddingEnd,
   })
 
   const virtualItems = virtualizer.getVirtualItems()

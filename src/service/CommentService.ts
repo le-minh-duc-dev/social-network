@@ -3,7 +3,7 @@ import Comment from "@/domain/model/Comment"
 import { CommentUploadType } from "@/domain/zod/CommentUploadSchema"
 import { ClientSession, Types } from "mongoose"
 import { revalidateTag, unstable_cache } from "next/cache"
-
+import { Comment as CommentType } from "@/types/schema"
 export class CommentService {
   async createComment(
     user: Types.ObjectId,
@@ -45,8 +45,41 @@ export class CommentService {
       },
       [UnstableCacheKey.POST_COMMENT_LIST + post + cursor + limit],
       {
-        tags: [UnstableCacheKey.POST_COMMENT_LIST + post, UnstableCacheKey.POST_COMMENT_LIST],
+        tags: [
+          UnstableCacheKey.POST_COMMENT_LIST + post,
+          UnstableCacheKey.POST_COMMENT_LIST,
+        ],
       }
     )()
+  }
+
+  async getCommentById(commentId: Types.ObjectId) : Promise<CommentType | null> {
+    return unstable_cache(
+      async () => {
+        return await Comment.findById(commentId).populate(
+          "author",
+          "_id fullName avatarUrl isVerified username"
+        )
+      },
+      [UnstableCacheKey.POST_COMMENT_LIST + commentId],
+      {
+        tags: [
+          UnstableCacheKey.POST_COMMENT_LIST + commentId,
+          UnstableCacheKey.POST_COMMENT_LIST,
+        ],
+      }
+    )()
+  }
+
+  async deleteCommentById(commentId: Types.ObjectId, dbSession: ClientSession) {
+    const result = await Comment.deleteOne(
+      { _id: commentId },
+      { session: dbSession }
+    )
+
+    revalidateTag(UnstableCacheKey.POST_COMMENT_LIST + commentId)
+    revalidateTag(UnstableCacheKey.POST_COMMENT_LIST)
+
+    return result.deletedCount > 0
   }
 }

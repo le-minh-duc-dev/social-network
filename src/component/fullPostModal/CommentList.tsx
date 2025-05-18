@@ -12,6 +12,7 @@ export default function CommentList({ postId }: Readonly<{ postId: string }>) {
       fetchFn={async (pageParam: string) => {
         return await CommentAPI.getComments(postId, pageParam)
       }}
+      paddingEnd={20}
       renderItem={(comment) => (
         <div className="py-2">
           <Comment
@@ -24,6 +25,9 @@ export default function CommentList({ postId }: Readonly<{ postId: string }>) {
             createdAt={comment.createdAt}
             content={comment.content}
             isVerified={(comment.author as User)?.isVerified}
+            author={comment.author as User}
+            id={comment._id.toString()}
+            postId={comment.post as string}
           />
         </div>
       )}

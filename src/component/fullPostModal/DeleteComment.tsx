@@ -1,35 +1,39 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import React from "react"
 import ConfirmModal from "../ConfirmModal"
-import { deletePost } from "@/actions/post/deletePost"
 import { HttpMessages, HttpStatus } from "@/domain/enums/HttpStatus"
 import { addToast } from "@heroui/react"
 import { QueryKey } from "@/domain/enums/QueryKey"
+import { ToastHelper } from "@/lib/ToastHelper"
+import { deleteComment } from "@/actions/comment/deleteComment"
 
-export default function DeletePost({
+export default function DeleteComment({
   isOpen,
   onOpenChange,
   onClose,
+  commentId,
   postId,
 }: Readonly<{
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void
   onClose: () => void
+  commentId: string
   postId: string
 }>) {
   const queryClient = useQueryClient()
   const mutation = useMutation({
     mutationFn: async () => {
-      return await deletePost(postId)
+      console.log("delete comment", commentId)
+      return await deleteComment(commentId)
     },
     onSuccess: (response) => {
       if (response.status == HttpStatus.NO_CONTENT) {
         queryClient.invalidateQueries({
-          queryKey: [QueryKey.GET_POSTS],
+          queryKey: [QueryKey.GET_POST_COMMENTS, postId],
         })
         onClose()
         addToast({
-          title: "Post deleted successfully!",
+          title: "Comment deleted successfully!",
         })
       } else {
         addToast({
@@ -40,9 +44,7 @@ export default function DeletePost({
       }
     },
     onError: () => {
-      addToast({
-        title: HttpMessages[HttpStatus.INTERNAL_SERVER_ERROR],
-      })
+      ToastHelper.makeMutationErrorToast()
     },
   })
 
@@ -54,7 +56,7 @@ export default function DeletePost({
         mutation.mutate()
       }}
       isLoading={mutation.isPending}
-      message="Are you sure to delete this post"
+      message="Are you sure to delete this comment?"
     />
   )
 }

@@ -27,6 +27,15 @@ export class PermissionService {
     return userId == postAuthorId
   }
 
+  static hasDeleteCommentPermission(
+    userId: string,
+    userRole: Role,
+    postAuthorId: string
+  ): boolean {
+    if (userRole == Role.ADMIN) return true
+    return userId == postAuthorId
+  }
+
   static hasPermission(
     permissions: Partial<Record<Permission, boolean>> | undefined,
     permission: Permission
