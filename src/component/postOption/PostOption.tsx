@@ -24,7 +24,7 @@ function copyToClipboard(text: string): void {
       console.error("Failed to copy:", err)
     })
 }
-type hiddenItemsType = "edit" | "delete" | "unfollow"
+type hiddenItemsType = "edit" | "delete" | "unfollow" | "goToPost"
 export default function PostOption({
   post,
   hiddenItems = [],
@@ -82,9 +82,11 @@ export default function PostOption({
           >
             Copy link
           </DropdownItem>
-          <DropdownItem key="goToPost" href={postUrl}>
-            Go to post
-          </DropdownItem>
+          {!isHidden("goToPost") ? (
+            <DropdownItem key="goToPost" href={postUrl}>
+              Go to post
+            </DropdownItem>
+          ) : null}
           {isPostAuthor && !isHidden("edit") ? (
             <DropdownItem key="edit" onPress={onEditPostOpen}>
               Edit

@@ -45,7 +45,7 @@ export default function FullPost({ post }: Readonly<{ post: Post | null }>) {
               </div>
             }
           />
-          <PostOption post={post} />
+          <PostOption post={post} hiddenItems={["goToPost"]}/>
         </div>
         <Divider className="my-4" />
         <div className="flex flex-col flex-1  overflow-hidden">
