@@ -55,7 +55,11 @@ export default function SearchResultList({
 }
 
 function LoadingComponent() {
-  return <Spinner />
+  return (
+    <div className="flex-1 flex items-center justify-center">
+      <Spinner />
+    </div>
+  )
 }
 
 function EmptyComponent() {
