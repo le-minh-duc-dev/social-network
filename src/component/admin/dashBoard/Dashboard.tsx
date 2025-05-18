@@ -9,6 +9,7 @@ import { SiChainlink } from "react-icons/si"
 
 import { clearCache } from "@/actions/admin/clearCache"
 import { UnstableCacheKey } from "@/domain/enums/UnstableCacheKey"
+import PostsOverviewChart from "./PostsOverviewChart"
 
 interface CacheClearButtonProps {
   label: string
@@ -84,18 +85,23 @@ export default function Dashboard() {
 
   return (
     <div className="mt-24 mx-24">
-      <h2 className="text-2xl mb-12">Actions</h2>
-      <div className="flex gap-4 flex-wrap items-center border py-8 px-8 border-white/15 rounded-3xl">
-        {buttons.map(({ label, icon, cacheKey, width, height }) => (
-          <CacheClearButton
-            key={label}
-            label={label}
-            icon={icon}
-            cacheKey={cacheKey}
-            width={width}
-            height={height}
-          />
-        ))}
+      <div className="w-[75%] h-96">
+        <PostsOverviewChart />
+      </div>
+      <div className="mt-12">
+        <h2 className="text-2xl mb-12">Actions</h2>
+        <div className="flex gap-4 flex-wrap items-center border py-8 px-8 border-white/15 rounded-3xl">
+          {buttons.map(({ label, icon, cacheKey, width, height }) => (
+            <CacheClearButton
+              key={label}
+              label={label}
+              icon={icon}
+              cacheKey={cacheKey}
+              width={width}
+              height={height}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )
