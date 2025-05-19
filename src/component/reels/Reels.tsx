@@ -23,6 +23,9 @@ export default function Reels() {
 
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
+  const touchStartY = useRef<number | null>(null)
+  const touchEndY = useRef<number | null>(null)
+
   //Fetch posts
   const queryFn = async ({
     pageParam = "",
@@ -89,12 +92,39 @@ export default function Reels() {
     }, 500)
   }
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    touchEndY.current = e.changedTouches[0].clientY
+
+    const diff = (touchStartY.current ?? 0) - (touchEndY.current ?? 0)
+
+    if (Math.abs(diff) < 50) return // Ignore small swipes
+
+    if (diff > 0) {
+      // Swipe Up
+      handleChangeIndex("down")
+    } else {
+      // Swipe Down
+      handleChangeIndex("up")
+    }
+
+    // Debounce swipe
+    scrollTimeoutRef.current = setTimeout(() => {
+      scrollTimeoutRef.current = null
+    }, 500)
+  }
+
   return (
     <>
       <div className="flex-1  z-0  overflow-hidden relative hidden md:block">
         <div
           className="flex justify-center items-center h-full overflow-hidden relative"
           onWheel={handleScroll}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
           <ReelVideo
             post={currentPost}
@@ -114,10 +144,12 @@ export default function Reels() {
         )}
       </div>
       {/* Mobile view */}
-      <div className="flex-1  z-0  overflow-hidden relative md:hidden">
+      <div className="flex-1 max-h-screen z-0 flex overflow-hidden relative md:hidden">
         <div
-          className="flex justify-center  h-full overflow-hidden relative pb-10"
+          className="flex justify-center flex-1  overflow-hidden relative mb-12"
           onWheel={handleScroll}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
           <ReelVideo
             post={currentPost}
