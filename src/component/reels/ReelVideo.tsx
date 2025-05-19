@@ -49,9 +49,9 @@ export default function ReelVideo({
     )
   }
   return (
-    <div className="aspect-[9/16] lg:h-screen w-screen md:w-[75vw] lg:w-auto flex items-center justify-center lg:p-6 relative">
+    <div className="aspect-[9/16] lg:h-screen w-screen md:w-[75vw] md:h-[90vh] lg:w-auto flex items-center justify-center lg:p-6 relative ">
       {post && (
-        <div className="  md:translate-x-0 right-2 md:-right-8 bottom-12 absolute flex flex-col gap-y-2   gap-x-2  md:w-auto z-10">
+        <div className="  md:translate-x-0 right-2 md:right-4 lg:-right-8 bottom-12 absolute flex flex-col gap-y-2   gap-x-2  md:w-auto z-10">
           <div className="flex flex-col items-center">
             <Like
               postId={post._id.toString()}
@@ -113,7 +113,7 @@ export default function ReelVideo({
             src={post.media[0].url}
             autoPlayOnView={false}
             autoPlay
-            className="object-cover w-full h-full lg:rounded-xl"
+            className="object-cover w-full h-full md:rounded-xl"
             loop={true}
             muted={!hasSound}
           />
@@ -151,7 +151,7 @@ export default function ReelVideo({
         <Skeleton className="w-full h-full rounded-xl" />
       )}
       {post && (
-        <div className=" flex-col gap-y-8 absolute -right-8 hidden md:flex">
+        <div className=" flex-col gap-y-8 absolute md:-right-12 lg:-right-8 right-2 flex">
           <Button
             isIconOnly
             variant="light"

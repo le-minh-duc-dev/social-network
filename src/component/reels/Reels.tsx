@@ -77,7 +77,7 @@ export default function Reels() {
 
   //Handle scroll
   const handleScroll = (e: React.WheelEvent) => {
-    e.preventDefault()
+  
     if (scrollTimeoutRef.current) return
 
     if (e.deltaY > 50) {
