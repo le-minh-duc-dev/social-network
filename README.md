@@ -41,7 +41,7 @@
    * [User Profile Routes](#user-profile-routes)
    * [Admin Routes](#admin-routes)
    * [Programmatic Usage](#programmatic-usage)
-8. [🚀 Installation Guide](#-installation)
+8. [🚀 Installation Guide](#-installation-guide)
 9. [🧑‍💻 Author](#-author)
 ---
 
