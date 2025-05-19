@@ -12,6 +12,7 @@ import PostOption from "../postOption/PostOption"
 import { MdVerified } from "react-icons/md"
 import Saved from "../Saved"
 import ProfilePreview from "../profilePreview/ProfilePreview"
+import MobileCommentList from "./MobileCommentList"
 
 export default function Post({ post }: Readonly<{ post: PostType }>) {
   const author: UserType = post.author as UserType
@@ -84,9 +85,14 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
       <div className="flex justify-between mt-2">
         <div className="flex ">
           <Like postId={post._id.toString()} />
-          <Button isIconOnly variant="light" onPress={() => setPost(post)}>
-            <FaRegComment className="text-2xl -scale-x-100" />
-          </Button>
+          <div className="hidden lg:block">
+            <Button isIconOnly variant="light" onPress={() => setPost(post)}>
+              <FaRegComment className="text-2xl -scale-x-100" />
+            </Button>
+          </div>
+          <div className="lg:hidden">
+            <MobileCommentList post={post}/>
+          </div>
         </div>
         <Saved postId={post._id.toString()} />
       </div>
