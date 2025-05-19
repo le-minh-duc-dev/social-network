@@ -132,7 +132,7 @@ export default function ReelVideo({
         <Skeleton className="w-full h-full rounded-xl" />
       )}
       {post && (
-          <div className="flex flex-col gap-y-8 absolute left-full">
+          <div className="flex flex-col gap-y-8 absolute -right-8">
             <Button
               isIconOnly
               variant="light"

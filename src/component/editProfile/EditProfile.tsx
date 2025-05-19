@@ -135,7 +135,7 @@ export default function EditProfile() {
 
   return (
     <div className="h-full flex justify-center">
-      <Form className=" w-[60%] py-8 gap-y-4" onSubmit={handleSubmit}>
+      <Form className=" w-[85%] xl:w-[60%] py-8 gap-y-4" onSubmit={handleSubmit}>
         <h1 className="text-2xl font-semibold mt-4">Edit profile</h1>
         <Card
           classNames={{

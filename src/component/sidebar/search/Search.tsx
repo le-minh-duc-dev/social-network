@@ -35,7 +35,7 @@ export default function Search({
         type="text"
         onChange={(e) => handleSearch(e.target.value)}
       />
-      <div className="flex-1 flex mt-8">
+      <div className="flex-1 flex mt-8 overflow-hidden pb-6">
         <SearchResultList
           searchKey={searchKey}
           setIsSearchOpen={setIsSearchOpen}

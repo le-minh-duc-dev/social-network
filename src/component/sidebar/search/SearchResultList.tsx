@@ -50,6 +50,7 @@ export default function SearchResultList({
       Skeleton={LoadingComponent}
       EmptyComponent={EmptyComponent}
       staleTime={QueryStaleTime[QueryKey.GET_USERS]}
+      paddingEnd={20}
     />
   )
 }
