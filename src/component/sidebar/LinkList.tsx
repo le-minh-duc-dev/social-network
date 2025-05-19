@@ -1,6 +1,6 @@
 "use client"
 import { AppRouteManager } from "@/service/AppRouteManager"
-import { Button, Listbox, ListboxItem, Skeleton } from "@heroui/react"
+import { Button, Skeleton } from "@heroui/react"
 import React, { ReactNode } from "react"
 import { GoHome, GoHomeFill } from "react-icons/go"
 import { IoIosHeartEmpty, IoMdHeart } from "react-icons/io"
@@ -114,21 +114,13 @@ export default function LinkList({
 
   if (isLoading)
     return (
-      <Listbox aria-label="Dynamic Actions" items={items}>
-        {(item) => (
-          <ListboxItem
-            key={item.label}
-            classNames={{
-              title: `text-base ${
-                isPathNameMatched(item.url) ? "font-semibold" : ""
-              }`,
-              base: "mt-4",
-            }}
-          >
-            <Skeleton className="w-[60%] h-8 rounded-xl" />
-          </ListboxItem>
-        )}
-      </Listbox>
+      <div className="flex flex-col w-full items-center gap-y-6">
+        {items.map((item) => (
+          <div className="w-full" key={item.label}>
+            <Skeleton className="w-36 h-8 rounded-xl"></Skeleton>
+          </div>
+        ))}
+      </div>
     )
 
   if (!authUser?.isActive) return <div></div>
