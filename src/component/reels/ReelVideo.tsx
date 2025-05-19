@@ -83,15 +83,6 @@ export default function ReelVideo({
                 </Button>
               )}
             </MobileCommentList>
-            <Button
-              isIconOnly
-              className="rounded-full hidden lg:flex"
-              variant="flat"
-              color={isOpenCommentList ? "primary" : "default"}
-              onPress={toggleCommentList}
-            >
-              <FaRegComment className="text-2xl -scale-x-100" />
-            </Button>
 
             <p className="text-sm  text-white mt-1">{post?.commentCount}</p>
           </div>
