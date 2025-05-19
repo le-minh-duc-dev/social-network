@@ -1,7 +1,8 @@
 # Social Network
 
-**Website:** [https://social.ducle.online](https://social.ducle.online) 
+**Website:** [https://social.ducle.online](https://social.ducle.online)
 **Default account for guests:**
+
 - **Email:** guest@mail.com
 - **Password:** guestofduc
 
@@ -14,35 +15,40 @@
 3. [🏗️ Architecture & Technologies](#️-architecture--technologies)
 4. [🧩 Key Features](#-key-features)
 
-   * [✅ Authentication & Access Control](#-authentication--access-control)
-   * [📝 User-Generated Content (Posts, Comments, Likes)](#-user-generated-content-posts-comments-likes)
-   * [🔁 Infinite Scrolling & Pagination](#-infinite-scrolling--pagination)
-   * [🔔 Real-Time Notifications](#-real-time-notifications)
-   * [🔍 Search, Explore & Saved Posts](#-search-explore--saved-posts)
-   * [🛠️ Admin Features](#-admin-features)
-   * [🔧 Developer Experience](#-developer-experience)
+   - [✅ Authentication & Access Control](#-authentication--access-control)
+   - [📝 User-Generated Content (Posts, Comments, Likes)](#-user-generated-content-posts-comments-likes)
+   - [🔁 Infinite Scrolling & Pagination](#-infinite-scrolling--pagination)
+   - [🔔 Real-Time Notifications](#-real-time-notifications)
+   - [🔍 Search, Explore & Saved Posts](#-search-explore--saved-posts)
+   - [🛠️ Admin Features](#-admin-features)
+   - [🔧 Developer Experience](#-developer-experience)
+
 5. [📂 MongoDB Schema Models](#-mongodb-schema-models)
 
-   * [🧑‍💻 User Model](#-user-model)
-   * [📷 Post Model](#-post-model)
-   * [💬 Comment Model](#-comment-model)
-   * [❤️ Like Model](#-like-model)
-   * [📌 Saved Model](#-saved-model)
-   * [👥 Follow Model](#-follow-model)
-   * [🔔 Notification Model](#-notification-model)
+   - [🧑‍💻 User Model](#-user-model)
+   - [📷 Post Model](#-post-model)
+   - [💬 Comment Model](#-comment-model)
+   - [❤️ Like Model](#-like-model)
+   - [📌 Saved Model](#-saved-model)
+   - [👥 Follow Model](#-follow-model)
+   - [🔔 Notification Model](#-notification-model)
+
 6. [📑 UI/UX Design](#-uiux-design)
 
-   * [1. MediaCarousel Component](#1-mediacarousel-component)
-   * [2. Reels Component](#2-reels-component)
-   * [3. ReelVideo Component](#3-reelvideo-component)
+   - [1. MediaCarousel Component](#1-mediacarousel-component)
+   - [2. Reels Component](#2-reels-component)
+   - [3. ReelVideo Component](#3-reelvideo-component)
+
 7. [🔗 Core Routes](#-core-routes)
 
-   * [Public Routes](#public-routes)
-   * [User Profile Routes](#user-profile-routes)
-   * [Admin Routes](#admin-routes)
-   * [Programmatic Usage](#programmatic-usage)
+   - [Public Routes](#public-routes)
+   - [User Profile Routes](#user-profile-routes)
+   - [Admin Routes](#admin-routes)
+   - [Programmatic Usage](#programmatic-usage)
+
 8. [🚀 Installation Guide](#-installation-guide)
 9. [🧑‍💻 Author](#-author)
+
 ---
 
 ## 🌐 **Overview**
@@ -125,7 +131,7 @@ It supports dynamic content such as posts, reels (short-form videos), comments, 
 
 - Admin dashboard with CRUD over:
   - Users
-- Role-based permissions to restrict access to sensitive functionality 
+- Role-based permissions to restrict access to sensitive functionality
 
 ---
 
@@ -364,7 +370,7 @@ cd social-network
 
 ### 2. ⚙️ Set Up Environment Variables
 
-Create a `.env` file in the root directory with the following structure. Replace the placeholder values  with your actual credentials:
+Create a `.env` file in the root directory with the following structure. Replace the placeholder values with your actual credentials:
 
 ```env
 # === Site Info ===
@@ -409,12 +415,95 @@ npm run dev
 
 ---
 
+## 📷 User Interface Screenshots
+
+Below are screenshots showcasing the main user interface of the chat system.
+
+### 🔐 Authentication
+
+- **Login Page**
+  ![login page screenshot](/screenshot/login.png)
+
+- **Register Page**
+  ![register page screenshot](/screenshot/register.png)
+
+### 🏠 Home
+
+- **Feeds**
+  ![feeds screenshot](/screenshot/home.png)
+
+- **Search**
+  ![search screenshot](/screenshot/search.png)
+
+- **Notifications**
+  ![notifications screenshot](/screenshot/notifications.png)
+
+- **Create Post**
+  ![create post screenshot](/screenshot/create_post.png)
+
+- **Full Post with Comments**
+  ![full post with comments screenshot](/screenshot/full_post.png)
+
+- **Edit Post**
+  ![edit post screenshot](/screenshot/edit_post.png)
+
+- **More Options**
+  ![more options screenshot](/screenshot/more_options.png)
+
+### 🎬 Reels
+
+- **Reels Page**
+  ![reels page screenshot](/screenshot/reels.png)
+
+- **Reels Comments**
+  ![reels comments screenshot](/screenshot/reels_comments.png)
+
+### 👤 Profile
+
+- **User Profile**
+  ![user profile screenshot](/screenshot/profile.png)
+
+- **Edit Profile**
+  ![edit profile screenshot](/screenshot/edit_profile.png)
+
+- **Account Privacy**
+  ![account privacy screenshot](/screenshot/account_privacy.png)
+
+### 🛠 Admin Dashboard
+
+- **Admin Dashboard**
+  ![admin dashboard screenshot](/screenshot/dashboard.png)
+
+- **Manage Users**
+  ![manage users screenshot](/screenshot/manage_users.png)
+
+### 📱 Mobile Responsiveness
+
+- **Mobile Feeds**
+  ![mobile feeds screenshot](/screenshot/mobile_home.png)
+
+- **Mobile Create Post**
+  ![mobile create post screenshot](/screenshot/mobile_create.png)
+
+- **Mobile Post Comments**
+  ![mobile post comments screenshot](/screenshot/mobile_post_comments.png)
+
+- **Mobile Reels**
+  ![mobile reels screenshot](/screenshot/mobile_reels.png)
+
+- **Mobile Reels Comments**
+  ![mobile reels comments screenshot](/screenshot/mobile_reels_comments.png)
+
+- **Mobile Profile**
+  ![mobile profile screenshot](/screenshot/mobile_profile.png)
+
+---
 
 ## 🧑‍💻 Author
 
 **Lê Minh Đức**
 Final year student at Can Tho University
 
-* 🌐 Personal goal: Professional Java & Spring Developer
-* 🧠 Passionate about clean code, scalable systems, and full-stack architecture
-* ✉️ Contact: [le.minh.duc.dev@gmail.com](mailto:le.minh.duc.dev@gmail.com)
+- 🌐 Personal goal: Professional Java & Spring Developer
+- 🧠 Passionate about clean code, scalable systems, and full-stack architecture
+- ✉️ Contact: [le.minh.duc.dev@gmail.com](mailto:le.minh.duc.dev@gmail.com)
