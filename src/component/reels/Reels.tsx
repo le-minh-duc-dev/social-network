@@ -101,7 +101,7 @@ export default function Reels() {
 
     const diff = (touchStartY.current ?? 0) - (touchEndY.current ?? 0)
 
-    if (Math.abs(diff) < 50) return // Ignore small swipes
+    if (Math.abs(diff) < 10) return // Ignore small swipes
 
     if (diff > 0) {
       // Swipe Up
@@ -144,9 +144,9 @@ export default function Reels() {
         )}
       </div>
       {/* Mobile view */}
-      <div className="flex-1 max-h-screen z-0 flex overflow-hidden relative md:hidden">
+      <div className="flex-1  z-0  overflow-hidden relative md:hidden">
         <div
-          className="flex justify-center flex-1  overflow-hidden relative mb-12"
+          className="flex justify-center  h-[calc(100vh-57px)]  overflow-hidden relative "
           onWheel={handleScroll}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
