@@ -90,24 +90,44 @@ export default function Reels() {
   }
 
   return (
-    <div className="flex-1  z-0  overflow-hidden relative">
-      <div
-        className="flex justify-center items-center h-full overflow-hidden relative"
-        onWheel={handleScroll}
-      >
-        <ReelVideo
-          post={currentPost}
-          isOpenCommentList={isOpenCommentList}
-          toggleCommentList={() => setIsOpenCommentList(!isOpenCommentList)}
-          currentIndex={currentIndex}
-          handleChangeIndex={handleChangeIndex}
-        />
-      </div>
-      {currentPost && isOpenCommentList && (
-        <div className="absolute top-0 right-0 w-96 h-full bg-default-100 z-20">
-          <CommentList post={currentPost}  toggleCommentList={() => setIsOpenCommentList(!isOpenCommentList)}/>
+    <>
+      <div className="flex-1  z-0  overflow-hidden relative hidden md:block">
+        <div
+          className="flex justify-center items-center h-full overflow-hidden relative"
+          onWheel={handleScroll}
+        >
+          <ReelVideo
+            post={currentPost}
+            isOpenCommentList={isOpenCommentList}
+            toggleCommentList={() => setIsOpenCommentList(!isOpenCommentList)}
+            currentIndex={currentIndex}
+            handleChangeIndex={handleChangeIndex}
+          />
         </div>
-      )}
-    </div>
+        {currentPost && isOpenCommentList && (
+          <div className="absolute top-0 right-0 w-96 h-full bg-default-100 z-20">
+            <CommentList
+              post={currentPost}
+              toggleCommentList={() => setIsOpenCommentList(!isOpenCommentList)}
+            />
+          </div>
+        )}
+      </div>
+      {/* Mobile view */}
+      <div className="flex-1  z-0  overflow-hidden relative md:hidden">
+        <div
+          className="flex justify-center  h-full overflow-hidden relative pb-10"
+          onWheel={handleScroll}
+        >
+          <ReelVideo
+            post={currentPost}
+            isOpenCommentList={isOpenCommentList}
+            toggleCommentList={() => setIsOpenCommentList(!isOpenCommentList)}
+            currentIndex={currentIndex}
+            handleChangeIndex={handleChangeIndex}
+          />
+        </div>
+      </div>
+    </>
   )
 }

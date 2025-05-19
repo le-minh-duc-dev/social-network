@@ -8,12 +8,17 @@ import { Button, Skeleton, User } from "@heroui/react"
 import Link from "next/link"
 import { AppRouteManager } from "@/service/AppRouteManager"
 import Like from "../Like"
-import { FaChevronCircleDown, FaChevronCircleUp, FaRegComment } from "react-icons/fa"
+import {
+  FaChevronCircleDown,
+  FaChevronCircleUp,
+  FaRegComment,
+} from "react-icons/fa"
 import { PiShareFat } from "react-icons/pi"
 import { IoMdVolumeHigh, IoMdVolumeOff } from "react-icons/io"
 import { LocalStorageService } from "@/service/LocalStorageService"
 import { ExternalStorageServiceKey } from "@/domain/enums/ExternalStorageServiceKey"
 import { VolumnType } from "@/domain/enums/VolumeType"
+import MobileCommentList from "../home/MobileCommentList"
 
 export default function ReelVideo({
   post,
@@ -44,9 +49,9 @@ export default function ReelVideo({
     )
   }
   return (
-    <div className="aspect-[9/16] lg:h-screen w-[75vw] lg:w-auto flex items-center justify-center p-6 relative">
+    <div className="aspect-[9/16] lg:h-screen w-screen md:w-[75vw] lg:w-auto flex items-center justify-center lg:p-6 relative">
       {post && (
-        <div className=" -right-8 bottom-12 absolute flex flex-col gap-y-2">
+        <div className="  md:translate-x-0 right-2 md:-right-8 bottom-12 absolute flex flex-col gap-y-2   gap-x-2  md:w-auto z-10">
           <div className="flex flex-col items-center">
             <Like
               postId={post._id.toString()}
@@ -58,13 +63,36 @@ export default function ReelVideo({
           <div className="flex flex-col items-center">
             <Button
               isIconOnly
-              className="rounded-full"
+              className="rounded-full hidden lg:flex"
               variant="flat"
               color={isOpenCommentList ? "primary" : "default"}
               onPress={toggleCommentList}
             >
               <FaRegComment className="text-2xl -scale-x-100" />
             </Button>
+
+            <MobileCommentList post={post}>
+              {({ onOpen }) => (
+                <Button
+                  isIconOnly
+                  className="rounded-full lg:hidden "
+                  variant="flat"
+                  onPress={onOpen}
+                >
+                  <FaRegComment className="text-2xl -scale-x-100" />
+                </Button>
+              )}
+            </MobileCommentList>
+            <Button
+              isIconOnly
+              className="rounded-full hidden lg:flex"
+              variant="flat"
+              color={isOpenCommentList ? "primary" : "default"}
+              onPress={toggleCommentList}
+            >
+              <FaRegComment className="text-2xl -scale-x-100" />
+            </Button>
+
             <p className="text-sm  text-white mt-1">{post?.commentCount}</p>
           </div>
           <Button
@@ -94,7 +122,7 @@ export default function ReelVideo({
             src={post.media[0].url}
             autoPlayOnView={false}
             autoPlay
-            className="object-cover w-full h-full rounded-xl"
+            className="object-cover w-full h-full lg:rounded-xl"
             loop={true}
             muted={!hasSound}
           />
@@ -132,27 +160,27 @@ export default function ReelVideo({
         <Skeleton className="w-full h-full rounded-xl" />
       )}
       {post && (
-          <div className="flex flex-col gap-y-8 absolute -right-8">
-            <Button
-              isIconOnly
-              variant="light"
-              className="group"
-              onPress={() => handleChangeIndex("up")}
-              isDisabled={currentIndex == 0}
-            >
-              <FaChevronCircleUp className="text-xl opacity-60  group-hover:opacity-100" />
-            </Button>
+        <div className=" flex-col gap-y-8 absolute -right-8 hidden md:flex">
+          <Button
+            isIconOnly
+            variant="light"
+            className="group"
+            onPress={() => handleChangeIndex("up")}
+            isDisabled={currentIndex == 0}
+          >
+            <FaChevronCircleUp className="text-xl opacity-60  group-hover:opacity-100" />
+          </Button>
 
-            <Button
-              isIconOnly
-              variant="light"
-              className="group"
-              onPress={() => handleChangeIndex("down")}
-            >
-              <FaChevronCircleDown className="text-xl opacity-60  group-hover:opacity-100" />
-            </Button>
-          </div>
-        )}
+          <Button
+            isIconOnly
+            variant="light"
+            className="group"
+            onPress={() => handleChangeIndex("down")}
+          >
+            <FaChevronCircleDown className="text-xl opacity-60  group-hover:opacity-100" />
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
