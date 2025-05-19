@@ -1,10 +1,11 @@
 import React from "react"
-import { Post } from "@/types/schema"
+import { Post as PostType } from "@/types/schema"
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react"
 import FullPost from "./FullPost"
 import { Button } from "@heroui/react"
 import { IoMdClose } from "react-icons/io"
 import { useRouter } from "next/navigation"
+import Post from "../home/Post"
 
 export default function FullPostModal({
   isOpen,
@@ -14,7 +15,7 @@ export default function FullPostModal({
 }: Readonly<{
   isOpen: boolean
   onClose: () => void
-  post: Post | null
+  post: PostType | null
   showCloseBtn?: boolean
 }>) {
   const router = useRouter()
@@ -36,7 +37,12 @@ export default function FullPostModal({
               <IoMdClose className="text-lg" />
             </Button>
           )}
-          <FullPost post={post} />
+          <div className="hidden lg:block">
+            <FullPost post={post} />
+          </div>
+          <div className="lg:hidden w-full md:w-[450px] xl:w-[450px]">
+            <Post post={post} />
+          </div>
         </DialogPanel>
       </div>
     </Dialog>
