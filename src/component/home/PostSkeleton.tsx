@@ -2,8 +2,9 @@
 import { Skeleton } from "@heroui/react"
 
 export default function PostSkeleton() {
+ 
   return (
-    <div className="w-[450px] p-4">
+    <div className="w-[95vw] md:w-[350px] xl:w-[450px] p-4" >
       <div className=" flex items-center gap-3">
         <div>
           <Skeleton className="flex rounded-full w-12 h-12" />
