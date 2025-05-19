@@ -1,6 +1,6 @@
 "use client"
 import { AppRouteManager } from "@/service/AppRouteManager"
-import { Listbox, ListboxItem, Skeleton } from "@heroui/react"
+import { Button, Listbox, ListboxItem, Skeleton } from "@heroui/react"
 import React, { ReactNode } from "react"
 import { GoHome, GoHomeFill } from "react-icons/go"
 import { IoIosHeartEmpty, IoMdHeart } from "react-icons/io"
@@ -11,7 +11,7 @@ import {
 } from "react-icons/io5"
 import { PiFilmReel, PiFilmReelFill } from "react-icons/pi"
 import UserIcon from "./UserIcon"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useAuth } from "@/component/provider/auth/AuthContext"
 import { MdExplore, MdOutlineExplore } from "react-icons/md"
 import NotificationIcon from "./NotificationIcon"
@@ -36,6 +36,7 @@ export default function LinkList({
 }>) {
   const pathname = usePathname()
   const { authUser, isLoading } = useAuth()
+  const router = useRouter()
   const items: ItemType[] = [
     {
       type: "link",
@@ -132,45 +133,38 @@ export default function LinkList({
 
   if (!authUser?.isActive) return <div></div>
   return (
-    <div>
-      <Listbox
-        aria-label="Dynamic Actions"
-        items={items}
-        onAction={(key) => {
-          const item = items.find((item) => item.label == key)
-          if (item?.type == "action") {
-            switch (item.label) {
-              case "Search":
-                setIsSearchOpen((prev) => !prev)
-                break
-              case "Notifications":
-                setIsNotificationPanelOpen((prev) => !prev)
-                break
-            }
+    <div className="flex flex-col w-full items-center gap-y-6">
+      {items.map((item) => (
+        <Button
+          key={item.label}
+          startContent={
+            (item.type == "link" && isPathNameMatched(item.url)) ||
+            isActionActive(item)
+              ? item.activeIcon
+              : item.defaultIcon
           }
-        }}
-      >
-        {(item) => (
-          <ListboxItem
-            key={item.label}
-            href={item.type == "link" ? item.url : undefined}
-            startContent={
-              (item.type == "link" && isPathNameMatched(item.url)) ||
-              isActionActive(item)
-                ? item.activeIcon
-                : item.defaultIcon
+          variant="light"
+          className={`text-base ${
+            isPathNameMatched(item.url) ? "font-semibold" : ""
+          } w-full lg:justify-start justify-center`}
+          onPress={() => {
+            if (item?.type == "action") {
+              switch (item.label) {
+                case "Search":
+                  setIsSearchOpen((prev) => !prev)
+                  break
+                case "Notifications":
+                  setIsNotificationPanelOpen((prev) => !prev)
+                  break
+              }
+            } else {
+              router.push(item.url)
             }
-            classNames={{
-              title: `text-base ${
-                isPathNameMatched(item.url) ? "font-semibold" : ""
-              }`,
-              base: "mt-4",
-            }}
-          >
-            <div className="lg:block hidden">{item.label}</div>
-          </ListboxItem>
-        )}
-      </Listbox>
+          }}
+        >
+          <div className="lg:block hidden">{item.label}</div>
+        </Button>
+      ))}
     </div>
   )
 }
