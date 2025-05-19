@@ -23,7 +23,7 @@ export default function FullPostModal({
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
-      <DialogBackdrop className="fixed inset-0 bg-black/75" />
+      <DialogBackdrop className="fixed inset-0 md:bg-black/75 bg-black" />
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
         <DialogPanel>
           {showCloseBtn && (

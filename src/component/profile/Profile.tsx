@@ -41,14 +41,14 @@ export default function Profile() {
   }, [currentTab])
   return (
     <ProfileContext.Provider value={contextValue}>
-      <div className={`${MARGIN_LEFT_ACCORDING_TO_SIDEBAR_WITH}  h-full`}>
+      <div className={`${MARGIN_LEFT_ACCORDING_TO_SIDEBAR_WITH}  flex-1 overflow-hidden`}>
         <div className="flex justify-center">
           <Info />
         </div>
-        <div className="flex justify-center my-12">
+        <div className="flex justify-center my-6 md:my-12">
           <div className="w-[40%]">
             <div className="flex flex-col items-center w-fit gap-y-4">
-              <div className="w-16 h-16 rounded-full bg-default-100 flex items-center justify-center text-5xl text-default-500 outline outline-2 outline-offset-4 outline-default-500">
+              <div className="md:w-16 md:h-16 w-8 h-8 rounded-full bg-default-100 flex items-center justify-center text-5xl text-default-500 outline outline-2 outline-offset-4 outline-default-500">
                 <GoPlus />
               </div>
               <div className="text-sm">New</div>
@@ -57,7 +57,7 @@ export default function Profile() {
         </div>
 
         <div className="flex justify-center ">
-          <div className="border-t border-t-white/15 pt-8 mt-8 w-[60%]">
+          <div className="border-t border-t-white/15 pt-8 mt-8  md:w-[60%]">
             <CategoryTabs />
 
             {tabContent}

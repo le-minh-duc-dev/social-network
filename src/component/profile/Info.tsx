@@ -27,8 +27,8 @@ export default function Info() {
   //skeleton
   if (isLoading) {
     return (
-      <div className="mt-12 flex gap-x-20 items-start">
-        <Skeleton className="w-32 h-32 rounded-full" />
+      <div className="mt-12 flex gap-x-6 md:gap-x-20 items-start">
+        <Skeleton className="md:w-36 md:h-36 w-12 h-12 rounded-full" />
         <div className="flex flex-col justify-center">
           <div className="flex items-center gap-x-6">
             <div className="text-xl font-bold flex  items-center gap-x-2">
@@ -46,8 +46,8 @@ export default function Info() {
     )
   }
   return (
-    <div className="mt-12 flex gap-x-20 items-start">
-      <Avatar src={user?.avatarUrl} alt="Your avatar" className="w-36 h-36" />
+    <div className="mt-12 flex gap-x-6 md:gap-x-20 items-start">
+      <Avatar src={user?.avatarUrl} alt="Your avatar" className="md:w-36 md:h-36 w-12 h-12" />
       <div className="flex flex-col justify-center">
         <div className="flex items-center gap-x-6">
           <div className="text-xl font-bold flex  items-center gap-x-2">
