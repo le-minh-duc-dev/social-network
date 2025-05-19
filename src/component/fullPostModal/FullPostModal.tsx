@@ -30,7 +30,7 @@ export default function FullPostModal({
             <Button
               isIconOnly
               radius="full"
-              className="fixed top-8 right-8 z-50"
+              className="fixed top-2 lg:top-8 right-2 lg:right-8 z-50"
               variant="flat"
               onPress={() => router.back()}
             >
@@ -40,7 +40,7 @@ export default function FullPostModal({
           <div className="hidden lg:block">
             <FullPost post={post} />
           </div>
-          <div className="lg:hidden w-full md:w-[450px] xl:w-[450px]">
+          <div className="lg:hidden w-full md:w-[450px] xl:w-[450px] bg-black">
             <Post post={post} />
           </div>
         </DialogPanel>
