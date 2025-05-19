@@ -11,24 +11,22 @@ import Saved from "../Saved"
 import {
   Drawer,
   DrawerContent,
-  Button,
   useDisclosure,
   Divider,
   User,
 } from "@heroui/react"
-import { FaRegComment } from "react-icons/fa"
 
 export default function MobileCommentList({
   post,
-}: Readonly<{ post: Post | null }>) {
+  children
+}: Readonly<{ post: Post | null, children:(props:{onOpen:()=>void}) => React.ReactNode }>) {
   const author: UserType = post?.author as UserType
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   if (!post) return null
   return (
     <>
-      <Button isIconOnly variant="light" onPress={onOpen}>
-        <FaRegComment className="text-2xl -scale-x-100" />
-      </Button>
+      {children({onOpen})}
+     
       <Drawer isOpen={isOpen} onOpenChange={onOpenChange} placement="bottom" classNames={{
         base:"max-h-screen w-full md:w-[90vw] left-1/2 -translate-x-1/2 ",
       }}>

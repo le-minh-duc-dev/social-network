@@ -91,7 +91,13 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
             </Button>
           </div>
           <div className="lg:hidden">
-            <MobileCommentList post={post}/>
+            <MobileCommentList post={post}>
+              {({ onOpen }) => (
+                <Button isIconOnly variant="light" onPress={onOpen}>
+                  <FaRegComment className="text-2xl -scale-x-100" />
+                </Button>
+              )}
+            </MobileCommentList>
           </div>
         </div>
         <Saved postId={post._id.toString()} />
@@ -112,15 +118,27 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
         </div>
       )}
       {post.commentCount > 0 && (
-        <div className="mt-2">
-          <button
-            className="text-sm text-gray-500"
-            onClick={() => setPost(post)}
-          >
-            View {post.commentCount > 1 ? "all" : ""} {post.commentCount}{" "}
-            {post.commentCount > 1 ? "comments" : "comment"}
-          </button>
-        </div>
+        <>
+          <div className="mt-2 lg:hidden">
+            <MobileCommentList post={post}>
+              {({ onOpen }) => (
+                <button className="text-sm text-gray-500" onClick={onOpen}>
+                  View {post.commentCount > 1 ? "all" : ""} {post.commentCount}{" "}
+                  {post.commentCount > 1 ? "comments" : "comment"}
+                </button>
+              )}
+            </MobileCommentList>
+          </div>
+          <div className="mt-2 hidden lg:block">
+            <button
+              className="text-sm text-gray-500"
+              onClick={() => setPost(post)}
+            >
+              View {post.commentCount > 1 ? "all" : ""} {post.commentCount}{" "}
+              {post.commentCount > 1 ? "comments" : "comment"}
+            </button>
+          </div>
+        </>
       )}
       <div className="my-2 ">
         <CommentForm postId={post._id.toString()} />
