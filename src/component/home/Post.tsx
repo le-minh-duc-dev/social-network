@@ -7,17 +7,18 @@ import { FaRegComment } from "react-icons/fa"
 import CommentForm from "../CommentForm"
 import { LuDot } from "react-icons/lu"
 import Like from "../Like"
-import { useFullPostModal } from "@/context/FullPostContext"
 import PostOption from "../postOption/PostOption"
 import { MdVerified } from "react-icons/md"
 import Saved from "../Saved"
 import ProfilePreview from "../profilePreview/ProfilePreview"
 import MobileCommentList from "./MobileCommentList"
+import { AppRouteManager } from "@/service/AppRouteManager"
+import { useRouter } from "next/navigation"
 
 export default function Post({ post }: Readonly<{ post: PostType }>) {
   const author: UserType = post.author as UserType
-  const { setPost } = useFullPostModal()
 
+  const router = useRouter()
   return (
     <div className=" border-b border-white/25 pb-3 ">
       <div className="flex justify-between items-center">
@@ -86,7 +87,13 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
         <div className="flex ">
           <Like postId={post._id.toString()} />
           <div className="hidden lg:block">
-            <Button isIconOnly variant="light" onPress={() => setPost(post)}>
+            <Button
+              isIconOnly
+              variant="light"
+              onPress={() => {
+                router.push(AppRouteManager.posts(post._id.toString()))
+              }}
+            >
               <FaRegComment className="text-2xl -scale-x-100" />
             </Button>
           </div>
@@ -132,7 +139,9 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
           <div className="mt-2 hidden lg:block">
             <button
               className="text-sm text-gray-500"
-              onClick={() => setPost(post)}
+              onClick={() =>
+                router.push(AppRouteManager.posts(post._id as string))
+              }
             >
               View {post.commentCount > 1 ? "all" : ""} {post.commentCount}{" "}
               {post.commentCount > 1 ? "comments" : "comment"}

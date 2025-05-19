@@ -8,8 +8,8 @@ import { SessionProvider } from "next-auth/react"
 
 import "react-photo-view/dist/react-photo-view.css"
 import ReactQueryProvider from "@/component/provider/QueryProvider"
-import ModalProviders from "@/component/provider/ModalProviders"
 import AuthProvider from "@/component/provider/auth/AuthProvider"
+import MediaUploadProvider from "@/component/provider/MediaUploadProvider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -47,14 +47,14 @@ export default async function RootLayout({
           <ReactQueryProvider>
             <AuthProvider>
               <UIProvider>
-                <ModalProviders>
+                <MediaUploadProvider>
                   <div className="flex flex-col h-screen">
                     <main className=" flex-1 flex flex-col">
                       <Sidebar />
                       {children}
                     </main>
                   </div>
-                </ModalProviders>
+                </MediaUploadProvider>
               </UIProvider>
             </AuthProvider>
           </ReactQueryProvider>

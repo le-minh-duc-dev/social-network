@@ -30,7 +30,7 @@ export default function Feeds() {
       queryKey={[QueryKey.GET_POSTS]}
       fetchFn={PostAPI.getPosts}
       renderItem={(post) => (
-        <div className="pb-4">
+        <div className="pb-4 px-4 lg:px-0">
           <Post post={post} />
         </div>
       )}

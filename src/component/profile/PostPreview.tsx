@@ -1,19 +1,23 @@
-import { useFullPostModal } from "@/context/FullPostContext"
 import { MediaType } from "@/domain/enums/MediaType"
+import { AppRouteManager } from "@/service/AppRouteManager"
 import { Post } from "@/types/schema"
 import { Image } from "@heroui/react"
+import { useRouter } from "next/navigation"
 import React from "react"
 export default function PostPreview({
   post,
   height = "h-[450px]",
 }: Readonly<{ post: Post; height?: string }>) {
-  const { setPost } = useFullPostModal()
   const firstMedia = post.media[0]
+  const router = useRouter()
   if (!firstMedia) {
     return (
       <button
-        className={"border border-white/15 pt-4 hover:opacity-85 flex justify-center items-center "+ height}
-        onClick={() => setPost(post)}
+        className={
+          "border border-white/15 pt-4 hover:opacity-85 flex justify-center items-center " +
+          height
+        }
+        onClick={() => router.push(AppRouteManager.posts(post._id as string))}
       >
         <p>{post.caption}</p>
       </button>
@@ -22,7 +26,7 @@ export default function PostPreview({
   return (
     <button
       className={" overflow-hidden pt-4 hover:opacity-85 relative " + height}
-      onClick={() => setPost(post)}
+      onClick={() => router.push(AppRouteManager.posts(post._id as string))}
     >
       {" "}
       {firstMedia.type == MediaType.VIDEO ? (
