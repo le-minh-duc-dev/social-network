@@ -15,4 +15,6 @@ export const AppRouteManager = {
   USER_SETTINGS_EDIT_PROFILE: "/user-settings/edit-profile",
   USER_SETTINGS_PRIVACY: "/user-settings/privacy",
   EXPLORE: "/explore",
+  CREATE: "/create",
+  SEARCH: "/search",
 }
