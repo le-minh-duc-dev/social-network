@@ -10,6 +10,7 @@ import { ProfileContext } from "./ProfileContext"
 import ReelList from "./ReelList"
 import SavedList from "./SavedList"
 import { useSearchParams } from "next/navigation"
+import { MARGIN_LEFT_ACCORDING_TO_SIDEBAR_WITH } from "@/domain/enums/SidebarWidth"
 
 export type TabType = "posts" | "reels" | "saved"
 export default function Profile() {
@@ -40,7 +41,7 @@ export default function Profile() {
   }, [currentTab])
   return (
     <ProfileContext.Provider value={contextValue}>
-      <div className="ml-[354px]  h-full">
+      <div className={`${MARGIN_LEFT_ACCORDING_TO_SIDEBAR_WITH}  h-full`}>
         <div className="flex justify-center">
           <Info />
         </div>

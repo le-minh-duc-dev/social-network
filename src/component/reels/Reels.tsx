@@ -6,8 +6,6 @@ import { Post } from "@/types/schema"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import React, { useMemo, useRef, useState } from "react"
 import ReelVideo from "./ReelVideo"
-import { FaChevronCircleDown, FaChevronCircleUp } from "react-icons/fa"
-import { Button } from "@heroui/react"
 import CommentList from "./CommentList"
 
 interface PostTypeWithKey extends Post {
@@ -97,34 +95,17 @@ export default function Reels() {
         className="flex justify-center items-center h-full overflow-hidden relative"
         onWheel={handleScroll}
       >
-        <ReelVideo post={currentPost} isOpenCommentList={isOpenCommentList} toggleCommentList={()=>setIsOpenCommentList(!isOpenCommentList)}/>
-
-        {currentPost && (
-          <div className="flex flex-col gap-y-8">
-            <Button
-              isIconOnly
-              variant="light"
-              className="group"
-              onPress={() => handleChangeIndex("up")}
-              isDisabled={currentIndex == 0}
-            >
-              <FaChevronCircleUp className="text-xl opacity-60  group-hover:opacity-100" />
-            </Button>
-
-            <Button
-              isIconOnly
-              variant="light"
-              className="group"
-              onPress={() => handleChangeIndex("down")}
-            >
-              <FaChevronCircleDown className="text-xl opacity-60  group-hover:opacity-100" />
-            </Button>
-          </div>
-        )}
+        <ReelVideo
+          post={currentPost}
+          isOpenCommentList={isOpenCommentList}
+          toggleCommentList={() => setIsOpenCommentList(!isOpenCommentList)}
+          currentIndex={currentIndex}
+          handleChangeIndex={handleChangeIndex}
+        />
       </div>
       {currentPost && isOpenCommentList && (
-        <div className="absolute top-0 right-0 w-96 h-full bg-default-100">
-          <CommentList post={currentPost} />
+        <div className="absolute top-0 right-0 w-96 h-full bg-default-100 z-20">
+          <CommentList post={currentPost}  toggleCommentList={() => setIsOpenCommentList(!isOpenCommentList)}/>
         </div>
       )}
     </div>

@@ -9,7 +9,7 @@ export default function Stories() {
   // const { authUser } = useAuth()
   return (
     <div className="w-[35vw] relative">
-      <div className="absolute left-[110%] top-6">
+      <div className="absolute left-[110%] top-6 lg:block hidden">
         <Account />
       </div>
       {/* <div className="flex gap-x-4 overflow-x-auto max-w-full  py-6 px-4">

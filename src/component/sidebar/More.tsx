@@ -29,7 +29,7 @@ export default function More() {
       <DropdownTrigger>
         <Button variant="light" className="!justify-start">
           <LuMenu className="text-3xl" />
-          <div className="">More</div>
+          <div className="hidden lg:block">More</div>
         </Button>
       </DropdownTrigger>
       <DropdownMenu

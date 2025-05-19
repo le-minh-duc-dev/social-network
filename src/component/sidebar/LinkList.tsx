@@ -174,7 +174,7 @@ export default function LinkList({
               base: "mt-4",
             }}
           >
-            {item.label}
+            <div className="lg:block hidden">{item.label}</div>
           </ListboxItem>
         )}
       </Listbox>

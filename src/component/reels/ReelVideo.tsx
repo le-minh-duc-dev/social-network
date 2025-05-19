@@ -8,7 +8,7 @@ import { Button, Skeleton, User } from "@heroui/react"
 import Link from "next/link"
 import { AppRouteManager } from "@/service/AppRouteManager"
 import Like from "../Like"
-import { FaRegComment } from "react-icons/fa"
+import { FaChevronCircleDown, FaChevronCircleUp, FaRegComment } from "react-icons/fa"
 import { PiShareFat } from "react-icons/pi"
 import { IoMdVolumeHigh, IoMdVolumeOff } from "react-icons/io"
 import { LocalStorageService } from "@/service/LocalStorageService"
@@ -19,10 +19,14 @@ export default function ReelVideo({
   post,
   isOpenCommentList,
   toggleCommentList,
+  currentIndex,
+  handleChangeIndex,
 }: Readonly<{
   post?: Post
   isOpenCommentList: boolean
   toggleCommentList?: () => void
+  currentIndex: number
+  handleChangeIndex: (direction: "up" | "down") => void
 }>) {
   const { authUser } = useAuth()
   const author = post?.author as UserType
@@ -40,7 +44,7 @@ export default function ReelVideo({
     )
   }
   return (
-    <div className="aspect-[9/16] h-screen flex items-center justify-center p-6 relative">
+    <div className="aspect-[9/16] lg:h-screen w-[75vw] lg:w-auto flex items-center justify-center p-6 relative">
       {post && (
         <div className=" -right-8 bottom-12 absolute flex flex-col gap-y-2">
           <div className="flex flex-col items-center">
@@ -75,11 +79,11 @@ export default function ReelVideo({
       )}
       {post ? (
         <>
-          <div className="absolute top-20 right-6">
+          <div className="absolute top-8 right-6">
             <Button
               variant="light"
               isIconOnly
-              className="absolute bottom-4 right-2 text-lg z-10 "
+              className=" text-lg z-10 "
               onPress={toggleVolume}
             >
               {hasSound ? <IoMdVolumeHigh /> : <IoMdVolumeOff />}
@@ -127,6 +131,28 @@ export default function ReelVideo({
       ) : (
         <Skeleton className="w-full h-full rounded-xl" />
       )}
+      {post && (
+          <div className="flex flex-col gap-y-8 absolute left-full">
+            <Button
+              isIconOnly
+              variant="light"
+              className="group"
+              onPress={() => handleChangeIndex("up")}
+              isDisabled={currentIndex == 0}
+            >
+              <FaChevronCircleUp className="text-xl opacity-60  group-hover:opacity-100" />
+            </Button>
+
+            <Button
+              isIconOnly
+              variant="light"
+              className="group"
+              onPress={() => handleChangeIndex("down")}
+            >
+              <FaChevronCircleDown className="text-xl opacity-60  group-hover:opacity-100" />
+            </Button>
+          </div>
+        )}
     </div>
   )
 }

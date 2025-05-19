@@ -6,12 +6,13 @@ import PostOption from "../postOption/PostOption"
 import Comment from "../fullPostModal/Comment"
 import CommentForm from "../CommentForm"
 import RealCommentList from "../fullPostModal/CommentList"
+import { useOutsideClick } from "@/hooks/useOutsideClick"
 
-export default function CommentList({ post }: Readonly<{ post: Post }>) {
+export default function CommentList({ post,toggleCommentList }: Readonly<{ post: Post,toggleCommentList: () => void }>) {
   const author = post?.author as UserType
-
+  const ref = useOutsideClick<HTMLDivElement>(toggleCommentList)
   return (
-    <div className="h-full px-4 flex flex-col overflow-hidden">
+    <div className="h-full px-4 flex flex-col overflow-hidden " ref={ref}>
       <div className="flex justify-between items-center mt-2 mr-2">
         <User
           avatarProps={{
