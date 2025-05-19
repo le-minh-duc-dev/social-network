@@ -55,7 +55,7 @@ export async function createPost(
     await dbSession.commitTransaction()
     return {
       status: HttpStatus.CREATED,
-      data: "/posts/" + newPost._id,
+      data:  newPost._id,
       message: "Post created successfully",
     }
   } catch (error) {

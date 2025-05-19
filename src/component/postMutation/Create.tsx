@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useMemo, useRef, useState } from "react"
 import MutatePostModal from "./MutatePostModal"
 import { useMediaUpload } from "@/context/MediaUploadContext"
@@ -10,16 +12,11 @@ import { MutatePostContext } from "./MutatePostContext"
 import { HttpMessages, HttpStatus } from "@/domain/enums/HttpStatus"
 import { addToast } from "@heroui/react"
 import { PostPrivacy } from "@/domain/enums/PostPrivacy"
+import {  useRouter } from "next/navigation"
+import { AppRouteManager } from "@/service/AppRouteManager"
 
-export default function Create({
-  isOpen,
-  onOpenChange,
-  onClose,
-}: Readonly<{
-  isOpen: boolean
-  onOpenChange: (isOpen: boolean) => void
-  onClose: () => void
-}>) {
+export default function Create() {
+  const router = useRouter()
   const queryClient = useQueryClient()
 
   const uploadService = useMediaUpload()
@@ -74,7 +71,7 @@ export default function Create({
       setFiles([])
       captionRef.current = ""
       privacyRef.current = PostPrivacy.PUBLIC
-      onClose()
+      router.push(response.data ?? AppRouteManager.HOME)
     },
     onError: () => {
       addToast({
@@ -109,8 +106,10 @@ export default function Create({
       <MutatePostModal
         title="Create new post"
         submitButtonName="Share"
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        isOpen={true}
+        onOpenChange={() => {
+          router.back()
+        }}
       />
     </MutatePostContext.Provider>
   )

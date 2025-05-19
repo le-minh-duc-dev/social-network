@@ -1,6 +1,6 @@
 "use client"
 import { AppRouteManager } from "@/service/AppRouteManager"
-import { Listbox, ListboxItem, Skeleton, useDisclosure } from "@heroui/react"
+import { Listbox, ListboxItem, Skeleton } from "@heroui/react"
 import React, { ReactNode } from "react"
 import { GoHome, GoHomeFill } from "react-icons/go"
 import { IoIosHeartEmpty, IoMdHeart } from "react-icons/io"
@@ -12,7 +12,6 @@ import {
 import { PiFilmReel, PiFilmReelFill } from "react-icons/pi"
 import UserIcon from "./UserIcon"
 import { usePathname } from "next/navigation"
-import Create from "../postMutation/Create"
 import { useAuth } from "@/component/provider/auth/AuthContext"
 import { MdExplore, MdOutlineExplore } from "react-icons/md"
 import NotificationIcon from "./NotificationIcon"
@@ -83,8 +82,8 @@ export default function LinkList({
     },
 
     {
-      type: "action",
-      url: "",
+      type: "link",
+      url: AppRouteManager.CREATE,
       label: "Create",
       defaultIcon: <IoAddCircleOutline className="text-2xl" />,
       activeIcon: <IoAddCircleOutline className="text-2xl" />,
@@ -112,8 +111,6 @@ export default function LinkList({
     return false
   }
 
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
-
   if (isLoading)
     return (
       <Listbox aria-label="Dynamic Actions" items={items}>
@@ -136,7 +133,6 @@ export default function LinkList({
   if (!authUser?.isActive) return <div></div>
   return (
     <div>
-      <Create isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} />
       <Listbox
         aria-label="Dynamic Actions"
         items={items}
@@ -144,9 +140,6 @@ export default function LinkList({
           const item = items.find((item) => item.label == key)
           if (item?.type == "action") {
             switch (item.label) {
-              case "Create":
-                onOpen()
-                break
               case "Search":
                 setIsSearchOpen((prev) => !prev)
                 break

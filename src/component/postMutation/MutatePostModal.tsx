@@ -1,3 +1,4 @@
+"use client"
 import {
   Button,
   Modal,
@@ -10,6 +11,8 @@ import DropZone from "./DropZone"
 import { useAuth } from "@/component/provider/auth/AuthContext"
 import { useMutatePostContext } from "./MutatePostContext"
 import PrivacySelection from "./PrivacySelection"
+import { useIsBreakPoint } from "@/hooks/useIsBreakPoint"
+import { BreakPoint } from "@/domain/enums/BreakPoint"
 export default function MutatePostModal({
   title,
   submitButtonName,
@@ -28,14 +31,15 @@ export default function MutatePostModal({
     captionRef.current = caption
   }
 
+  const isMobile = !useIsBreakPoint(BreakPoint.MD)
   return (
     <Modal
       isOpen={isOpen}
       onOpenChange={onOpenChange}
-      size="4xl"
+      size={isMobile ? "full" : "4xl"}
       classNames={{
         header: "border-b-[1px] border-white/10 text-base py-2 ",
-        body: "grid grid-cols-5   p-0    overflow-y-hidden",
+        body: "grid lg:grid-cols-5   p-0    overflow-y-hidden",
         base: "bg-black border border-white/10 h-[75vh] ",
       }}
       hideCloseButton={true}
@@ -61,10 +65,10 @@ export default function MutatePostModal({
               </Button>
             </ModalHeader>
             <ModalBody>
-              <div className="col-span-3 h-full overflow-hidden">
+              <div className="lg:col-span-3 h-full overflow-hidden">
                 <DropZone />
               </div>
-              <div className="col-span-2 p-3 bg-neutral-800">
+              <div className="lg:col-span-2 p-3 bg-neutral-800">
                 <div className="">
                   <User
                     avatarProps={{

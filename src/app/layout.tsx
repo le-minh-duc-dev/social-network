@@ -36,8 +36,10 @@ export async function generateMetadata() {
 
 export default async function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode
+  modal: React.ReactNode
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -51,6 +53,7 @@ export default async function RootLayout({
                   <div className="flex flex-col h-screen">
                     <main className=" flex-1 flex flex-col">
                       <Sidebar />
+                      {modal}
                       {children}
                     </main>
                   </div>
