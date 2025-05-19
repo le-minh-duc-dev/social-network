@@ -2,7 +2,7 @@ import { createComment } from "@/actions/comment/createComment"
 import { HttpMessages, HttpStatus } from "@/domain/enums/HttpStatus"
 import { QueryKey } from "@/domain/enums/QueryKey"
 import { CommentUploadSchema } from "@/domain/zod/CommentUploadSchema"
-import { addToast } from "@heroui/react"
+import { addToast, Button } from "@heroui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import React, { useState } from "react"
 
@@ -19,7 +19,7 @@ export default function CommentForm({ postId }: Readonly<{ postId: string }>) {
     return await createComment(postId, safeComment)
   }
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: handleCreateComment,
     onSuccess: (response) => {
       if (response.status != HttpStatus.CREATED) {
@@ -70,14 +70,15 @@ export default function CommentForm({ postId }: Readonly<{ postId: string }>) {
         type="text"
         className=" focus-within:bg-transparent focus-within:outline-none w-full bg-transparent pb-1 text-sm"
       />
-      {inputValue.length > 0 && (
-        <button
-          type="submit"
-          className="text-sm text-blue-500 hover:text-blue-700"
-        >
-          Post
-        </button>
-      )}
+
+      <Button
+        variant="light"
+        type="submit"
+        className={`text-sm text-blue-500 hover:text-blue-700 ${inputValue.length > 0 ? "visible" : "invisible"}`}
+        isLoading={isPending}
+      >
+        Post
+      </Button>
     </form>
   )
 }

@@ -149,9 +149,8 @@ export default function Post({ post }: Readonly<{ post: PostType }>) {
           </div>
         </>
       )}
-      <div className="my-2 ">
-        <CommentForm postId={post._id.toString()} />
-      </div>
+
+      <CommentForm postId={post._id.toString()} />
     </div>
   )
 }
