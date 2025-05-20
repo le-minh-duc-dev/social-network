@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef, TouchEvent } from "react"
 import { MediaItem } from "@/types/schema"
 import { MediaType } from "@/domain/enums/MediaType"
 import { Button, Image } from "@heroui/react"
@@ -27,6 +27,22 @@ export default function MediaCarousel({
   const nextSlide = () => setCurrent((prev) => (prev + 1) % mediaList.length)
   const prevSlide = () =>
     setCurrent((prev) => (prev - 1 + mediaList.length) % mediaList.length)
+
+  const currentX = useRef<number>(0)
+  const handleTouchStart = (e: TouchEvent) => {
+    currentX.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = (e: TouchEvent) => {
+    const touchX = e.changedTouches[0].clientX
+    const diffX = currentX.current - touchX
+
+    if (diffX > 50 && current < mediaList.length - 1) {
+      nextSlide()
+    } else if (diffX < -50 && current > 0) {
+      prevSlide()
+    }
+  }
 
   useEffect(() => {
     const externalStorageService = new LocalStorageService()
@@ -58,6 +74,8 @@ export default function MediaCarousel({
       <div
         key={current}
         className=" bg-black w-full max-h-full flex items-center justify-center"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         {mediaList[current].type === MediaType.IMAGE ? (
           <Image
